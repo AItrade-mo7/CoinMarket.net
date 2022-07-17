@@ -1,0 +1,11 @@
+{
+  "name": "gather-market-net",
+  "version": "0.1.0",
+  "scripts": {
+    "git": "./_shell/gitSet.sh",
+    "sync": "./_shell/sync_git.sh",
+    "start": "./_shell/run.sh",
+    "build": "./_shell/build.sh",
+    "deploy": "./_shell/deploy.sh"
+  }
+}

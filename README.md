@@ -1,2 +1,3 @@
-# CoinMarket
-获取和分析市场行情
+# CoinMarket.net
+
+数据搜集中心，专门搜集各种公开数据
