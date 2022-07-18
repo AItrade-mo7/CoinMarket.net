@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Cache-control" content="no-store" />
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="VueDemo" />
+    <link rel="apple-touch-icon" href="//file.mo7.cc/static/lxh_png/2.png" />
+    <link rel="mask-icon" href="//file.mo7.cc/static/lxh_png/2.png" color="#F0B90B" />
+    <meta name="msapplication-TileImage" content="//file.mo7.cc/static/lxh_png/2.png" />
+    <meta name="msapplication-TileColor" content="#F0B90B" />
+    <link rel="icon" href="//file.mo7.cc/static/lxh_png/2.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="//file.mo7.cc/static/lxh_png/2.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="//file.mo7.cc/static/lxh_png/2.png" />
+    <title>Vue + TS + Vite + go</title>
+  </head>
+
+  <body>
+    <div id="VueApp">
+      <style>
+        .AppLoaderToIndexHtml {
+          position: fixed;
+          left: 0;
+          top: 0;
+          width: 100vw;
+          height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: rgba(3, 3, 3, 0.4);
+          z-index: 9;
+        }
+
+        .AppLoaderToIndexHtml::after {
+          content: '';
+          display: block;
+          width: 36px;
+          height: 36px;
+          animation: AppLoaderToIndexHtmlKeyframes 1s infinite linear;
+          background-color: rgba(240, 185, 11, 0.7);
+        }
+
+        @keyframes AppLoaderToIndexHtmlKeyframes {
+          0% {
+            transform: rotate(0deg);
+            border-radius: 50%;
+          }
+
+          50% {
+            transform: rotate(90deg);
+            border-radius: 0%;
+          }
+
+          100% {
+            transform: rotate(180deg);
+            border-radius: 50%;
+          }
+        }
+      </style>
+      <div class="AppLoaderToIndexHtml"></div>
+    </div>
+  </body>
+</html>
+<script>
+  window.addEventListener('beforeinstallprompt', (event) => {
+    window.deferredPrompt = event;
+    console.info('beforeinstallprompt', window.deferredPrompt);
+  });
+  // window.document.oncontextmenu = new Function('return false');
+</script>
+<script type="module" src="/src/main.ts"></script>

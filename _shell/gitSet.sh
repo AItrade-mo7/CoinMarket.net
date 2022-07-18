@@ -11,4 +11,4 @@ git config --global core.fileMode false
 git config core.filemode false
 
 echo "更改文件夹权限"
-chmod -R 755 ./
+chmod -R 777 ./

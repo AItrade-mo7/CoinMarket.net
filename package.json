@@ -1,11 +1,49 @@
 {
-  "name": "gather-market-net",
-  "version": "0.1.0",
+  "name": "coin-market",
+  "version": "0.0.1",
+  "Port": 8573,
+  "private": true,
   "scripts": {
+    "dev": "vite",
+    "build": "run-p vue:check vue:build && ./_shell/build.sh",
+    "serve": "./_shell/serve_start.sh",
+    "vue:build": "vite build",
+    "vue:check": "vue-tsc --noEmit",
     "git": "./_shell/gitSet.sh",
     "sync": "./_shell/sync_git.sh",
-    "start": "./_shell/run.sh",
-    "build": "./_shell/build.sh",
     "deploy": "./_shell/deploy.sh"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "copy-to-clipboard": "^3.3.1",
+    "less": "^4.1.3",
+    "lodash": "^4.17.21",
+    "normalize.css": "^8.0.1",
+    "qs": "^6.10.5",
+    "store": "^2.0.12",
+    "vue": "^3.2.37",
+    "vue-router": "^4.0.16"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.1.3",
+    "@types/lodash": "^4.14.182",
+    "@types/qs": "^6.9.7",
+    "@types/store": "^2.0.2",
+    "@vicons/antd": "^0.12.0",
+    "@vicons/utils": "^0.1.4",
+    "@vitejs/plugin-vue": "^2.3.3",
+    "@vue/eslint-config-typescript": "^11.0.0",
+    "@vue/tsconfig": "^0.1.3",
+    "eslint": "^8.17.0",
+    "eslint-plugin-vue": "^9.1.1",
+    "naive-ui": "^2.30.4",
+    "npm-run-all": "^4.1.5",
+    "typescript": "~4.7.3",
+    "unplugin-vue-components": "^0.19.6",
+    "vite": "^2.9.12",
+    "vite-plugin-eslint": "^1.6.1",
+    "vite-plugin-inspect": "^0.5.0",
+    "vite-plugin-pwa": "^0.12.0",
+    "vue-tsc": "^0.37.8"
   }
 }

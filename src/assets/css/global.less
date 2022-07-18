@@ -1,0 +1,73 @@
+html,
+body {
+  font-size: 16px;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+#VueApp {
+  min-width: 280px;
+  position: relative;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.PageTitle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 10px;
+  font-size: 18px;
+  margin: 0;
+  text-align: left;
+}
+.PageWrapper {
+  padding: 50px 16px 16px;
+}
+
+.n-avatar {
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+.n-drawer {
+  min-width: 160px;
+}
+
+@keyframes Rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+//  表单
+
+.myForm {
+  max-width: 418px;
+  margin: 0 auto;
+  .myForm__item {
+    text-align: center;
+    .n-input__input-el {
+      text-align: inherit;
+    }
+    .n-button {
+      width: 76%;
+      margin: 0 auto;
+    }
+  }
+}
+
+// vue 动画
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
