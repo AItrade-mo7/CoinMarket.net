@@ -1,20 +1,22 @@
 package main
 
 import (
-	"CoinMarket.net/global"
-	"CoinMarket.net/observe"
-	"CoinMarket.net/router"
+	_ "embed"
+
+	"CoinMarket.net/server/global"
+	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/router"
+	jsoniter "github.com/json-iterator/go"
 )
 
-// https://juejin.cn/post/6987204577879654407
+//go:embed package.json
+var AppPackage []byte
 
 func main() {
-	// // 初始化系统参数
+	jsoniter.Unmarshal(AppPackage, &config.AppInfo)
+	// 初始化系统参数
 	global.Start()
 
-	// // 数据整备
-	observe.Start()
-
-	// 启动端口服务
+	// 启动 http 监听服务
 	router.Start()
 }
