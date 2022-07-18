@@ -27,50 +27,6 @@ const showDrawer = () => {
         </template>
         <div className="TopBar__ul">
           <div className="TopBar__item">
-            <RouterLink to="/about" class="item_btn">
-              <n-button text size="tiny">
-                <template #icon>
-                  <XIcon name="InfoCircleOutlined" />
-                </template>
-                About
-              </n-button>
-            </RouterLink>
-          </div>
-
-          <div className="TopBar__item">
-            <RouterLink to="/upload_file" class="item_btn">
-              <n-button text size="tiny">
-                <template #icon>
-                  <XIcon name="CloudUploadOutlined" />
-                </template>
-                上传文件
-              </n-button>
-            </RouterLink>
-          </div>
-
-          <div className="TopBar__item">
-            <RouterLink to="/daily_cover" class="item_btn">
-              <n-button text size="tiny">
-                <template #icon>
-                  <XIcon name="PictureOutlined" />
-                </template>
-                每日一图
-              </n-button>
-            </RouterLink>
-          </div>
-
-          <div className="TopBar__item" v-if="!UserInfoStore.value.UserID">
-            <RouterLink to="/login" class="item_btn">
-              <n-button text size="tiny">
-                <template #icon>
-                  <XIcon name="LoginOutlined" />
-                </template>
-                Login
-              </n-button>
-            </RouterLink>
-          </div>
-
-          <div className="TopBar__item">
             <RouterLink to="/" class="item_btn">
               <n-button text size="tiny">
                 <template #icon>
