@@ -3,9 +3,6 @@ import vue from '@vitejs/plugin-vue';
 import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 
-import eslintPlugin from 'vite-plugin-eslint';
-import Inspect from 'vite-plugin-inspect';
-
 import Components from 'unplugin-vue-components/vite';
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 
@@ -21,26 +18,10 @@ const PwaConfig = {
     lang: 'zh',
     icons: [
       {
-        src: '//file.mo7.cc/static/lxh_png/2.png',
-        sizes: '192x192',
-        type: 'image/png',
-      },
-      {
-        src: '//file.mo7.cc/static/lxh_png/2.png',
-        sizes: '512x512',
-        type: 'image/png',
-      },
-      {
-        src: '//file.mo7.cc/static/lxh_png/2.png',
-        sizes: '192x192',
-        type: 'image/png',
-        purpose: 'maskable',
-      },
-      {
-        src: '//file.mo7.cc/static/lxh_png/2.png',
-        sizes: '512x512',
-        type: 'image/png',
-        purpose: 'maskable',
+        src: '/logo.svg', //inside the scope!
+        sizes: '48x48 72x72 96x96 128x128 256x256', //see the size in the devtools, not in editor. I've set up size 1200x1200 in Illustrator, but Chrome says it's 150x150. Also, "sizes":"any" not work.
+        type: 'image/svg+xml', //not image/svg which is still visible in web
+        purpose: 'any', //not "maskable any" as you may see there in answers.
       },
     ],
     start_url: './?mode=pwa',
@@ -71,8 +52,6 @@ export default defineConfig({
       dts: path.resolve(pathSrc, 'components.d.ts'),
     }),
     VitePWA(PwaConfig),
-    eslintPlugin(),
-    Inspect(),
   ],
   define: {
     ViteConst: JSON.stringify({

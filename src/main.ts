@@ -1,4 +1,4 @@
-import '@/assets/js/AITrade.net';
+import '@/assets/js/CoinMarket.net';
 import 'normalize.css';
 import '@/assets/css/global.less';
 
