@@ -7,10 +7,9 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/router/api"
-	"CoinMarket.net/server/router/api/order"
-	"CoinMarket.net/server/router/api/sys"
 	"CoinMarket.net/server/router/middle"
-	"CoinMarket.net/server/router/wss"
+	"CoinMarket.net/server/router/private"
+	"CoinMarket.net/server/router/public"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
@@ -48,26 +47,19 @@ func Start() {
 		Output:     logFile,
 	}), middle.Public, compress.New(), favicon.New())
 
-	// CoinAI
-	r_api := app.Group("/CoinAI")
-	r_api.Get("/config", api.GetConfig)
-	r_api.Get("/wss", wss.WsServer())
+	// CoinMarket
+	A_api := app.Group("/CoinMarket")
 
-	// sys
-	s_api := app.Group("/CoinAI/sys")
-	s_api.Post("/remove", sys.Remove)
-	s_api.Post("/restart", sys.ReStart)
+	// /api/public
+	public.Router(A_api)
 
-	// order
-	o_api := app.Group("/CoinAI/Order")
-	o_api.Post("/Buy", order.Buy)
-	o_api.Post("/Sell", order.Sell)
-	o_api.Post("/Close", order.Close)
+	// /api/private
+	private.Router(A_api)
 
 	// Ping
 	app.Use(api.Ping)
 
-	listenHost := mStr.Join(":", config.AppEnv.Port)
+	listenHost := mStr.Join(":", config.AppInfo.Port)
 	global.Log.Println(mStr.Join(`启动服务: http://127.0.0.1`, listenHost))
 	app.Listen(listenHost)
 }

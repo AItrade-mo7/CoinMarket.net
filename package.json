@@ -1,6 +1,7 @@
 {
-  "name": "coin-ai",
-  "version": "0.3.6",
+  "name": "coin-market",
+  "version": "0.0.1",
+  "port": 8998,
   "scripts": {
     "git": "./_shell/gitSet.sh",
     "sync": "./_shell/gitSync.sh",

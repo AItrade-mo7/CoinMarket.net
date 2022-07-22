@@ -40,10 +40,5 @@ func TokenAuth(c *fiber.Ctx) (Message string, err error) {
 		return
 	}
 
-	if UserID != config.AppEnv.UserID {
-		err = errors.New("Token包含信息有误")
-		return
-	}
-
 	return
 }
