@@ -8,7 +8,7 @@ import (
 )
 
 func MiddleWare(c *fiber.Ctx) error {
-	c.Set("Data-Path", "DataCenter.net/api/private")
+	c.Set("Data-Path", "DataCenter.net/CoinMarket/private")
 
 	// 授权验证
 	err := middle.EncryptAuth(c)
