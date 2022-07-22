@@ -1,7 +1,7 @@
 package private
 
 import (
-	"CoinMarket.net/server/router/api/account"
+	"CoinMarket.net/server/router/api"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -14,5 +14,5 @@ import (
 func Router(router fiber.Router) {
 	r := router.Group("/private", MiddleWare)
 
-	r.Get("/get_user_info", account.GetUserInfo)
+	r.Post("/ping", api.Ping)
 }
