@@ -1,32 +1,27 @@
 #!/bin/bash
-# 加载变量
 source "./_shell/init.sh"
 #############
 
-echo " =========== 整理文件到 www  =========== "
-rm -rf ${staticPath}
-mv ${outPutPath} ${staticPath}
-
-echo " =========== 写入文件 =========== "
-sudo cat >${staticPath}"/index.go" <<END
-package www
-
-import "embed"
-
-//go:embed *
-var Static embed.FS
-END
-
-echo " =========== go build  =========== "
+echo " =========== 正在进行编译 aarch64 =========== "
 
 go mod tidy &&
-  go build -o ${buildName}
-echo " server 端编译 完成"
+  GOOS=linux GOARCH=arm64 GOARM=7 go build -o ${buildName}"_aarch64"
+echo "编译 完成"
 
-echo " =========== 开始进行文件整合 =========== "
+echo " =========== 正在进行编译 x86_64 =========== "
 
-mkdir ${outPutPath}
+set GOARCH=amd64
+go mod tidy &&
+  GOOS=linux GOARCH=amd64 go build -o ${buildName}"_x86_64"
+echo "编译 完成"
 
-echo "移动 go build 文件"
-mv ${buildName} ${outPutPath}"/" &&
-  exit
+echo " =========== 开始进行 文件整理 =========== "
+
+echo "清理并创建 dist 目录"
+rm -rf ${outPutPath}
+mkdir ${outPutPath} &&
+  echo "移动 goRun 文件"
+mv ${buildName}"_aarch64" ${outPutPath} &&
+  mv ${buildName}"_x86_64" ${outPutPath} &&
+  cp -r ${path}"/README.md" ${outPutPath}
+cp -r ${path}"/package.json" ${outPutPath}

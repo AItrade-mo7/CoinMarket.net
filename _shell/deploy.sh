@@ -1,20 +1,22 @@
 #!/bin/bash
+##WebHook:~ 发布 ShellHooks.net ~
 # 加载变量
 source "./_shell/init.sh"
 #############
 
-npm install
-echo "开始打包" &&
-  npm run build
+rm -rf ${outPutPath}
+npm run build &&
+  npm run git
 
-echo "停止 pm2 服务" &&
-  pm2 delete ${startName}
+nowTime=$(date +%Y-%m-%d\T%H:%M:%S)
 
-cd ${deployPath}
-rm -rf ${deployPath}"/assets"
+cd ${outPutPath}
 
-echo "移动文件到 ProdProject 目录"
-cp -r ${outPutPath}"/." ${deployPath}"/"
+git init
+git add .
+git commit -m ${nowTime}
+git remote add origin ${deployPath}
+git push -f --set-upstream origin master:main
+echo "同步完成"
 
-echo "启动 pm2 服务"
-pm2 start ./${buildName} --name ${startName}
+exit

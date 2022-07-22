@@ -1,41 +1,39 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
-
-cache
-
-# Editor directories and files
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-package-lock.json
-## go
-*.sum
-*.work
-sys_env.yaml
+# Binaries for programs and plugins
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
 
-!www/index.go
+HunterUserFile
 
-www
+package-lock.json
 
-auto-imports.d.ts
-components.d.ts
+*.work
+
+*.sum
+
+sys_env.yaml
+
+node_modules
+
+logs
+
+*.log
+dist
+goRun-*
+/jsonData
+/www
+hunter_release
+*.zip
+*_aarch64
+*_x86_64
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
