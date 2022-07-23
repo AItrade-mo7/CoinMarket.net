@@ -16,7 +16,6 @@ func Start() {
 		Func:      inst.Start,
 		SleepTime: time.Hour * 4, // 每 4 时获取一次
 	}).Start()
-
 	mFile.Write(config.Dir.JsonData+"/SPOT_inst.json", mJson.ToStr(okxInfo.SPOT_inst))
 	mFile.Write(config.Dir.JsonData+"/SWAP_inst.json", mJson.ToStr(okxInfo.SWAP_inst))
 }
