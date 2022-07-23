@@ -16,7 +16,7 @@ import (
 
 // 获取可交易现货列表
 func SPOT() {
-	SWAP_file := mStr.Join(config.Dir.Log, "/SPOT.json")
+	SWAP_file := mStr.Join(config.Dir.JsonData, "/SPOT.json")
 
 	resData, err := restApi.Fetch(restApi.FetchOpt{
 		Path:   "/api/v5/public/instruments",
@@ -33,6 +33,8 @@ func SPOT() {
 		global.InstLog.Println("SPOT", err)
 		return
 	}
+
+	fmt.Println(resData)
 
 	var result okxInfo.ReqType
 	jsoniter.Unmarshal(resData, &result)

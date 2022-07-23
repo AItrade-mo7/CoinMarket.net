@@ -12,7 +12,7 @@ import (
 
 // 获取可交易合约列表
 func SWAP() {
-	SWAP_file := mStr.Join(config.Dir.Log, "/SWAP.json")
+	SWAP_file := mStr.Join(config.Dir.JsonData, "/SWAP.json")
 
 	resData, err := restApi.Fetch(restApi.FetchOpt{
 		Path:   "/api/v5/public/instruments",
