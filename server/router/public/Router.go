@@ -12,5 +12,6 @@ import (
 func Router(router fiber.Router) {
 	r := router.Group("/public", MiddleWare)
 
-	r.Post("/ping", api.Ping)
+	r.Post("/Tickers", api.Tickers)
+	r.Post("/Inst", api.Inst)
 }
