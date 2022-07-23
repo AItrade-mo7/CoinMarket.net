@@ -12,6 +12,7 @@ import (
 )
 
 func Start() {
+	// 获取 OKX 交易产品信息
 	mCycle.New(mCycle.Opt{
 		Func:      inst.Start,
 		SleepTime: time.Hour * 4, // 每 4 时获取一次
