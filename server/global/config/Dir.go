@@ -13,6 +13,12 @@ type DirType struct {
 
 var Dir DirType
 
+type FileType struct {
+	AppEnv string // ./app_env.yaml
+}
+
+var File FileType
+
 func DirInit() {
 	Dir.App, _ = os.Getwd()
 
@@ -20,5 +26,11 @@ func DirInit() {
 		Dir.App,
 		mStr.ToStr(os.PathSeparator),
 		"logs",
+	)
+
+	File.AppEnv = mStr.Join(
+		Dir.App,
+		mStr.ToStr(os.PathSeparator),
+		"app_env.yaml",
 	)
 }
