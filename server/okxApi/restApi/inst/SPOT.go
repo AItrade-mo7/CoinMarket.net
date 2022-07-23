@@ -53,7 +53,7 @@ func setSPOT_list(data any) {
 	jsoniter.Unmarshal(jsonStr, &list)
 
 	for _, val := range list {
-		find := strings.Contains(val.InstID, "-USDT")
+		find := strings.Contains(val.InstID, config.SPOT_suffix)
 		if find && val.State == "live" {
 			SPOT_list[val.InstID] = val
 		}

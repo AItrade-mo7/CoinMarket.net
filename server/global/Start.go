@@ -20,9 +20,5 @@ func Start() {
 	// 加载 App Env
 	AppEnvInit()
 
-	Log.Println("Unit", config.Unit)
-	Log.Println("SPOT_suffix", config.SPOT_suffix)
-	Log.Println("SWAP_suffix", config.SWAP_suffix)
-
 	Log.Println(`系统初始化完成`)
 }
