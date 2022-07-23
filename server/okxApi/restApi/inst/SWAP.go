@@ -10,7 +10,6 @@ import (
 
 // 获取可交易合约列表
 func SWAP() {
-	// 获取可交易现货列表
 	resData, err := restApi.Fetch(restApi.FetchOpt{
 		Path:   "/api/v5/public/instruments",
 		Method: "get",
@@ -19,7 +18,7 @@ func SWAP() {
 		},
 	})
 	if err != nil {
-		global.InstLog.Fatalln("SWAP", err)
+		global.InstLog.Println("SWAP", err)
 		return
 	}
 
