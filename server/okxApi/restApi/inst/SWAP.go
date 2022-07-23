@@ -23,5 +23,5 @@ func SWAP() {
 	}
 
 	// 写入日志文件
-	mFile.Write(config.Dir.Log+"/SWAP.json", mStr.ToStr(resData))
+	go mFile.Write(config.Dir.Log+"/SWAP.json", mStr.ToStr(resData))
 }

@@ -1,11 +1,16 @@
 package inst
 
 import (
+	"fmt"
+
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/okxApi/okxInfo"
 	"CoinMarket.net/server/okxApi/restApi"
 	"github.com/EasyGolang/goTools/mFile"
+	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mStr"
+	jsoniter "github.com/json-iterator/go"
 )
 
 // 获取可交易现货列表
@@ -22,6 +27,35 @@ func SPOT() {
 		return
 	}
 
+	var result okxInfo.ReqType
+	jsoniter.Unmarshal(resData, &result)
+	if result.Code != "0" {
+		global.InstLog.Println("SPOT-err", result)
+		return
+	}
+
+	SetInst(result.Data)
+
 	// 写入日志文件
-	mFile.Write(config.Dir.Log+"/SPOT.json", mStr.ToStr(resData))
+	go mFile.Write(config.Dir.Log+"/SPOT.json", mStr.ToStr(resData))
+}
+
+func SetInst(data any) {
+	var list []okxInfo.InstType
+
+	jsonStr := mJson.ToJson(data)
+
+	jsoniter.Unmarshal(jsonStr, &list)
+
+	fmt.Println(list)
+
+	// for _, val := range data {
+
+	// 	find := strings.Contains(val.InstID, "-USDT") // 只保留 USDT
+	// 	if find && val.State == "live" {
+	// 		// inst := InstCount(val)
+	// 		// instList = append(instList, inst)
+	// 	}
+	// }
+	// okxInfo.InstList = instList
 }
