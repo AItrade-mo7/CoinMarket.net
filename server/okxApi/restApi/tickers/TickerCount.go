@@ -10,21 +10,6 @@ import (
 func TickerCount(data okxInfo.TickerType) (Ticker okxInfo.TickerType) {
 	Ticker = data
 
-	// 24 小时均价
-	Avg24 := mCount.Average([]string{
-		Ticker.Open24H,
-		Ticker.High24H,
-		Ticker.Low24H,
-	})
-	Ticker.Avg24 = mCount.PriceCent(Avg24, Ticker.Last)
-
-	// 24 小时成交额
-	Amount := mCount.Mul(
-		Ticker.Avg24,
-		Ticker.VolCcy24H,
-	)
-	Ticker.Amount = mCount.PriceCent(Amount, Ticker.Last)
-
 	// 24 小时 涨幅
 	Ticker.U_R24 = mCount.RoseCent(Ticker.Last, Ticker.Open24H)
 
@@ -44,8 +29,8 @@ func BubbleAmount(arr []okxInfo.TickerType) []okxInfo.TickerType {
 	for i := size - 1; i > 0; i-- {
 		swapped = false
 		for j := 0; j < i; j++ {
-			a := list[j+1].Amount
-			b := list[j].Amount
+			a := list[j+1].VolCcy24H
+			b := list[j].VolCcy24H
 			if mCount.Le(a, b) < 0 {
 				list[j], list[j+1] = list[j+1], list[j]
 				swapped = true
@@ -68,7 +53,6 @@ func BubbleU_R24(arr []okxInfo.TickerType) []okxInfo.TickerType {
 	for i := size - 1; i > 0; i-- {
 		swapped = false
 		for j := 0; j < i; j++ {
-
 			a := list[j+1].U_R24
 			b := list[j].U_R24
 			if mCount.Le(a, b) < 0 {
