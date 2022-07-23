@@ -52,13 +52,10 @@ func setSPOT_list(data any) {
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
 
-	var instList []okxInfo.InstType
 	for _, val := range list {
 		find := strings.Contains(val.InstID, "-USDT") // 只保留 USDT
 		if find && val.State == "live" {
-			instList = append(instList, val)
+			SPOT_list[val.InstID] = val
 		}
 	}
-
-	SPOT_list = instList
 }

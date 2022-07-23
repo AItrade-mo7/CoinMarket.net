@@ -2,12 +2,16 @@ package inst
 
 import (
 	"io/ioutil"
+	"strings"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/okxApi/okxInfo"
 	"CoinMarket.net/server/okxApi/restApi"
 	"github.com/EasyGolang/goTools/mFile"
+	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mStr"
+	jsoniter "github.com/json-iterator/go"
 )
 
 // 获取可交易合约列表
@@ -21,6 +25,7 @@ func SWAP() {
 			"instType": "SWAP",
 		},
 	})
+	// 本地模式
 	if config.AppEnv.RunMod == 1 {
 		resData, err = ioutil.ReadFile(SWAP_file)
 	}
@@ -29,6 +34,28 @@ func SWAP() {
 		return
 	}
 
+	var result okxInfo.ReqType
+	jsoniter.Unmarshal(resData, &result)
+	if result.Code != "0" {
+		global.InstLog.Println("SPOT-err", result)
+		return
+	}
+
+	setSWAP_list(result.Data)
+
 	// 写入日志文件
 	go mFile.Write(SWAP_file, mStr.ToStr(resData))
+}
+
+func setSWAP_list(data any) {
+	var list []okxInfo.InstType
+	jsonStr := mJson.ToJson(data)
+	jsoniter.Unmarshal(jsonStr, &list)
+
+	for _, val := range list {
+		find := strings.Contains(val.InstID, "-USDT-SWAP") // 只保留 USDT
+		if find && val.State == "live" {
+			SWAP_list[val.InstID] = val
+		}
+	}
 }
