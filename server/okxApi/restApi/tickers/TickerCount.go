@@ -1,6 +1,7 @@
 package tickers
 
 import (
+	"fmt"
 	"strings"
 
 	"CoinMarket.net/server/global/config"
@@ -8,8 +9,10 @@ import (
 	"github.com/EasyGolang/goTools/mCount"
 )
 
-func TickerCount(data okxInfo.TickerType) (Ticker okxInfo.TickerType) {
+func TickerCount(data okxInfo.TickerType, BinanceTicker okxInfo.BinanceTickerType) (Ticker okxInfo.TickerType) {
 	Ticker = data
+
+	fmt.Printf("Binance:%-15s  OKX:%-15s \n", BinanceTicker.InstID, Ticker.InstID)
 
 	// 24 小时 涨幅
 	Ticker.U_R24 = mCount.RoseCent(Ticker.Last, Ticker.Open24H)

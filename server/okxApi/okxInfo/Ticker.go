@@ -37,7 +37,7 @@ type TickerType struct {
 	Open24H   string `json:"open24h"`   // 24小时开盘价
 	High24H   string `json:"high24h"`   // 最高价
 	Low24H    string `json:"low24h"`    // 最低价
-	VolCcy24H string `json:"volCcy24h"` // 24小时成交量 计价货币数量
+	VolCcy24H string `json:"volCcy24h"` // 24小时成交量 USDT 数量
 	U_R24     string `json:"u_r24"`     // 涨幅 = (最新价-开盘价)/开盘价 =
 	CcyName   string `json:"CcyName"`   // 币种名称
 }

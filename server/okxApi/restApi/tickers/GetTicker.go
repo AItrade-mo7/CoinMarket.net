@@ -54,8 +54,17 @@ func setTicker(data any) {
 	for _, val := range list {
 		SPOT := okxInfo.SPOT_inst[val.InstID]
 		if SPOT.State == "live" {
-			ticker := TickerCount(val)
-			tickerList = append(tickerList, ticker)
+			BinanceTicker := okxInfo.BinanceTickerType{}
+			for _, BinanceVal := range okxInfo.BinanceTickerList {
+				if BinanceVal.InstID == val.InstID {
+					BinanceTicker = BinanceVal
+					break
+				}
+			}
+			if len(BinanceTicker.InstID) > 2 {
+				ticker := TickerCount(val, BinanceTicker)
+				tickerList = append(tickerList, ticker)
+			}
 		}
 	}
 
