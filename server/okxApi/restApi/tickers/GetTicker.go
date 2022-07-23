@@ -1,13 +1,17 @@
 package tickers
 
 import (
+	"fmt"
 	"io/ioutil"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/okxApi/okxInfo"
 	"CoinMarket.net/server/okxApi/restApi"
 	"github.com/EasyGolang/goTools/mFile"
+	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mStr"
+	jsoniter "github.com/json-iterator/go"
 )
 
 func GetTicker() {
@@ -30,5 +34,24 @@ func GetTicker() {
 		return
 	}
 
+	var result okxInfo.ReqType
+	jsoniter.Unmarshal(resData, &result)
+	if result.Code != "0" {
+		global.InstLog.Println("Ticker-err", result)
+		return
+	}
+
+	setTicker(result.Data)
+
 	go mFile.Write(Ticker_file, mStr.ToStr(resData))
+}
+
+func setTicker(data any) {
+	var list []okxInfo.TickerType
+	jsonStr := mJson.ToJson(data)
+	jsoniter.Unmarshal(jsonStr, &list)
+
+	for _, v := range list {
+		fmt.Println(v.InstID)
+	}
 }
