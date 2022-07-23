@@ -10,7 +10,7 @@ import (
 	resData, err := restApi.Fetch(restApi.FetchOpt{
 		Path: "/api/v5/account/balance",
 		Data: map[string]any{
-			"ccy": "USDT",
+			"xxxx": "xxxx",
 		},
 		Method: "get",
 		Event: func(s string, a any) {

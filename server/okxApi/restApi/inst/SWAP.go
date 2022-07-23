@@ -53,7 +53,8 @@ func setSWAP_list(data any) {
 	jsoniter.Unmarshal(jsonStr, &list)
 
 	for _, val := range list {
-		find := strings.Contains(val.InstID, "-USDT-SWAP") // 只保留 USDT
+
+		find := strings.Contains(val.InstID, config.SWAP_suffix) // 统一计价单位
 		if find && val.State == "live" {
 			SWAP_list[val.InstID] = val
 		}

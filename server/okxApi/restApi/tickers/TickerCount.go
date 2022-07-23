@@ -3,6 +3,7 @@ package tickers
 import (
 	"strings"
 
+	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 )
@@ -14,7 +15,7 @@ func TickerCount(data okxInfo.TickerType) (Ticker okxInfo.TickerType) {
 	Ticker.U_R24 = mCount.RoseCent(Ticker.Last, Ticker.Open24H)
 
 	// 币种的名称
-	Ticker.CcyName = strings.Replace(Ticker.InstID, "-USDT", "", -1)
+	Ticker.CcyName = strings.Replace(Ticker.InstID, config.SPOT_suffix, "", -1)
 
 	return Ticker
 }
