@@ -18,12 +18,12 @@ func Start() {
 		Func:      inst.Start,
 		SleepTime: time.Hour * 8, // 每 8 时获取一次
 	}).Start()
-	mFile.Write(config.Dir.JsonData+"/SPOT_inst.json", mJson.ToStr(okxInfo.SPOT_inst))
-	mFile.Write(config.Dir.JsonData+"/SWAP_inst.json", mJson.ToStr(okxInfo.SWAP_inst))
+	go mFile.Write(config.Dir.JsonData+"/SPOT_inst.json", mJson.ToStr(okxInfo.SPOT_inst))
+	go mFile.Write(config.Dir.JsonData+"/SWAP_inst.json", mJson.ToStr(okxInfo.SWAP_inst))
 
 	mCycle.New(mCycle.Opt{
 		Func:      tickers.Start,
 		SleepTime: time.Minute, // 每 1 分钟 获取一次
 	}).Start()
-	mFile.Write(config.Dir.JsonData+"/TickerList.json", mJson.ToStr(okxInfo.TickerList))
+	go mFile.Write(config.Dir.JsonData+"/TickerList.json", mJson.ToStr(okxInfo.TickerList))
 }

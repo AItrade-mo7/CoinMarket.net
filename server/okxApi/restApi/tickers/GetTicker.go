@@ -59,6 +59,5 @@ func setTicker(data any) {
 		}
 	}
 
-	AmountList := BubbleAmount(tickerList)   // 按照成交额排序之后
-	okxInfo.TickerList = Reverse(AmountList) // 翻转数组大的排在前面
+	okxInfo.TickerList = tickerList // 翻转数组大的排在前面
 }
