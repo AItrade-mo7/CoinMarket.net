@@ -3,6 +3,7 @@ package inst
 import (
 	"fmt"
 	"io/ioutil"
+	"strings"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
@@ -25,17 +26,15 @@ func SPOT() {
 			"instType": "SPOT",
 		},
 	})
-
+	// 本地模式
 	if config.AppEnv.RunMod == 1 {
 		resData, err = ioutil.ReadFile(SWAP_file)
 	}
+
 	if err != nil {
 		global.InstLog.Println("SPOT", err)
 		return
 	}
-
-	fmt.Println(resData)
-
 	var result okxInfo.ReqType
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {
@@ -51,20 +50,17 @@ func SPOT() {
 
 func SetInst(data any) {
 	var list []okxInfo.InstType
-
 	jsonStr := mJson.ToJson(data)
-
 	jsoniter.Unmarshal(jsonStr, &list)
 
-	fmt.Println(list)
+	for _, val := range list {
+		find := strings.Contains(val.InstID, "-USDT") // 只保留 USDT
 
-	// for _, val := range data {
-
-	// 	find := strings.Contains(val.InstID, "-USDT") // 只保留 USDT
-	// 	if find && val.State == "live" {
-	// 		// inst := InstCount(val)
-	// 		// instList = append(instList, inst)
-	// 	}
-	// }
+		fmt.Println(val.State, find, val.InstID)
+		// if find && val.State == "live" {
+		// 	// inst := InstCount(val)
+		// 	// instList = append(instList, inst)
+		// }
+	}
 	// okxInfo.InstList = instList
 }
