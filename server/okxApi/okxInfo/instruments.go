@@ -29,3 +29,8 @@ type InstType struct {
 	TickSz       string `json:"tickSz"`
 	Uly          string `json:"uly"`
 }
+
+var (
+	SPOT_inst = make(map[string]InstType)
+	SWAP_inst = make(map[string]InstType)
+)
