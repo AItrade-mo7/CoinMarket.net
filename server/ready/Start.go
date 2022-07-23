@@ -25,4 +25,5 @@ func Start() {
 		Func:      tickers.Start,
 		SleepTime: time.Minute, // 每 1 分钟 获取一次
 	}).Start()
+	mFile.Write(config.Dir.JsonData+"/TickerList.json", mJson.ToStr(okxInfo.TickerList))
 }

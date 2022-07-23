@@ -10,18 +10,25 @@ import (
 func TickerCount(data okxInfo.TickerType) (Ticker okxInfo.TickerType) {
 	Ticker = data
 
-	Ticker.Avg24 = mCount.Average([]string{
+	// 24 小时均价
+	Avg24 := mCount.Average([]string{
 		Ticker.Open24H,
 		Ticker.High24H,
 		Ticker.Low24H,
 	})
-	Ticker.Amount = mCount.Mul(
+	Ticker.Avg24 = mCount.PriceCent(Avg24, Ticker.Last)
+
+	// 24 小时成交额
+	Amount := mCount.Mul(
 		Ticker.Avg24,
 		Ticker.VolCcy24H,
 	)
+	Ticker.Amount = mCount.PriceCent(Amount, Ticker.Last)
 
+	// 24 小时 涨幅
 	Ticker.U_R24 = mCount.RoseCent(Ticker.Last, Ticker.Open24H)
 
+	// 币种的名称
 	Ticker.CcyName = strings.Replace(Ticker.InstID, "-USDT", "", -1)
 
 	return Ticker
