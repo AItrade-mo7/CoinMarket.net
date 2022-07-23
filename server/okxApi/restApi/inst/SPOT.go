@@ -1,7 +1,6 @@
 package inst
 
 import (
-	"fmt"
 	"io/ioutil"
 	"strings"
 
@@ -42,25 +41,24 @@ func SPOT() {
 		return
 	}
 
-	SetInst(result.Data)
+	setSPOT_list(result.Data)
 
 	// 写入数据文件
 	go mFile.Write(SWAP_file, mStr.ToStr(resData))
 }
 
-func SetInst(data any) {
+func setSPOT_list(data any) {
 	var list []okxInfo.InstType
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
 
+	var instList []okxInfo.InstType
 	for _, val := range list {
 		find := strings.Contains(val.InstID, "-USDT") // 只保留 USDT
-
-		fmt.Println(val.State, find, val.InstID)
-		// if find && val.State == "live" {
-		// 	// inst := InstCount(val)
-		// 	// instList = append(instList, inst)
-		// }
+		if find && val.State == "live" {
+			instList = append(instList, val)
+		}
 	}
-	// okxInfo.InstList = instList
+
+	SPOT_list = instList
 }
