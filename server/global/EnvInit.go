@@ -12,6 +12,8 @@ func AppEnvInit() {
 	if !isUserEnvPath {
 		return
 	}
+
 	config.LoadAppEnv()
+
 	Log.Println("加载 AppEnv : ", mJson.JsonFormat(mJson.ToJson(config.AppEnv)))
 }

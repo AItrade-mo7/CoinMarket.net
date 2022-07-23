@@ -17,5 +17,8 @@ func Start() {
 		SleepTime: time.Hour * 8,
 	}).Start()
 
+	// 加载 App Env
+	AppEnvInit()
+
 	Log.Println(`系统初始化完成`)
 }
