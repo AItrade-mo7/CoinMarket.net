@@ -12,8 +12,9 @@ import (
 )
 
 var (
-	Log    *log.Logger // 系统日志& 重大错误或者事件
-	WssLog *log.Logger // 系统日志& 重大错误或者事件
+	Log     *log.Logger // 系统日志& 重大错误或者事件
+	InstLog *log.Logger // 产品信息接口报错
+	RestLog *log.Logger // Rest 接口的请求日志
 )
 
 func LogInit() {
@@ -29,9 +30,15 @@ func LogInit() {
 		Path: config.Dir.Log,
 		Name: "Sys",
 	})
-	WssLog = mLog.NewLog(mLog.NewLogParam{
+
+	InstLog = mLog.NewLog(mLog.NewLogParam{
 		Path: config.Dir.Log,
-		Name: "Wss",
+		Name: "Inst",
+	})
+
+	RestLog = mLog.NewLog(mLog.NewLogParam{
+		Path: config.Dir.Log,
+		Name: "Rest",
 	})
 
 	// 设定清除log
