@@ -1,7 +1,6 @@
 package tickers
 
 import (
-	"fmt"
 	"io/ioutil"
 
 	"CoinMarket.net/server/global"
@@ -51,7 +50,15 @@ func setTicker(data any) {
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
 
-	for _, v := range list {
-		fmt.Println(v.InstID)
+	var tickerList []okxInfo.TickerType
+	for _, val := range list {
+		SPOT := okxInfo.SPOT_inst[val.InstID]
+		if SPOT.State == "live" {
+			ticker := TickerCount(val)
+			tickerList = append(tickerList, ticker)
+		}
 	}
+
+	AmountList := BubbleAmount(tickerList)   // 按照成交额排序之后
+	okxInfo.TickerList = Reverse(AmountList) // 翻转数组大的排在前面
 }
