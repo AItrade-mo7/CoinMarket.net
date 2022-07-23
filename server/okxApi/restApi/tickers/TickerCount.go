@@ -1,7 +1,6 @@
 package tickers
 
 import (
-	"fmt"
 	"strings"
 
 	"CoinMarket.net/server/global/config"
@@ -11,8 +10,6 @@ import (
 
 func TickerCount(data okxInfo.TickerType, BinanceTicker okxInfo.BinanceTickerType) (Ticker okxInfo.TickerType) {
 	Ticker = data
-
-	fmt.Printf("Binance:%-15s  OKX:%-15s \n", BinanceTicker.InstID, Ticker.InstID)
 
 	// 24 小时成交USDT
 	Ticker.QuoteVolume = BinanceTicker.QuoteVolume
