@@ -14,11 +14,17 @@ func TickerCount(data okxInfo.TickerType, BinanceTicker okxInfo.BinanceTickerTyp
 
 	fmt.Printf("Binance:%-15s  OKX:%-15s \n", BinanceTicker.InstID, Ticker.InstID)
 
+	// 24 小时成交USDT
+	Ticker.QuoteVolume = BinanceTicker.QuoteVolume
+
 	// 24 小时 涨幅
 	Ticker.U_R24 = mCount.RoseCent(Ticker.Last, Ticker.Open24H)
 
 	// 币种的名称
 	Ticker.CcyName = strings.Replace(Ticker.InstID, config.SPOT_suffix, "", -1)
+
+	// 成交量总和
+	Ticker.Amount = mCount.Add(Ticker.QuoteVolume, Ticker.VolCcy24H)
 
 	return Ticker
 }
@@ -33,8 +39,8 @@ func BubbleAmount(arr []okxInfo.TickerType) []okxInfo.TickerType {
 	for i := size - 1; i > 0; i-- {
 		swapped = false
 		for j := 0; j < i; j++ {
-			a := list[j+1].VolCcy24H
-			b := list[j].VolCcy24H
+			a := list[j+1].Amount
+			b := list[j].Amount
 			if mCount.Le(a, b) < 0 {
 				list[j], list[j+1] = list[j+1], list[j]
 				swapped = true
