@@ -1,8 +1,10 @@
 #!/bin/bash
-##WebHook:~ 发布 ShellHooks.net ~
 # 加载变量
 source "./_shell/init.sh"
 #############
+
+echo "开始打包" &&
+  npm run build
 
 echo "停止 pm2 服务" &&
   pm2 delete ${startName}
