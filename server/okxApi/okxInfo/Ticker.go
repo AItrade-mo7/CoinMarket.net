@@ -28,24 +28,24 @@ type BinanceTickerType struct {
 var BinanceTickerList []BinanceTickerType // 只用作数据中转
 
 type TickerType struct {
-	InstType  string `json:"instType"`
-	InstID    string `json:"instId"`
-	Last      string `json:"last"` // 最新成交价
-	LastSz    string `json:"lastSz"`
-	AskPx     string `json:"askPx"`
-	AskSz     string `json:"askSz"`
-	BidPx     string `json:"bidPx"`
-	BidSz     string `json:"bidSz"`
-	Open24H   string `json:"open24h"`   // 24小时开盘价
-	High24H   string `json:"high24h"`   // 最高价
-	Low24H    string `json:"low24h"`    // 最低价
-	VolCcy24H string `json:"volCcy24h"` // 24小时成交量 USDT 数量
+	InstType  string `json:"InstType"`
+	InstID    string `json:"InstID"`
+	Last      string `json:"Last"` // 最新成交价
+	LastSz    string `json:"LastSz"`
+	AskPx     string `json:"AskPx"`
+	AskSz     string `json:"AskSz"`
+	BidPx     string `json:"BidPx"`
+	BidSz     string `json:"BidSz"`
+	Open24H   string `json:"Open24H"`   // 24小时开盘价
+	High24H   string `json:"High24H"`   // 最高价
+	Low24H    string `json:"Low24H"`    // 最低价
+	VolCcy24H string `json:"VolCcy24H"` // 24小时成交量 USDT 数量
 	// Binance 数据
-	QuoteVolume string `json:"quoteVolume"` // 24 小时成交 USDT 数量
+	QuoteVolume string `json:"QuoteVolume"` // 24 小时成交 USDT 数量
 	// 自定义数据
-	U_R24   string `json:"u_r24"`   // 涨幅 = (最新价-开盘价)/开盘价 =
+	U_R24   string `json:"U_R24"`   // 涨幅 = (最新价-开盘价)/开盘价 =
 	CcyName string `json:"CcyName"` // 币种名称
-	Amount  string `json:"amount"`  // 成交量总和
+	Amount  string `json:"Amount"`  // 成交量总和
 }
 
 var (
