@@ -68,12 +68,12 @@ func setTicker(data any) {
 		}
 	}
 
-	AmountList := BubbleAmount(tickerList) // 按照成交额排序之后
-	tLen := len(AmountList)
+	VolumeList := BubbleVolume(tickerList) // 按照成交额排序之后
+	tLen := len(VolumeList)
 	if tLen > 30 {
-		AmountList = AmountList[len(AmountList)-30:] // 取出最后30个
+		VolumeList = VolumeList[len(VolumeList)-30:] // 取出最后30个
 	}
-	okxInfo.TickerList = Reverse(AmountList) // 翻转数组大的排在前面
-	SortU_R24 := BubbleU_R24(AmountList)     // 按照涨跌幅排序
+	okxInfo.TickerList = Reverse(VolumeList) // 翻转数组大的排在前面
+	SortU_R24 := BubbleU_R24(VolumeList)     // 按照涨跌幅排序
 	okxInfo.TickerU_R24 = Reverse(SortU_R24) // 24 小时涨跌幅
 }

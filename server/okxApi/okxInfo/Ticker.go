@@ -45,7 +45,7 @@ type TickerType struct {
 	// 自定义数据
 	U_R24   string `json:"U_R24"`   // 涨幅 = (最新价-开盘价)/开盘价 =
 	CcyName string `json:"CcyName"` // 币种名称
-	Amount  string `json:"Amount"`  // 成交量总和
+	Volume  string `json:"Volume"`  // 成交量总和
 }
 
 var (
