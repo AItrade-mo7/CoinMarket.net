@@ -43,9 +43,11 @@ type TickerType struct {
 	// Binance 数据
 	QuoteVolume string `json:"QuoteVolume"` // 24 小时成交 USDT 数量
 	// 自定义数据
-	U_R24   string `json:"U_R24"`   // 涨幅 = (最新价-开盘价)/开盘价 =
-	CcyName string `json:"CcyName"` // 币种名称
-	Volume  string `json:"Volume"`  // 成交量总和
+	U_R24          string `json:"U_R24"`          // 涨幅 = (最新价-开盘价)/开盘价 =
+	CcyName        string `json:"CcyName"`        // 币种名称
+	Volume         string `json:"Volume"`         // 成交量总和
+	OkxVolRose     string `json:"OkxVolRose"`     // 欧意占比总交易量
+	BinanceVolRose string `json:"BinanceVolRose"` // 币安占比总交易量
 }
 
 var (
