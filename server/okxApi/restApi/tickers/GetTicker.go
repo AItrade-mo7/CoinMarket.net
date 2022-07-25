@@ -70,8 +70,8 @@ func setTicker(data any) {
 
 	VolumeList := BubbleVolume(tickerList) // 按照成交额排序之后
 	tLen := len(VolumeList)
-	if tLen > 30 {
-		VolumeList = VolumeList[len(VolumeList)-30:] // 取出最后30个
+	if tLen > 12 {
+		VolumeList = VolumeList[len(VolumeList)-12:] // 取出最后30个
 	}
 	okxInfo.TickerList = Reverse(VolumeList) // 翻转数组大的排在前面
 	SortU_R24 := BubbleU_R24(VolumeList)     // 按照涨跌幅排序
