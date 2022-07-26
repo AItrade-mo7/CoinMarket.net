@@ -4,9 +4,9 @@ import (
 	"time"
 
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/okxInfo"
 	"CoinMarket.net/server/okxApi/restApi/inst"
-	"CoinMarket.net/server/okxApi/restApi/tickers"
 	"github.com/EasyGolang/goTools/mCycle"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
@@ -22,8 +22,12 @@ func Start() {
 	go mFile.Write(config.Dir.JsonData+"/SWAP_inst.json", mJson.ToStr(okxInfo.SWAP_inst))
 
 	mCycle.New(mCycle.Opt{
-		Func:      tickers.Start,
+		Func:      GetTicker,
 		SleepTime: time.Minute, // 每 1 分钟 获取一次
 	}).Start()
 	go mFile.Write(config.Dir.JsonData+"/TickerList.json", mJson.ToStr(okxInfo.TickerList))
+}
+
+func GetTicker() {
+	binanceApi.GetTicker()
 }
