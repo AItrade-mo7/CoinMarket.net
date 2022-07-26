@@ -53,5 +53,6 @@ func SetInstID(data []okxInfo.BinanceTickerType) {
 			}
 		}
 	}
+
 	okxInfo.BinanceTickerList = list
 }
