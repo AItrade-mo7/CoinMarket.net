@@ -7,6 +7,7 @@ import (
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/okxInfo"
 	"CoinMarket.net/server/okxApi/restApi/inst"
+	"CoinMarket.net/server/okxApi/restApi/tickers"
 	"github.com/EasyGolang/goTools/mCycle"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
@@ -30,5 +31,7 @@ func Start() {
 
 func GetTicker() {
 	binanceApi.GetTicker()
-	// tickers.GetTicker()
+	tickers.GetTicker()
+
+	SetTicker()
 }

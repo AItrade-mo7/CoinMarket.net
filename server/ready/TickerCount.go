@@ -1,31 +1,27 @@
 package ready
 
 import (
-	"strings"
+	"fmt"
 
-	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/okxInfo"
+	"CoinMarket.net/server/okxApi/restApi/tickers"
 	"github.com/EasyGolang/goTools/mCount"
 )
 
-func TickerCount(data okxInfo.TickerType, BinanceTicker binanceApi.BinanceTickerType) (Ticker okxInfo.TickerType) {
-	Ticker = data
+func SetTicker() {
+	if len(binanceApi.BinanceTickerList) != 10 || len(tickers.OKXTickerList) != 10 {
+		global.InstLog.Println("数据条目不正确", len(binanceApi.BinanceTickerList), len(tickers.OKXTickerList))
+	}
 
-	// 24 小时成交USDT
-	Ticker.QuoteVolume = BinanceTicker.QuoteVolume
+	for i := 0; i < 10; i++ {
+		fmt.Println(binanceApi.BinanceTickerList[i].InstID, tickers.OKXTickerList[i].InstID)
+	}
+}
 
-	// 24 小时 涨幅
-	Ticker.U_R24 = mCount.RoseCent(Ticker.Last, Ticker.Open24H)
-
-	// 币种的名称
-	Ticker.CcyName = strings.Replace(Ticker.InstID, config.SPOT_suffix, "", -1)
-
-	// 成交量总和
-	Ticker.Volume = mCount.Add(Ticker.QuoteVolume, Ticker.VolCcy24H)
-
-	Ticker.BinanceVolRose = mCount.Cent(mCount.PerCent(Ticker.QuoteVolume, Ticker.Volume), 0)
-	Ticker.OkxVolRose = mCount.Cent(mCount.PerCent(Ticker.VolCcy24H, Ticker.Volume), 0)
+func TickerCount(OKXTicker tickers.OKXTickerType, BinanceTicker binanceApi.BinanceTickerType) (Ticker okxInfo.TickerType) {
+	Ticker = okxInfo.TickerType{}
 
 	return Ticker
 }
