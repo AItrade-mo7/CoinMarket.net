@@ -61,7 +61,7 @@ type TickerType struct {
 	Volume         string `json:"Volume"`         // 成交量总和
 	OkxVolRose     string `json:"OkxVolRose"`     // 欧意占比总交易量
 	BinanceVolRose string `json:"BinanceVolRose"` // 币安占比总交易量
-	Ts             string `json:"ts"`
+	Ts             string `json:"Ts"`
 }
 
 var (
