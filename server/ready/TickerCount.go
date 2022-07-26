@@ -1,8 +1,6 @@
 package ready
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/okxApi/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
@@ -13,8 +11,13 @@ func SetTicker() {
 		global.InstLog.Println("数据条目不正确", len(okxInfo.BinanceTickerList), len(okxInfo.OKXTickerList))
 	}
 
-	for i := 0; i < 10; i++ {
-		fmt.Println(okxInfo.BinanceTickerList[i].InstID, okxInfo.OKXTickerList[i].InstID)
+	for _, okx := range okxInfo.OKXTickerList {
+		for _, binance := range okxInfo.BinanceTickerList {
+			if okx.InstID == binance.InstID {
+				TickerCount(okx, binance)
+				break
+			}
+		}
 	}
 }
 
