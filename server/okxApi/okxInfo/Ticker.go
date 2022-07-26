@@ -1,5 +1,49 @@
 package okxInfo
 
+type BinanceTickerType struct {
+	Symbol             string `json:"symbol"`
+	InstID             string `json:"InstID"`
+	PriceChange        string `json:"priceChange"`
+	PriceChangePercent string `json:"priceChangePercent"`
+	WeightedAvgPrice   string `json:"weightedAvgPrice"`
+	PrevClosePrice     string `json:"prevClosePrice"`
+	LastPrice          string `json:"lastPrice"`
+	LastQty            string `json:"lastQty"`
+	BidPrice           string `json:"bidPrice"`
+	BidQty             string `json:"bidQty"`
+	AskPrice           string `json:"askPrice"`
+	AskQty             string `json:"askQty"`
+	OpenPrice          string `json:"openPrice"`
+	HighPrice          string `json:"highPrice"`
+	LowPrice           string `json:"lowPrice"`
+	Volume             string `json:"volume"`
+	QuoteVolume        string `json:"quoteVolume"`
+	OpenTime           int64  `json:"openTime"`
+	CloseTime          int64  `json:"closeTime"`
+	FirstID            int    `json:"firstId"`
+	LastID             int    `json:"lastId"`
+	Count              int    `json:"count"`
+}
+
+type OKXTickerType struct {
+	InstType  string `json:"instType"`
+	InstID    string `json:"instId"`
+	Last      string `json:"last"`
+	LastSz    string `json:"lastSz"`
+	AskPx     string `json:"askPx"`
+	AskSz     string `json:"askSz"`
+	BidPx     string `json:"bidPx"`
+	BidSz     string `json:"bidSz"`
+	Open24H   string `json:"open24h"`
+	High24H   string `json:"high24h"`
+	Low24H    string `json:"low24h"`
+	VolCcy24H string `json:"volCcy24h"`
+	Vol24H    string `json:"vol24h"`
+	Ts        string `json:"ts"`
+	SodUtc0   string `json:"sodUtc0"`
+	SodUtc8   string `json:"sodUtc8"`
+}
+
 type TickerType struct {
 	InstID         string `json:"InstID"`         // 产品ID
 	CcyName        string `json:"CcyName"`        // 币种名称

@@ -14,26 +14,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-type OKXTickerType struct {
-	InstType  string `json:"instType"`
-	InstID    string `json:"instId"`
-	Last      string `json:"last"`
-	LastSz    string `json:"lastSz"`
-	AskPx     string `json:"askPx"`
-	AskSz     string `json:"askSz"`
-	BidPx     string `json:"bidPx"`
-	BidSz     string `json:"bidSz"`
-	Open24H   string `json:"open24h"`
-	High24H   string `json:"high24h"`
-	Low24H    string `json:"low24h"`
-	VolCcy24H string `json:"volCcy24h"`
-	Vol24H    string `json:"vol24h"`
-	Ts        string `json:"ts"`
-	SodUtc0   string `json:"sodUtc0"`
-	SodUtc8   string `json:"sodUtc8"`
-}
-
-var OKXTickerList []OKXTickerType // okx的Ticker
+var OKXTickerList []okxInfo.OKXTickerType // okx的Ticker
 
 func GetTicker() {
 	Ticker_file := mStr.Join(config.Dir.JsonData, "/Ticker.json")
@@ -68,11 +49,11 @@ func GetTicker() {
 }
 
 func setTicker(data any) {
-	var list []OKXTickerType
+	var list []okxInfo.OKXTickerType
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
 
-	var tickerList []OKXTickerType
+	var tickerList []okxInfo.OKXTickerType
 	for _, val := range list {
 		SPOT := okxInfo.SPOT_inst[val.InstID]
 		if SPOT.State == "live" {
@@ -89,9 +70,9 @@ func setTicker(data any) {
 }
 
 // 成交量排序
-func VolumeSort(arr []OKXTickerType) []OKXTickerType {
+func VolumeSort(arr []okxInfo.OKXTickerType) []okxInfo.OKXTickerType {
 	size := len(arr)
-	list := make([]OKXTickerType, size)
+	list := make([]okxInfo.OKXTickerType, size)
 	copy(list, arr)
 
 	var swapped bool
@@ -113,9 +94,9 @@ func VolumeSort(arr []OKXTickerType) []OKXTickerType {
 }
 
 // 翻转数组
-func Reverse(arr []OKXTickerType) []OKXTickerType {
+func Reverse(arr []okxInfo.OKXTickerType) []okxInfo.OKXTickerType {
 	list := make(
-		[]OKXTickerType,
+		[]okxInfo.OKXTickerType,
 		len(arr),
 		len(arr)*2,
 	)

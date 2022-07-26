@@ -20,7 +20,7 @@ func SetTicker() {
 	}
 }
 
-func TickerCount(OKXTicker tickers.OKXTickerType, BinanceTicker binanceApi.BinanceTickerType) (Ticker okxInfo.TickerType) {
+func TickerCount(OKXTicker okxInfo.OKXTickerType, BinanceTicker okxInfo.BinanceTickerType) (Ticker okxInfo.TickerType) {
 	Ticker = okxInfo.TickerType{}
 
 	return Ticker

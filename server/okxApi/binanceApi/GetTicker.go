@@ -13,32 +13,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-type BinanceTickerType struct {
-	Symbol             string `json:"symbol"`
-	InstID             string `json:"InstID"`
-	PriceChange        string `json:"priceChange"`
-	PriceChangePercent string `json:"priceChangePercent"`
-	WeightedAvgPrice   string `json:"weightedAvgPrice"`
-	PrevClosePrice     string `json:"prevClosePrice"`
-	LastPrice          string `json:"lastPrice"`
-	LastQty            string `json:"lastQty"`
-	BidPrice           string `json:"bidPrice"`
-	BidQty             string `json:"bidQty"`
-	AskPrice           string `json:"askPrice"`
-	AskQty             string `json:"askQty"`
-	OpenPrice          string `json:"openPrice"`
-	HighPrice          string `json:"highPrice"`
-	LowPrice           string `json:"lowPrice"`
-	Volume             string `json:"volume"`
-	QuoteVolume        string `json:"quoteVolume"`
-	OpenTime           int64  `json:"openTime"`
-	CloseTime          int64  `json:"closeTime"`
-	FirstID            int    `json:"firstId"`
-	LastID             int    `json:"lastId"`
-	Count              int    `json:"count"`
-}
-
-var BinanceTickerList []BinanceTickerType // 币安的Ticker 排行
+var BinanceTickerList []okxInfo.BinanceTickerType // 币安的Ticker 排行
 
 // 币安的 ticker 数据
 func GetTicker() {
@@ -56,7 +31,7 @@ func GetTicker() {
 		return
 	}
 
-	var result []BinanceTickerType
+	var result []okxInfo.BinanceTickerType
 	err = jsoniter.Unmarshal(resData, &result)
 	if err != nil {
 		global.InstLog.Println("BinanceTicker-err", result)
@@ -68,8 +43,8 @@ func GetTicker() {
 	go mFile.Write(Ticker_file, mStr.ToStr(resData))
 }
 
-func SetInstID(data []BinanceTickerType) {
-	var list []BinanceTickerType
+func SetInstID(data []okxInfo.BinanceTickerType) {
+	var list []okxInfo.BinanceTickerType
 	for _, val := range data {
 		find := strings.Contains(val.Symbol, config.Unit)
 		if find {
@@ -92,9 +67,9 @@ func SetInstID(data []BinanceTickerType) {
 }
 
 // 成交量排序
-func VolumeSort(arr []BinanceTickerType) []BinanceTickerType {
+func VolumeSort(arr []okxInfo.BinanceTickerType) []okxInfo.BinanceTickerType {
 	size := len(arr)
-	list := make([]BinanceTickerType, size)
+	list := make([]okxInfo.BinanceTickerType, size)
 	copy(list, arr)
 
 	var swapped bool
@@ -116,9 +91,9 @@ func VolumeSort(arr []BinanceTickerType) []BinanceTickerType {
 }
 
 // 翻转数组
-func Reverse(arr []BinanceTickerType) []BinanceTickerType {
+func Reverse(arr []okxInfo.BinanceTickerType) []okxInfo.BinanceTickerType {
 	list := make(
-		[]BinanceTickerType,
+		[]okxInfo.BinanceTickerType,
 		len(arr),
 		len(arr)*2,
 	)
