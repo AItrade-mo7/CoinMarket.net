@@ -85,7 +85,7 @@ func SetInstID(data []BinanceTickerType) {
 
 	tLen := len(VolumeList)
 	if tLen > 10 {
-		VolumeList = VolumeList[len(VolumeList)-10:] // 取出最后10个
+		VolumeList = VolumeList[tLen-10:] // 取出最后10个
 	}
 
 	BinanceTickerList = Reverse(VolumeList) // 翻转数组大的排在前面

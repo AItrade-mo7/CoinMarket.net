@@ -7,6 +7,7 @@ import (
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/okxInfo"
 	"CoinMarket.net/server/okxApi/restApi"
+	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mStr"
@@ -82,7 +83,48 @@ func setTicker(data any) {
 	VolumeList := VolumeSort(tickerList) // 按照成交额排序之后
 	tLen := len(VolumeList)
 	if tLen > 10 {
-		VolumeList = VolumeList[len(VolumeList)-10:] // 取出最后10个
+		VolumeList = VolumeList[tLen-10:] // 取出最后10个
 	}
 	OKXTickerList = Reverse(VolumeList) // 翻转数组大的排在前面
+}
+
+// 成交量排序
+func VolumeSort(arr []OKXTickerType) []OKXTickerType {
+	size := len(arr)
+	list := make([]OKXTickerType, size)
+	copy(list, arr)
+
+	var swapped bool
+	for i := size - 1; i > 0; i-- {
+		swapped = false
+		for j := 0; j < i; j++ {
+			a := list[j+1].VolCcy24H
+			b := list[j].VolCcy24H
+			if mCount.Le(a, b) < 0 {
+				list[j], list[j+1] = list[j+1], list[j]
+				swapped = true
+			}
+		}
+		if !swapped {
+			break
+		}
+	}
+	return list
+}
+
+// 翻转数组
+func Reverse(arr []OKXTickerType) []OKXTickerType {
+	list := make(
+		[]OKXTickerType,
+		len(arr),
+		len(arr)*2,
+	)
+
+	j := 0
+	for i := len(arr) - 1; i > -1; i-- {
+		list[j] = arr[i]
+		j++
+	}
+
+	return list
 }
