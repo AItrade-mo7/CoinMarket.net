@@ -32,6 +32,5 @@ func Start() {
 func GetTicker() {
 	binanceApi.GetTicker()
 	tickers.GetTicker()
-
-	SetTicker()
+	SetTicker() // 在这里计算综合排行榜单
 }
