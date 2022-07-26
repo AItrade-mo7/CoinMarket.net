@@ -46,6 +46,7 @@ func TickerCount(OKXTicker okxInfo.OKXTickerType, BinanceTicker okxInfo.BinanceT
 	Ticker.Volume = mCount.Add(OKXTicker.VolCcy24H, BinanceTicker.QuoteVolume)
 	Ticker.OkxVolRose = mCount.PerCent(Ticker.OKXVol24H, Ticker.Volume)
 	Ticker.BinanceVolRose = mCount.PerCent(Ticker.BinanceVol24H, Ticker.Volume)
+	Ticker.Ts = OKXTicker.Ts
 
 	return Ticker
 }
