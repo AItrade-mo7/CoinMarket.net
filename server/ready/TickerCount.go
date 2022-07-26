@@ -28,7 +28,6 @@ func SetTicker() {
 
 	VolumeSortList := VolumeSort(tickerList)
 	U_R24List := U_R24Sort(tickerList)
-
 	okxInfo.TickerU_R24 = U_R24List
 	okxInfo.TickerList = Reverse(VolumeSortList)
 }
