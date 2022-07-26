@@ -14,14 +14,23 @@ func SetTicker() {
 		global.InstLog.Println("数据条目不正确", len(okxInfo.BinanceTickerList), len(okxInfo.OKXTickerList))
 	}
 
+	tickerList := []okxInfo.TickerType{}
+
 	for _, okx := range okxInfo.OKXTickerList {
 		for _, binance := range okxInfo.BinanceTickerList {
 			if okx.InstID == binance.InstID {
-				TickerCount(okx, binance)
+				ticker := TickerCount(okx, binance)
+				tickerList = append(tickerList, ticker)
 				break
 			}
 		}
 	}
+
+	VolumeSortList := VolumeSort(tickerList)
+	U_R24List := U_R24Sort(tickerList)
+
+	okxInfo.TickerU_R24 = U_R24List
+	okxInfo.TickerList = Reverse(VolumeSortList)
 }
 
 func TickerCount(OKXTicker okxInfo.OKXTickerType, BinanceTicker okxInfo.BinanceTickerType) (Ticker okxInfo.TickerType) {
@@ -43,7 +52,7 @@ func TickerCount(OKXTicker okxInfo.OKXTickerType, BinanceTicker okxInfo.BinanceT
 }
 
 // 成交量排序
-func BubbleVolume(arr []okxInfo.TickerType) []okxInfo.TickerType {
+func VolumeSort(arr []okxInfo.TickerType) []okxInfo.TickerType {
 	size := len(arr)
 	list := make([]okxInfo.TickerType, size)
 	copy(list, arr)
@@ -67,7 +76,7 @@ func BubbleVolume(arr []okxInfo.TickerType) []okxInfo.TickerType {
 }
 
 // 涨跌幅排序
-func BubbleU_R24(arr []okxInfo.TickerType) []okxInfo.TickerType {
+func U_R24Sort(arr []okxInfo.TickerType) []okxInfo.TickerType {
 	size := len(arr)
 	list := make([]okxInfo.TickerType, size)
 	copy(list, arr)
