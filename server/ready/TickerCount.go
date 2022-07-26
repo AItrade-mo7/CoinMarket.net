@@ -4,11 +4,12 @@ import (
 	"strings"
 
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 )
 
-func TickerCount(data okxInfo.TickerType, BinanceTicker okxInfo.BinanceTickerType) (Ticker okxInfo.TickerType) {
+func TickerCount(data okxInfo.TickerType, BinanceTicker binanceApi.BinanceTickerType) (Ticker okxInfo.TickerType) {
 	Ticker = data
 
 	// 24 小时成交USDT

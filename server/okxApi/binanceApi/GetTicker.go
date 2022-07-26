@@ -12,7 +12,32 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-var BinanceTickerList []okxInfo.BinanceTickerType // 币安的Ticker 排行
+type BinanceTickerType struct {
+	Symbol             string `json:"symbol"`
+	InstID             string `json:"InstID"`
+	PriceChange        string `json:"priceChange"`
+	PriceChangePercent string `json:"priceChangePercent"`
+	WeightedAvgPrice   string `json:"weightedAvgPrice"`
+	PrevClosePrice     string `json:"prevClosePrice"`
+	LastPrice          string `json:"lastPrice"`
+	LastQty            string `json:"lastQty"`
+	BidPrice           string `json:"bidPrice"`
+	BidQty             string `json:"bidQty"`
+	AskPrice           string `json:"askPrice"`
+	AskQty             string `json:"askQty"`
+	OpenPrice          string `json:"openPrice"`
+	HighPrice          string `json:"highPrice"`
+	LowPrice           string `json:"lowPrice"`
+	Volume             string `json:"volume"`
+	QuoteVolume        string `json:"quoteVolume"`
+	OpenTime           int64  `json:"openTime"`
+	CloseTime          int64  `json:"closeTime"`
+	FirstID            int    `json:"firstId"`
+	LastID             int    `json:"lastId"`
+	Count              int    `json:"count"`
+}
+
+var BinanceTickerList []BinanceTickerType // 币安的Ticker 排行
 
 // 币安的 ticker 数据
 func GetTicker() {
@@ -30,7 +55,7 @@ func GetTicker() {
 		return
 	}
 
-	var result []okxInfo.BinanceTickerType
+	var result []BinanceTickerType
 	err = jsoniter.Unmarshal(resData, &result)
 	if err != nil {
 		global.InstLog.Println("BinanceTicker-err", result)
@@ -42,16 +67,15 @@ func GetTicker() {
 	go mFile.Write(Ticker_file, mStr.ToStr(resData))
 }
 
-func SetInstID(data []okxInfo.BinanceTickerType) {
-	var list []okxInfo.BinanceTickerType
+func SetInstID(data []BinanceTickerType) {
+	var list []BinanceTickerType
 	for _, val := range data {
-		Inst := val
 		find := strings.Contains(val.Symbol, config.Unit)
 		if find {
-			Inst.InstID = strings.Replace(val.Symbol, config.Unit, config.SPOT_suffix, -1)
-			SPOT := okxInfo.SPOT_inst[Inst.InstID]
+			val.InstID = strings.Replace(val.Symbol, config.Unit, config.SPOT_suffix, -1)
+			SPOT := okxInfo.SPOT_inst[val.InstID]
 			if SPOT.State == "live" {
-				list = append(list, Inst)
+				list = append(list, val)
 			}
 		}
 	}

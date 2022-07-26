@@ -13,7 +13,26 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-var OKXTickerList []okxInfo.TickerType // okx的Ticker
+type OKXTickerType struct {
+	InstType  string `json:"instType"`
+	InstID    string `json:"instId"`
+	Last      string `json:"last"`
+	LastSz    string `json:"lastSz"`
+	AskPx     string `json:"askPx"`
+	AskSz     string `json:"askSz"`
+	BidPx     string `json:"bidPx"`
+	BidSz     string `json:"bidSz"`
+	Open24H   string `json:"open24h"`
+	High24H   string `json:"high24h"`
+	Low24H    string `json:"low24h"`
+	VolCcy24H string `json:"volCcy24h"`
+	Vol24H    string `json:"vol24h"`
+	Ts        string `json:"ts"`
+	SodUtc0   string `json:"sodUtc0"`
+	SodUtc8   string `json:"sodUtc8"`
+}
+
+var OKXTickerList []OKXTickerType // okx的Ticker
 
 func GetTicker() {
 	Ticker_file := mStr.Join(config.Dir.JsonData, "/Ticker.json")
@@ -48,20 +67,19 @@ func GetTicker() {
 }
 
 func setTicker(data any) {
-	var list []okxInfo.TickerType
+	var list []OKXTickerType
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
 
-	var tickerList []okxInfo.TickerType
+	var tickerList []OKXTickerType
 	for _, val := range list {
 		SPOT := okxInfo.SPOT_inst[val.InstID]
 		if SPOT.State == "live" {
-			ticker := TickerCount(val)
-			tickerList = append(tickerList, ticker)
+			tickerList = append(tickerList, val)
 		}
 	}
 
-	VolumeList := BubbleVolume(tickerList) // 按照成交额排序之后
+	VolumeList := VolumeSort(tickerList) // 按照成交额排序之后
 	tLen := len(VolumeList)
 	if tLen > 10 {
 		VolumeList = VolumeList[len(VolumeList)-10:] // 取出最后10个
