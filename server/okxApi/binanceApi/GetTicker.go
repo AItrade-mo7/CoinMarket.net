@@ -7,6 +7,7 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/okxInfo"
+	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mStr"
 	jsoniter "github.com/json-iterator/go"
@@ -80,5 +81,53 @@ func SetInstID(data []BinanceTickerType) {
 		}
 	}
 
-	BinanceTickerList = list
+	VolumeList := VolumeSort(list)
+
+	tLen := len(VolumeList)
+	if tLen > 10 {
+		VolumeList = VolumeList[len(VolumeList)-10:] // 取出最后10个
+	}
+
+	BinanceTickerList = Reverse(VolumeList) // 翻转数组大的排在前面
+}
+
+// 成交量排序
+func VolumeSort(arr []BinanceTickerType) []BinanceTickerType {
+	size := len(arr)
+	list := make([]BinanceTickerType, size)
+	copy(list, arr)
+
+	var swapped bool
+	for i := size - 1; i > 0; i-- {
+		swapped = false
+		for j := 0; j < i; j++ {
+			a := list[j+1].QuoteVolume
+			b := list[j].QuoteVolume
+			if mCount.Le(a, b) < 0 {
+				list[j], list[j+1] = list[j+1], list[j]
+				swapped = true
+			}
+		}
+		if !swapped {
+			break
+		}
+	}
+	return list
+}
+
+// 翻转数组
+func Reverse(arr []BinanceTickerType) []BinanceTickerType {
+	list := make(
+		[]BinanceTickerType,
+		len(arr),
+		len(arr)*2,
+	)
+
+	j := 0
+	for i := len(arr) - 1; i > -1; i-- {
+		list[j] = arr[i]
+		j++
+	}
+
+	return list
 }
