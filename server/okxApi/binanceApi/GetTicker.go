@@ -57,8 +57,8 @@ func SetInstID(data []okxInfo.BinanceTickerType) {
 	VolumeList := VolumeSort(list)
 
 	tLen := len(VolumeList)
-	if tLen > 20 {
-		VolumeList = VolumeList[tLen-20:] // 取出最后 20 个
+	if tLen > 15 {
+		VolumeList = VolumeList[tLen-15:] // 取出最后 15 个
 	}
 
 	okxInfo.BinanceTickerList = Reverse(VolumeList) // 翻转数组大的排在前面
