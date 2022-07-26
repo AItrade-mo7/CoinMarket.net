@@ -12,6 +12,8 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
+var BinanceTickerList []okxInfo.BinanceTickerType // 币安的Ticker 排行
+
 // 币安的 ticker 数据
 func GetTicker() {
 	Ticker_file := mStr.Join(config.Dir.JsonData, "/BinanceTicker.json")
@@ -54,5 +56,5 @@ func SetInstID(data []okxInfo.BinanceTickerType) {
 		}
 	}
 
-	okxInfo.BinanceTickerList = list
+	BinanceTickerList = list
 }

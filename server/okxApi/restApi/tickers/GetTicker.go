@@ -54,17 +54,8 @@ func setTicker(data any) {
 	for _, val := range list {
 		SPOT := okxInfo.SPOT_inst[val.InstID]
 		if SPOT.State == "live" {
-			BinanceTicker := okxInfo.BinanceTickerType{}
-			for _, BinanceVal := range okxInfo.BinanceTickerList {
-				if BinanceVal.InstID == val.InstID {
-					BinanceTicker = BinanceVal
-					break
-				}
-			}
-			if len(BinanceTicker.InstID) > 2 {
-				ticker := TickerCount(val, BinanceTicker)
-				tickerList = append(tickerList, ticker)
-			}
+			ticker := TickerCount(val)
+			tickerList = append(tickerList, ticker)
 		}
 	}
 
@@ -73,7 +64,5 @@ func setTicker(data any) {
 	if tLen > 10 {
 		VolumeList = VolumeList[len(VolumeList)-10:] // 取出最后10个
 	}
-	okxInfo.TickerList = Reverse(VolumeList) // 翻转数组大的排在前面
-	SortU_R24 := BubbleU_R24(VolumeList)     // 按照涨跌幅排序
-	okxInfo.TickerU_R24 = Reverse(SortU_R24) // 24 小时涨跌幅
+	OKXTickerList = Reverse(VolumeList) // 翻转数组大的排在前面
 }

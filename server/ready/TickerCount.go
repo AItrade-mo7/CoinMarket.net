@@ -1,4 +1,4 @@
-package tickers
+package ready
 
 import (
 	"strings"
@@ -8,14 +8,23 @@ import (
 	"github.com/EasyGolang/goTools/mCount"
 )
 
-func TickerCount(data okxInfo.TickerType) (Ticker okxInfo.TickerType) {
+func TickerCount(data okxInfo.TickerType, BinanceTicker okxInfo.BinanceTickerType) (Ticker okxInfo.TickerType) {
 	Ticker = data
+
+	// 24 小时成交USDT
+	Ticker.QuoteVolume = BinanceTicker.QuoteVolume
 
 	// 24 小时 涨幅
 	Ticker.U_R24 = mCount.RoseCent(Ticker.Last, Ticker.Open24H)
 
 	// 币种的名称
 	Ticker.CcyName = strings.Replace(Ticker.InstID, config.SPOT_suffix, "", -1)
+
+	// 成交量总和
+	Ticker.Volume = mCount.Add(Ticker.QuoteVolume, Ticker.VolCcy24H)
+
+	Ticker.BinanceVolRose = mCount.Cent(mCount.PerCent(Ticker.QuoteVolume, Ticker.Volume), 0)
+	Ticker.OkxVolRose = mCount.Cent(mCount.PerCent(Ticker.VolCcy24H, Ticker.Volume), 0)
 
 	return Ticker
 }
@@ -30,8 +39,8 @@ func BubbleVolume(arr []okxInfo.TickerType) []okxInfo.TickerType {
 	for i := size - 1; i > 0; i-- {
 		swapped = false
 		for j := 0; j < i; j++ {
-			a := list[j+1].VolCcy24H
-			b := list[j].VolCcy24H
+			a := list[j+1].Volume
+			b := list[j].Volume
 			if mCount.Le(a, b) < 0 {
 				list[j], list[j+1] = list[j+1], list[j]
 				swapped = true

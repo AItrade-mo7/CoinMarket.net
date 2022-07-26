@@ -25,8 +25,6 @@ type BinanceTickerType struct {
 	Count              int    `json:"count"`
 }
 
-var BinanceTickerList []BinanceTickerType // 只用作数据中转
-
 type TickerType struct {
 	InstType  string `json:"InstType"`
 	InstID    string `json:"InstID"`
