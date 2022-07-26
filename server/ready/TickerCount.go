@@ -1,7 +1,10 @@
 package ready
 
 import (
+	"strings"
+
 	"CoinMarket.net/server/global"
+	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 )
@@ -23,6 +26,18 @@ func SetTicker() {
 
 func TickerCount(OKXTicker okxInfo.OKXTickerType, BinanceTicker okxInfo.BinanceTickerType) (Ticker okxInfo.TickerType) {
 	Ticker = okxInfo.TickerType{}
+	Ticker.InstID = OKXTicker.InstID
+	Ticker.CcyName = strings.Replace(Ticker.InstID, config.SPOT_suffix, "", -1)
+	Ticker.Last = OKXTicker.Last
+	Ticker.Open24H = OKXTicker.Open24H
+	Ticker.High24H = OKXTicker.High24H
+	Ticker.Low24H = OKXTicker.Low24H
+	Ticker.OKXVol24H = OKXTicker.VolCcy24H
+	Ticker.BinanceVol24H = BinanceTicker.QuoteVolume
+	Ticker.U_R24 = mCount.RoseCent(OKXTicker.Last, OKXTicker.Open24H)
+	Ticker.Volume = mCount.Add(OKXTicker.VolCcy24H, BinanceTicker.QuoteVolume)
+	Ticker.OkxVolRose = mCount.PerCent(Ticker.OKXVol24H, Ticker.Volume)
+	Ticker.BinanceVolRose = mCount.PerCent(Ticker.BinanceVol24H, Ticker.Volume)
 
 	return Ticker
 }
