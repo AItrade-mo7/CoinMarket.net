@@ -25,6 +25,8 @@ type BinanceTickerType struct {
 	Count              int    `json:"count"`
 }
 
+var BinanceTickerList []BinanceTickerType // 币安的Ticker 排行
+
 type OKXTickerType struct {
 	InstType  string `json:"instType"`
 	InstID    string `json:"instId"`
@@ -43,6 +45,8 @@ type OKXTickerType struct {
 	SodUtc0   string `json:"sodUtc0"`
 	SodUtc8   string `json:"sodUtc8"`
 }
+
+var OKXTickerList []OKXTickerType // okx的Ticker
 
 type TickerType struct {
 	InstID         string `json:"InstID"`         // 产品ID

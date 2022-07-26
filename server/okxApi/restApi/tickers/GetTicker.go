@@ -14,8 +14,6 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-var OKXTickerList []okxInfo.OKXTickerType // okx的Ticker
-
 func GetTicker() {
 	Ticker_file := mStr.Join(config.Dir.JsonData, "/Ticker.json")
 
@@ -66,7 +64,7 @@ func setTicker(data any) {
 	if tLen > 10 {
 		VolumeList = VolumeList[tLen-10:] // 取出最后10个
 	}
-	OKXTickerList = Reverse(VolumeList) // 翻转数组大的排在前面
+	okxInfo.OKXTickerList = Reverse(VolumeList) // 翻转数组大的排在前面
 }
 
 // 成交量排序

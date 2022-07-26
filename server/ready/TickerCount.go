@@ -4,19 +4,17 @@ import (
 	"fmt"
 
 	"CoinMarket.net/server/global"
-	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/okxInfo"
-	"CoinMarket.net/server/okxApi/restApi/tickers"
 	"github.com/EasyGolang/goTools/mCount"
 )
 
 func SetTicker() {
-	if len(binanceApi.BinanceTickerList) != 10 || len(tickers.OKXTickerList) != 10 {
-		global.InstLog.Println("数据条目不正确", len(binanceApi.BinanceTickerList), len(tickers.OKXTickerList))
+	if len(okxInfo.BinanceTickerList) != 10 || len(okxInfo.OKXTickerList) != 10 {
+		global.InstLog.Println("数据条目不正确", len(okxInfo.BinanceTickerList), len(okxInfo.OKXTickerList))
 	}
 
 	for i := 0; i < 10; i++ {
-		fmt.Println(binanceApi.BinanceTickerList[i].InstID, tickers.OKXTickerList[i].InstID)
+		fmt.Println(okxInfo.BinanceTickerList[i].InstID, okxInfo.OKXTickerList[i].InstID)
 	}
 }
 

@@ -13,8 +13,6 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-var BinanceTickerList []okxInfo.BinanceTickerType // 币安的Ticker 排行
-
 // 币安的 ticker 数据
 func GetTicker() {
 	Ticker_file := mStr.Join(config.Dir.JsonData, "/BinanceTicker.json")
@@ -63,7 +61,7 @@ func SetInstID(data []okxInfo.BinanceTickerType) {
 		VolumeList = VolumeList[tLen-10:] // 取出最后10个
 	}
 
-	BinanceTickerList = Reverse(VolumeList) // 翻转数组大的排在前面
+	okxInfo.BinanceTickerList = Reverse(VolumeList) // 翻转数组大的排在前面
 }
 
 // 成交量排序
