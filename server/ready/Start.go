@@ -44,8 +44,6 @@ func Start() {
 		Func:      GetTicker,
 		SleepTime: time.Minute * 5, // 每 5 分钟 获取一次
 	}).Start()
-	go mFile.Write(config.Dir.JsonData+"/TickerList.json", mJson.ToStr(okxInfo.TickerList))
-	go mFile.Write(config.Dir.JsonData+"/MarketKdata.json", mJson.ToStr(okxInfo.MarketKdata))
 }
 
 func GetTicker() {
