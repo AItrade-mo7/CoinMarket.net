@@ -33,13 +33,13 @@ func GetKdata(InstID string) {
 	}
 
 	if err != nil {
-		global.InstLog.Println(InstID, err)
+		global.KdataLog.Println(InstID, err)
 		return
 	}
 	var result okxInfo.ReqType
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {
-		global.InstLog.Println(InstID, "Err", result)
+		global.KdataLog.Println(InstID, "Err", result)
 		return
 	}
 

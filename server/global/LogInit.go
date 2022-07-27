@@ -14,7 +14,6 @@ import (
 var (
 	Log      *log.Logger // 系统日志& 重大错误或者事件
 	InstLog  *log.Logger // 产品信息接口报错
-	RestLog  *log.Logger // Rest 接口的请求日志
 	KdataLog *log.Logger // Rest 接口的请求日志
 )
 
@@ -41,11 +40,6 @@ func LogInit() {
 	InstLog = mLog.NewLog(mLog.NewLogParam{
 		Path: config.Dir.Log,
 		Name: "Inst",
-	})
-
-	RestLog = mLog.NewLog(mLog.NewLogParam{
-		Path: config.Dir.Log,
-		Name: "Rest",
 	})
 
 	KdataLog = mLog.NewLog(mLog.NewLogParam{

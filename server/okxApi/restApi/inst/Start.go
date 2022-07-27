@@ -17,7 +17,7 @@ func Start() {
 	SPOT()
 	if len(SPOT_list) < 30 || len(SWAP_list) < 30 {
 		// 正确
-		global.InstLog.Println("数据条目不正确", len(SPOT_list), len(SWAP_list))
+		global.InstLog.Println("inst 数据条目不正确", len(SPOT_list), len(SWAP_list))
 		return
 	}
 	SPOT_inst := make(map[string]okxInfo.InstType)

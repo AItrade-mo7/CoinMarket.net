@@ -11,7 +11,7 @@ import (
 
 func SetTicker() {
 	if len(okxInfo.BinanceTickerList) != 10 || len(okxInfo.OKXTickerList) != 10 {
-		global.InstLog.Println("数据条目不正确", len(okxInfo.BinanceTickerList), len(okxInfo.OKXTickerList))
+		global.InstLog.Println("TickerList 数据条目不正确", len(okxInfo.BinanceTickerList), len(okxInfo.OKXTickerList))
 	}
 
 	tickerList := []okxInfo.TickerType{}
