@@ -15,6 +15,8 @@ func NewKdata(now okxInfo.Kd, list []okxInfo.Kd) (kdata okxInfo.Kd) {
 		H:        now.H,
 		L:        now.L,
 		C:        now.C,
+		Vol:      now.Vol,
+		VolCcy:   now.VolCcy,
 		Type:     now.Type,
 	}
 
