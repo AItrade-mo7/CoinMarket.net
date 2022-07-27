@@ -29,11 +29,9 @@ func NewKdata(now okxInfo.Kd, list []okxInfo.Kd) (kdata okxInfo.Kd) {
 	Center := mCount.Average([]string{now.C, now.O, now.H, now.L})
 	kdata.Center = mCount.PriceCent(Center, now.C)
 
-	HLPer := mCount.Rose(now.H, now.L)
-	kdata.HLPer = mCount.PriceCent(HLPer, now.C)
+	kdata.HLPer = mCount.RoseCent(now.H, now.L)
 
-	SolidPer := mCount.Rose(now.C, now.O)
-	kdata.SolidPer = mCount.PriceCent(SolidPer, now.C)
+	kdata.SolidPer = mCount.RoseCent(now.C, now.O)
 
 	U_shade, D_shade := ShadeCount(kdata)
 	kdata.U_shade = mCount.PriceCent(U_shade, now.C)
@@ -43,8 +41,7 @@ func NewKdata(now okxInfo.Kd, list []okxInfo.Kd) (kdata okxInfo.Kd) {
 		return
 	}
 	Pre := list[len(list)-1]
-	RosePer := mCount.Rose(now.C, Pre.C)
-	kdata.RosePer = mCount.PriceCent(RosePer, now.C)
+	kdata.RosePer = mCount.RoseCent(now.C, Pre.C)
 	kdata.C_dir = C_dirCount(kdata, Pre)
 
 	return
