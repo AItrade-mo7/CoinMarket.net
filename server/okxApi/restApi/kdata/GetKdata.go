@@ -1,9 +1,9 @@
 package kdata
 
 import (
+	"fmt"
 	"io/ioutil"
 
-	"CoinMarket.net/server/analyse"
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/okxInfo"
@@ -45,7 +45,7 @@ func GetKdata(InstID string) {
 		return
 	}
 
-	FormatKdata(result.Data)
+	FormatKdata(result.Data, InstID)
 
 	// 写入数据文件
 	go mFile.Write(SWAP_file, mStr.ToStr(resData))
@@ -53,13 +53,20 @@ func GetKdata(InstID string) {
 
 var KdataList []okxInfo.Kd
 
-func FormatKdata(data any) {
+func FormatKdata(data any, InstID string) {
 	var list []okxInfo.CandleDataType
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
-
 	for _, item := range list {
-		kdata := analyse.NewKdata(item)
-		KdataList = append(KdataList, kdata)
+		kdata := okxInfo.Kd{
+			InstID:   InstID,
+			TimeUnix: item[0],
+			Time:     mTime.MsToTime(item[0], "0"),
+			O:        item[1],
+			H:        item[2],
+			L:        item[3],
+			C:        item[4],
+		}
+		fmt.Println(kdata)
 	}
 }
