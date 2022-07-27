@@ -75,12 +75,7 @@ func FormatKdata(data any, InstID string) {
 var KdataList []okxInfo.Kd
 
 func Storage(kdata okxInfo.Kd) {
-	if len(KdataList) < 2 {
-		KdataList = append(KdataList, kdata)
-		return
-	}
-	pre := KdataList[len(KdataList)-1]
-	new_Kdata := analyse.NewKdata(pre, kdata)
+	new_Kdata := analyse.NewKdata(kdata, KdataList)
 	KdataList = append(KdataList, new_Kdata)
 
 	global.KdataLog.Println(mJson.JsonFormat(mJson.ToJson(new_Kdata)))
