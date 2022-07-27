@@ -3,17 +3,33 @@ package ready
 import (
 	"time"
 
+	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/okxInfo"
 	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/tickers"
+	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mCycle"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
 )
 
 func Start() {
+	// 这里是启动日志
+
+	go global.Email(global.EmailOpt{
+		To: []string{
+			"meichangliang@mo7.cc",
+		},
+		Subject:  "ServeStart",
+		Template: tmpl.SysEmail,
+		SendData: tmpl.SysParam{
+			Message: "服务启动",
+			SysTime: time.Now(),
+		},
+	}).Send()
+
 	// 获取 OKX 交易产品信息
 	mCycle.New(mCycle.Opt{
 		Func:      inst.Start,
