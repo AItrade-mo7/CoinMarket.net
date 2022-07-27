@@ -16,19 +16,20 @@ import (
 )
 
 func Start() {
-	// 这里是启动日志
-
-	go global.Email(global.EmailOpt{
-		To: []string{
-			"meichangliang@mo7.cc",
-		},
-		Subject:  "ServeStart",
-		Template: tmpl.SysEmail,
-		SendData: tmpl.SysParam{
-			Message: "服务启动",
-			SysTime: time.Now(),
-		},
-	}).Send()
+	if config.AppEnv.RunMod == 0 {
+		// 发送邮件
+		go global.Email(global.EmailOpt{
+			To: []string{
+				"meichangliang@mo7.cc",
+			},
+			Subject:  "ServeStart",
+			Template: tmpl.SysEmail,
+			SendData: tmpl.SysParam{
+				Message: "服务启动",
+				SysTime: time.Now(),
+			},
+		}).Send()
+	}
 
 	// 获取 OKX 交易产品信息
 	mCycle.New(mCycle.Opt{
@@ -38,9 +39,10 @@ func Start() {
 	go mFile.Write(config.Dir.JsonData+"/SPOT_inst.json", mJson.ToStr(okxInfo.SPOT_inst))
 	go mFile.Write(config.Dir.JsonData+"/SWAP_inst.json", mJson.ToStr(okxInfo.SWAP_inst))
 
+	// 获取当前的行情与交易量榜单
 	mCycle.New(mCycle.Opt{
 		Func:      GetTicker,
-		SleepTime: time.Minute, // 每 1 分钟 获取一次
+		SleepTime: time.Minute * 5, // 每 5 分钟 获取一次
 	}).Start()
 	go mFile.Write(config.Dir.JsonData+"/TickerList.json", mJson.ToStr(okxInfo.TickerList))
 }
@@ -49,15 +51,5 @@ func GetTicker() {
 	binanceApi.GetTicker()
 	tickers.GetTicker()
 	SetTicker() // 在这里计算综合排行榜单
-
 	TickerKdata()
 }
-
-/*
-
-
-curl --request GET \
-     --url https://api.exchange.coinbase.com/products/BTC-USDT/stats \
-     --header 'Accept: application/json'
-
-*/
