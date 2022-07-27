@@ -7,7 +7,7 @@ import (
 
 // 构造新的Kdata
 func NewKdata(now okxInfo.Kd, list []okxInfo.Kd) (kdata okxInfo.Kd) {
-	Kdata := okxInfo.Kd{
+	kdata = okxInfo.Kd{
 		InstID:   now.InstID,
 		TimeUnix: now.TimeUnix,
 		Time:     now.Time,
@@ -17,28 +17,33 @@ func NewKdata(now okxInfo.Kd, list []okxInfo.Kd) (kdata okxInfo.Kd) {
 		C:        now.C,
 		Type:     now.Type,
 	}
-	Kdata.Dir = mCount.Le(Kdata.C, Kdata.O)
+
+	if mCount.Le("0", now.C) > -1 {
+		return
+	}
+
+	kdata.Dir = mCount.Le(kdata.C, kdata.O)
 
 	Center := mCount.Average([]string{now.C, now.O, now.H, now.L})
-	Kdata.Center = mCount.PriceCent(Center, now.C)
+	kdata.Center = mCount.PriceCent(Center, now.C)
 
 	HLPer := mCount.Rose(now.H, now.L)
-	Kdata.HLPer = mCount.PriceCent(HLPer, now.C)
+	kdata.HLPer = mCount.PriceCent(HLPer, now.C)
 
 	SolidPer := mCount.Rose(now.C, now.O)
-	Kdata.SolidPer = mCount.PriceCent(SolidPer, now.C)
+	kdata.SolidPer = mCount.PriceCent(SolidPer, now.C)
 
-	U_shade, D_shade := ShadeCount(Kdata)
-	Kdata.U_shade = mCount.PriceCent(U_shade, now.C)
-	Kdata.D_shade = mCount.PriceCent(D_shade, now.C)
+	U_shade, D_shade := ShadeCount(kdata)
+	kdata.U_shade = mCount.PriceCent(U_shade, now.C)
+	kdata.D_shade = mCount.PriceCent(D_shade, now.C)
 
 	if len(list) < 1 {
 		return
 	}
 	Pre := list[len(list)-1]
 	RosePer := mCount.Rose(now.C, Pre.C)
-	Kdata.RosePer = mCount.PriceCent(RosePer, now.C)
-	Kdata.C_dir = C_dirCount(Kdata, Pre)
+	kdata.RosePer = mCount.PriceCent(RosePer, now.C)
+	kdata.C_dir = C_dirCount(kdata, Pre)
 
 	return
 }
