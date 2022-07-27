@@ -1,6 +1,7 @@
 package ready
 
 import (
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global/config"
@@ -33,6 +34,8 @@ func GetTicker() {
 	binanceApi.GetTicker()
 	tickers.GetTicker()
 	SetTicker() // 在这里计算综合排行榜单
+
+	fmt.Println(len(okxInfo.TickerList))
 }
 
 /*
