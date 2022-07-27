@@ -26,3 +26,5 @@ type Kd struct {
 	RosePer string `json:"RosePer"` // 涨幅 当前收盘价 - 上一位收盘价 * 100%
 	C_dir   int    `json:"C_dir"`   // 中心点方向 (当前中心点-前中心点) 1：涨 & -1：跌 & 0：横盘
 }
+
+var MarketKdata = map[string][]Kd{}

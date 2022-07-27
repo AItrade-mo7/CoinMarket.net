@@ -15,9 +15,12 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-func GetKdata(InstID string) {
+var KdataList []okxInfo.Kd
+
+func GetKdata(InstID string) []okxInfo.Kd {
 	SWAP_file := mStr.Join(config.Dir.JsonData, "/", InstID, ".json")
 
+	KdataList = []okxInfo.Kd{}
 	resData, err := restApi.Fetch(restApi.FetchOpt{
 		Path:   "/api/v5/market/candles",
 		Method: "get",
@@ -36,19 +39,20 @@ func GetKdata(InstID string) {
 
 	if err != nil {
 		global.KdataLog.Println(InstID, err)
-		return
+		return nil
 	}
 	var result okxInfo.ReqType
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {
 		global.KdataLog.Println(InstID, "Err", result)
-		return
+		return nil
 	}
 
 	FormatKdata(result.Data, InstID)
 
 	// 写入数据文件
 	go mFile.Write(SWAP_file, mStr.ToStr(resData))
+	return KdataList
 }
 
 func FormatKdata(data any, InstID string) {
@@ -74,11 +78,8 @@ func FormatKdata(data any, InstID string) {
 	}
 }
 
-var KdataList []okxInfo.Kd
-
 func Storage(kdata okxInfo.Kd) {
 	new_Kdata := analyse.NewKdata(kdata, KdataList)
 	KdataList = append(KdataList, new_Kdata)
-
-	global.KdataLog.Println(mJson.JsonFormat(mJson.ToJson(new_Kdata)))
+	go global.KdataLog.Println(mJson.JsonFormat(mJson.ToJson(new_Kdata)))
 }
