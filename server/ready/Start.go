@@ -34,3 +34,12 @@ func GetTicker() {
 	tickers.GetTicker()
 	SetTicker() // 在这里计算综合排行榜单
 }
+
+/*
+
+
+curl --request GET \
+     --url https://api.exchange.coinbase.com/products/BTC-USDT/stats \
+     --header 'Accept: application/json'
+
+*/
