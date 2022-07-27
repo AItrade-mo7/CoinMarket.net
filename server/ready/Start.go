@@ -50,7 +50,7 @@ func GetTicker() {
 	tickers.GetTicker()
 	SetTicker() // 在这里计算综合排行榜单
 
-	TickerKData()
+	TickerKdata()
 }
 
 /*

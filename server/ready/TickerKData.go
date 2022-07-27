@@ -7,7 +7,7 @@ import (
 	"CoinMarket.net/server/okxApi/restApi/kdata"
 )
 
-func TickerKData() {
+func TickerKdata() {
 	MaxNum := 4 // 去除前 6 条数据
 	for key, item := range okxInfo.TickerList {
 		fmt.Println(key, item.InstID)
