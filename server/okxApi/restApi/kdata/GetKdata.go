@@ -8,10 +8,13 @@ import (
 	"CoinMarket.net/server/okxApi/okxInfo"
 	"CoinMarket.net/server/okxApi/restApi"
 	"github.com/EasyGolang/goTools/mFile"
+	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
 	jsoniter "github.com/json-iterator/go"
 )
+
+type CandleDataType [7]string
 
 func GetKdata(InstID string) {
 	SWAP_file := mStr.Join(config.Dir.JsonData, "/", InstID, ".json")
@@ -43,6 +46,17 @@ func GetKdata(InstID string) {
 		return
 	}
 
+	FormatKdata(result.Data)
+
 	// 写入数据文件
 	go mFile.Write(SWAP_file, mStr.ToStr(resData))
+}
+
+func FormatKdata(data any) {
+	var list []CandleDataType
+	jsonStr := mJson.ToJson(data)
+	jsoniter.Unmarshal(jsonStr, &list)
+
+	// for _, item := range list {
+	// }
 }
