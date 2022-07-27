@@ -55,7 +55,8 @@ func FormatKdata(data any, InstID string) {
 	var list []okxInfo.CandleDataType
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
-	for _, item := range list {
+	for i := len(list) - 1; i >= 0; i-- {
+		item := list[i]
 		kdata := okxInfo.Kd{
 			InstID:   InstID,
 			TimeUnix: item[0],
