@@ -30,14 +30,14 @@ func GetTicker() {
 	}
 
 	if err != nil {
-		global.InstLog.Println("OKXTicker", err)
+		global.TickerLog.Println("OKXTicker", err)
 		return
 	}
 
 	var result okxInfo.ReqType
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {
-		global.InstLog.Println("Ticker-err", result)
+		global.TickerLog.Println("Ticker-err", result)
 		return
 	}
 

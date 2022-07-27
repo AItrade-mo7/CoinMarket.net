@@ -12,9 +12,10 @@ import (
 )
 
 var (
-	Log      *log.Logger // 系统日志& 重大错误或者事件
-	InstLog  *log.Logger // 产品信息接口报错
-	KdataLog *log.Logger // Rest 接口的请求日志
+	Log       *log.Logger // 系统日志& 重大错误或者事件
+	InstLog   *log.Logger // 产品信息接口报错
+	KdataLog  *log.Logger // Rest 接口的请求日志
+	TickerLog *log.Logger // Rest 接口的请求日志
 )
 
 func LogInit() {
@@ -45,6 +46,11 @@ func LogInit() {
 	KdataLog = mLog.NewLog(mLog.NewLogParam{
 		Path: config.Dir.Log,
 		Name: "Kdata",
+	})
+
+	TickerLog = mLog.NewLog(mLog.NewLogParam{
+		Path: config.Dir.Log,
+		Name: "Ticker",
 	})
 
 	// 设定清除log
