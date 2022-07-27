@@ -3,6 +3,7 @@ package kdata
 import (
 	"io/ioutil"
 
+	"CoinMarket.net/server/analyse"
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/okxInfo"
@@ -13,8 +14,6 @@ import (
 	"github.com/EasyGolang/goTools/mTime"
 	jsoniter "github.com/json-iterator/go"
 )
-
-type CandleDataType [7]string
 
 func GetKdata(InstID string) {
 	SWAP_file := mStr.Join(config.Dir.JsonData, "/", InstID, ".json")
@@ -52,11 +51,15 @@ func GetKdata(InstID string) {
 	go mFile.Write(SWAP_file, mStr.ToStr(resData))
 }
 
+var KdataList []okxInfo.Kd
+
 func FormatKdata(data any) {
-	var list []CandleDataType
+	var list []okxInfo.CandleDataType
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
 
-	// for _, item := range list {
-	// }
+	for _, item := range list {
+		kdata := analyse.NewKdata(item)
+		KdataList = append(KdataList, kdata)
+	}
 }
