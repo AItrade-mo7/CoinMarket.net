@@ -1,7 +1,6 @@
-package candles
+package kdata
 
 import (
-	"fmt"
 	"io/ioutil"
 
 	"CoinMarket.net/server/global"
@@ -14,7 +13,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-func GetCandles(InstID string) {
+func GetKdata(InstID string) {
 	SWAP_file := mStr.Join(config.Dir.JsonData, "/", InstID, ".json")
 
 	resData, err := restApi.Fetch(restApi.FetchOpt{
@@ -22,11 +21,12 @@ func GetCandles(InstID string) {
 		Method: "get",
 		Data: map[string]any{
 			"instId": InstID,
-			"bar":    "10m",
+			"bar":    "15m",
 			"after":  mTime.GetUnix(),
 			"limit":  300,
 		},
 	})
+
 	// 本地模式
 	if config.AppEnv.RunMod == 1 {
 		resData, err = ioutil.ReadFile(SWAP_file)
@@ -42,8 +42,6 @@ func GetCandles(InstID string) {
 		global.InstLog.Println(InstID, "Err", result)
 		return
 	}
-
-	fmt.Println("111", result.Code)
 
 	// 写入数据文件
 	go mFile.Write(SWAP_file, mStr.ToStr(resData))

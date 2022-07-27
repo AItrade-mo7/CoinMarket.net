@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"CoinMarket.net/server/okxApi/okxInfo"
-	"CoinMarket.net/server/okxApi/restApi/candles"
+	"CoinMarket.net/server/okxApi/restApi/kdata"
 )
 
 func TickerKData() {
@@ -16,5 +16,5 @@ func TickerKData() {
 		}
 	}
 
-	candles.GetCandles(okxInfo.TickerList[0].InstID)
+	kdata.GetKdata(okxInfo.TickerList[0].InstID)
 }
