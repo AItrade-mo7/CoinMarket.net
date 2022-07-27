@@ -6,7 +6,7 @@ type CandleDataType [7]string
 
 type Kd struct {
 	InstID   string    `json:"InstID"`   // 持仓币种
-	TimeUnix string    `json:"TimeUnix"` // 毫秒时间戳
+	TimeUnix int64     `json:"TimeUnix"` // 毫秒时间戳
 	Time     time.Time `json:"Time"`     // 时间
 	O        string    `json:"O"`        // 开盘
 	H        string    `json:"H"`        // 最高

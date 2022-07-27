@@ -42,13 +42,14 @@ func Start() {
 	// 获取当前的行情与交易量榜单
 	mCycle.New(mCycle.Opt{
 		Func:      GetTicker,
-		SleepTime: time.Minute * 3, // 每 3 分钟 获取一次
+		SleepTime: time.Minute * 5, // 每 5 分钟 获取一次
 	}).Start()
 }
 
 func GetTicker() {
 	binanceApi.GetTicker()
 	tickers.GetTicker()
-	SetTicker() // 在这里计算综合排行榜单
-	TickerKdata()
+	SetTicker()     // 在这里计算综合排行榜单
+	TickerKdata()   // 遍历历史数据
+	AnalyseTicker() // 进行市场分析
 }

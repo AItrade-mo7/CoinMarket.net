@@ -64,8 +64,8 @@ func FormatKdata(data any, InstID string) {
 
 		kdata := okxInfo.Kd{
 			InstID:   InstID,
-			TimeUnix: item[0],
 			Time:     mTime.MsToTime(item[0], "0"),
+			TimeUnix: mTime.ToUnixMsec(mTime.MsToTime(item[0], "0")),
 			O:        item[1],
 			H:        item[2],
 			L:        item[3],
