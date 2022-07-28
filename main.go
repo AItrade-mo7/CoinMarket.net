@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "embed"
+	"fmt"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
@@ -20,6 +21,8 @@ func main() {
 	global.Start()
 
 	ready.Start()
+
+	fmt.Println("123123")
 
 	router.Start()
 }
