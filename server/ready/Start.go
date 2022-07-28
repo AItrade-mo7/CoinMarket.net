@@ -49,7 +49,6 @@ func Start() {
 func GetTicker() {
 	binanceApi.GetTicker()
 	tickers.GetTicker()
-	SetTicker()     // 在这里计算综合排行榜单
-	TickerKdata()   // 遍历历史数据
-	AnalyseTicker() // 进行市场分析
+	SetTicker()   // 在这里计算综合排行榜单
+	TickerKdata() // 遍历历史数据
 }

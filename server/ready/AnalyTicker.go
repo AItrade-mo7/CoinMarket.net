@@ -1,8 +1,6 @@
 package ready
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/okxApi/okxInfo"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mTime"
@@ -15,13 +13,6 @@ type AnalyseType struct {
 }
 
 // 开始进行市场分析
-func AnalyseTicker() {
-	for key, val := range okxInfo.MarketKdata {
-		fmt.Println(key)
-		AnalyseTicker_single(val)
-	}
-}
-
 func AnalyseTicker_single(list []okxInfo.Kd) (resData AnalyseType) {
 	resData = AnalyseType{}
 
