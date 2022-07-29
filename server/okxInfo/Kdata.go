@@ -27,4 +27,4 @@ type Kd struct {
 	C_dir   int    `json:"C_dir"`   // 中心点方向 (当前中心点-前中心点) 1：涨 & -1：跌 & 0：横盘
 }
 
-var MarketKdata map[string][]Kd
+var MarketKdata = map[string][]Kd{}
