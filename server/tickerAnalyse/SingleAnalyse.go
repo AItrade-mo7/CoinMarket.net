@@ -22,8 +22,11 @@ import (
 */
 
 func SingleAnalyse(list []okxInfo.Kd) (resData AnalyseType) {
-	InstID := list[0].InstID
 	resData = AnalyseType{}
+	if len(list) < 3 {
+		return
+	}
+	InstID := list[0].InstID
 
 	resData.StartTime = list[0].Time
 	resData.StartTimeUnix = list[0].TimeUnix
