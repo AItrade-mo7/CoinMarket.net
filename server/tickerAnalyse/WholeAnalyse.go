@@ -6,6 +6,7 @@ import (
 	"CoinMarket.net/server/okxApi/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mStr"
+	"github.com/EasyGolang/goTools/mTime"
 )
 
 type AnalyseType struct {
@@ -38,6 +39,7 @@ type WholeResultType struct {
 	UPLe     int    `json:"UPLe"`     // 上涨趋势
 	UDLe     int    `json:"UDLe"`     // 上涨强度
 	DirIndex int    `json:"DirIndex"` // 当前市场情况  -1 下跌   0 震荡   1 上涨
+	Ts       int64  `json:"Ts"`       // 生成时间
 }
 
 func WholeAnalyse() (resData WholeResultType) {
@@ -75,6 +77,8 @@ func WholeAnalyse() (resData WholeResultType) {
 	} else if resData.UPLe < 0 && resData.UDLe < 0 {
 		resData.DirIndex = -1
 	}
+
+	resData.Ts = mTime.GetUnixInt64()
 
 	return resData
 }
