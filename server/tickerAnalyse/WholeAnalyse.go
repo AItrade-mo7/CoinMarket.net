@@ -22,16 +22,6 @@ type AnalyseType struct {
 
 */
 
-var (
-	Up_Inst []string
-	Up_Num  []string
-	Up_UR   string
-
-	Down_Inst []string
-	Down_Num  []string
-	Down_UR   string
-)
-
 func WholeAnalyse() (resData okxInfo.WholeTickerAnalyseType) {
 	resData = okxInfo.WholeTickerAnalyseType{}
 	okxInfo.WholeTickerAnalyse = resData
@@ -40,20 +30,26 @@ func WholeAnalyse() (resData okxInfo.WholeTickerAnalyseType) {
 		return
 	}
 
+	// 开始
+
+	var (
+		Up_Num   []string
+		Down_Num []string
+	)
+
 	for _, val := range okxInfo.TickerList {
 		U_24_diff := mCount.Le(val.U_R24, "0")
 		if U_24_diff > -1 {
-			Up_Inst = append(Up_Inst, val.InstID)
 			Up_Num = append(Up_Num, val.U_R24)
 		} else {
-			Down_Inst = append(Down_Inst, val.InstID)
 			Down_Num = append(Down_Num, val.U_R24)
 		}
 	}
 
 	// 上涨指数
-	upN := mStr.ToStr(len(Up_Inst))
+	upN := mStr.ToStr(len(Up_Num))
 	allN := mStr.ToStr(len(okxInfo.TickerList))
+
 	resData.UPIndex = mCount.PerCent(upN, allN)
 
 	// 涨跌均值

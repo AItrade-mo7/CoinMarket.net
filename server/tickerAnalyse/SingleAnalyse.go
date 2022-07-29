@@ -1,10 +1,7 @@
 package tickerAnalyse
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/okxInfo"
-	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mTime"
 )
 
@@ -26,7 +23,7 @@ func SingleAnalyse(list []okxInfo.Kd) (resData AnalyseType) {
 	if len(list) < 3 {
 		return
 	}
-	InstID := list[0].InstID
+	// InstID := list[0].InstID
 
 	resData.StartTime = list[0].Time
 	resData.StartTimeUnix = list[0].TimeUnix
@@ -34,8 +31,8 @@ func SingleAnalyse(list []okxInfo.Kd) (resData AnalyseType) {
 	resData.EndTimeUnix = list[len(list)-1].TimeUnix
 	resData.DiffHour = (resData.EndTimeUnix - resData.StartTimeUnix) / mTime.UnixTimeInt64.Hour
 
-	fmt.Println(InstID)
-	mJson.Println(resData)
+	// fmt.Println(InstID)
+	// mJson.Println(resData)
 
 	return
 }
