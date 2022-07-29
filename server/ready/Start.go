@@ -9,6 +9,7 @@ import (
 	"CoinMarket.net/server/okxApi/okxInfo"
 	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/tickers"
+	"CoinMarket.net/server/tickerAnalyse"
 	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mCycle"
 	"github.com/EasyGolang/goTools/mFile"
@@ -49,7 +50,7 @@ func Start() {
 func GetTicker() {
 	binanceApi.GetTicker()
 	tickers.GetTicker()
-	SetTicker()     // 在这里计算综合排行榜单
-	TickerKdata()   // 遍历历史数据
-	AnalyseTicker() // 市场行情分析
+	SetTicker()                  // 在这里计算综合排行榜单
+	TickerKdata()                // 遍历历史数据
+	tickerAnalyse.WholeAnalyse() // 整体分析
 }

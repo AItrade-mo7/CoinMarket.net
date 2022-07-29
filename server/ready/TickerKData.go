@@ -5,6 +5,7 @@ import (
 
 	"CoinMarket.net/server/okxApi/okxInfo"
 	"CoinMarket.net/server/okxApi/restApi/kdata"
+	"CoinMarket.net/server/tickerAnalyse"
 )
 
 func TickerKdata() {
@@ -14,5 +15,5 @@ func TickerKdata() {
 		okxInfo.MarketKdata[item.InstID] = list
 		// AnalyseTicker_single(list)
 	}
-	AnalyseTicker_single(okxInfo.MarketKdata["ETH-USDT"])
+	tickerAnalyse.SingleAnalyse(okxInfo.MarketKdata["ETH-USDT"])
 }
