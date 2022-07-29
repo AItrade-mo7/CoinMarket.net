@@ -14,5 +14,4 @@ func Router(router fiber.Router) {
 
 	r.Post("/Tickers", api.Tickers)
 	r.Post("/Inst", api.Inst)
-	r.Post("/TickerAnalyse", api.TickerAnalyse)
 }

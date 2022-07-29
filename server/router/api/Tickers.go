@@ -8,20 +8,25 @@ import (
 )
 
 type TickersParam struct {
-	SortType string `json:"SortType"`
+	SortType string `json:"SortType"` //  Amount  || U_R24
+}
+
+type TickerResType struct {
+	List    []okxInfo.TickerType           `json:"List"`    // 列表
+	Analyse okxInfo.WholeTickerAnalyseType `json:"Analyse"` // 分析结果
 }
 
 func Tickers(c *fiber.Ctx) error {
 	var json TickersParam
 	mFiber.Parser(c, &json)
 
+	TickerRes := TickerResType{}
+	TickerRes.List = okxInfo.TickerList
+	TickerRes.Analyse = okxInfo.WholeTickerAnalyse
+
 	if json.SortType == "U_R24" {
-		return c.JSON(result.Succeed.WithData(okxInfo.TickerU_R24))
+		TickerRes.List = okxInfo.TickerU_R24
 	}
 
-	if json.SortType == "Amount" {
-		return c.JSON(result.Succeed.WithData(okxInfo.TickerList))
-	}
-
-	return c.JSON(result.Fail.WithMsg("缺少 SortType"))
+	return c.JSON(result.Succeed.WithData(TickerRes))
 }
