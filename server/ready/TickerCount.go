@@ -26,8 +26,9 @@ func SetTicker() {
 		}
 	}
 
-	okxInfo.TickerList = VolumeSort(tickerList)
-	okxInfo.TickerU_R24 = U_R24Sort(tickerList)
+	VolumeSortList := VolumeSort(tickerList)
+	okxInfo.TickerList = VolumeSortList
+	okxInfo.TickerU_R24 = U_R24Sort(VolumeSortList)
 }
 
 func TickerCount(OKXTicker okxInfo.OKXTickerType, BinanceTicker okxInfo.BinanceTickerType) (Ticker okxInfo.TickerType) {
