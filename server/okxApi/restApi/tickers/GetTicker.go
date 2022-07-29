@@ -5,8 +5,8 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/okxApi/okxInfo"
 	"CoinMarket.net/server/okxApi/restApi"
+	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"

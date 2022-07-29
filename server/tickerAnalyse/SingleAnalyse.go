@@ -3,7 +3,7 @@ package tickerAnalyse
 import (
 	"fmt"
 
-	"CoinMarket.net/server/okxApi/okxInfo"
+	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mTime"
 )

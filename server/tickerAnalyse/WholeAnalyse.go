@@ -3,7 +3,7 @@ package tickerAnalyse
 import (
 	"time"
 
-	"CoinMarket.net/server/okxApi/okxInfo"
+	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
@@ -33,19 +33,8 @@ var (
 	Down_UR   string
 )
 
-type WholeResultType struct {
-	UPIndex  string             `json:"UPIndex"`  // 上涨指数
-	UDAvg    string             `json:"UDAvg"`    // 综合涨幅均值
-	UPLe     int                `json:"UPLe"`     // 上涨趋势
-	UDLe     int                `json:"UDLe"`     // 上涨强度
-	DirIndex int                `json:"DirIndex"` // 当前市场情况  -1 下跌   0 震荡   1 上涨
-	MaxUP    okxInfo.TickerType `json:"MaxUP"`    // 最大涨幅币种
-	MaxDown  okxInfo.TickerType `json:"MaxDown"`  // 最大跌幅币种
-	Ts       int64              `json:"Ts"`       // 生成时间
-}
-
-func WholeAnalyse() (resData WholeResultType) {
-	resData = WholeResultType{}
+func WholeAnalyse() (resData okxInfo.WholeTickerAnalyseType) {
+	resData = okxInfo.WholeTickerAnalyseType{}
 
 	if len(okxInfo.TickerList) < 3 {
 		return

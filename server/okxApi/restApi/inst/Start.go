@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"CoinMarket.net/server/global"
-	"CoinMarket.net/server/okxApi/okxInfo"
+	"CoinMarket.net/server/okxInfo"
 )
 
 var (

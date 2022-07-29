@@ -1,7 +1,7 @@
 package analyse
 
 import (
-	"CoinMarket.net/server/okxApi/okxInfo"
+	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 )
 
