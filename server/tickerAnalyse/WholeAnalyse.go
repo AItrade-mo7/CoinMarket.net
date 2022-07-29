@@ -78,5 +78,6 @@ func WholeAnalyse() (resData okxInfo.WholeTickerAnalyseType) {
 	resData.MaxUP = okxInfo.TickerU_R24[0]
 	resData.MaxDown = okxInfo.TickerU_R24[len(okxInfo.TickerU_R24)-1]
 
+	okxInfo.WholeTickerAnalyse = resData
 	return resData
 }

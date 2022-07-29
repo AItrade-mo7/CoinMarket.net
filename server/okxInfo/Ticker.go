@@ -82,3 +82,5 @@ type WholeTickerAnalyseType struct {
 	MaxDown  TickerType `json:"MaxDown"`  // 最大跌幅币种
 	Ts       int64      `json:"Ts"`       // 生成时间
 }
+
+var WholeTickerAnalyse WholeTickerAnalyseType

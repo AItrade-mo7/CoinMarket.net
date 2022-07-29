@@ -52,5 +52,5 @@ func GetTicker() {
 	tickers.GetTicker()
 	SetTicker()                  // 在这里计算综合排行榜单
 	TickerKdata()                // 遍历历史数据
-	tickerAnalyse.WholeAnalyse() // 整体分析
+	tickerAnalyse.WholeAnalyse() // 设置整体分析结果
 }
