@@ -6,7 +6,6 @@ import (
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mStr"
-	"github.com/EasyGolang/goTools/mTime"
 )
 
 type AnalyseType struct {
@@ -74,7 +73,7 @@ func WholeAnalyse() (resData okxInfo.WholeTickerAnalyseType) {
 		resData.DirIndex = -1
 	}
 
-	resData.Ts = mTime.GetUnixInt64()
+	resData.Ts = okxInfo.TickerList[0].Ts
 
 	resData.MaxUP = okxInfo.TickerU_R24[0]
 	resData.MaxDown = okxInfo.TickerU_R24[len(okxInfo.TickerU_R24)-1]
