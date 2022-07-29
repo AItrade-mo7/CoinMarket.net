@@ -2,6 +2,7 @@ package ready
 
 import (
 	"fmt"
+	"time"
 
 	"CoinMarket.net/server/okxApi/okxInfo"
 	"github.com/EasyGolang/goTools/mJson"
@@ -9,9 +10,11 @@ import (
 )
 
 type AnalyseType struct {
-	StartTime int64 `json:"StartTime"`
-	EndTime   int64 `json:"EndTime"`
-	DiffHour  int64 `json:"DiffHour"`
+	StartTime     time.Time `json:"StartTime"`
+	StartTimeUnix int64     `json:"StartTimeUnix"`
+	EndTime       time.Time `json:"EndTime"`
+	EndTimeUnix   int64     `json:"EndTimeUnix"`
+	DiffHour      int64     `json:"DiffHour"`
 }
 
 /*
@@ -31,9 +34,11 @@ func AnalyseTicker_single(list []okxInfo.Kd) (resData AnalyseType) {
 	InstID := list[0].InstID
 	resData = AnalyseType{}
 
-	resData.StartTime = list[0].TimeUnix
-	resData.EndTime = list[len(list)-1].TimeUnix
-	resData.DiffHour = (resData.EndTime - resData.StartTime) / mTime.UnixTimeInt64.Hour
+	resData.StartTime = list[0].Time
+	resData.StartTimeUnix = list[0].TimeUnix
+	resData.EndTime = list[len(list)-1].Time
+	resData.EndTimeUnix = list[len(list)-1].TimeUnix
+	resData.DiffHour = (resData.EndTimeUnix - resData.StartTimeUnix) / mTime.UnixTimeInt64.Hour
 
 	fmt.Println(InstID)
 	mJson.Println(resData)
