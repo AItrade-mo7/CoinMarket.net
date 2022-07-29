@@ -12,10 +12,11 @@ func TickerKdata() {
 	for key, item := range okxInfo.TickerList {
 		time.Sleep(time.Second / 6) // 1秒最多 6 次
 		list := kdata.GetKdata(item.InstID)
-		AnalyseTicker_single(list)
 		okxInfo.MarketKdata[item.InstID] = list
 		if key > MaxNum-2 {
 			break
 		}
 	}
+
+	AnalyseTicker_single(okxInfo.MarketKdata["ETH-USDT"])
 }
