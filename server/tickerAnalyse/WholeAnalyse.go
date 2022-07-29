@@ -47,6 +47,10 @@ type WholeResultType struct {
 func WholeAnalyse() (resData WholeResultType) {
 	resData = WholeResultType{}
 
+	if len(okxInfo.TickerList) < 3 {
+		return
+	}
+
 	for _, val := range okxInfo.TickerList {
 		U_24_diff := mCount.Le(val.U_R24, "0")
 		if U_24_diff > -1 {

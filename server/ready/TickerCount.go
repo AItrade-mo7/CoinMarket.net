@@ -26,10 +26,8 @@ func SetTicker() {
 		}
 	}
 
-	VolumeSortList := VolumeSort(tickerList)
-	U_R24List := U_R24Sort(tickerList)
-	okxInfo.TickerU_R24 = U_R24List
-	okxInfo.TickerList = Reverse(VolumeSortList)
+	okxInfo.TickerList = VolumeSort(tickerList)
+	okxInfo.TickerU_R24 = U_R24Sort(tickerList)
 }
 
 func TickerCount(OKXTicker okxInfo.OKXTickerType, BinanceTicker okxInfo.BinanceTickerType) (Ticker okxInfo.TickerType) {
@@ -72,7 +70,19 @@ func VolumeSort(arr []okxInfo.TickerType) []okxInfo.TickerType {
 			break
 		}
 	}
-	return list
+
+	// 设置 VolIdx 并倒序
+
+	listIDX := []okxInfo.TickerType{}
+	j := 0
+	for i := len(arr) - 1; i > -1; i-- {
+		Ticker := arr[i]
+		Ticker.VolIdx = j + 1
+		listIDX = append(listIDX, Ticker)
+		j++
+	}
+
+	return listIDX
 }
 
 // 涨跌幅排序
@@ -96,21 +106,15 @@ func U_R24Sort(arr []okxInfo.TickerType) []okxInfo.TickerType {
 			break
 		}
 	}
-	return list
-}
 
-func Reverse(arr []okxInfo.TickerType) []okxInfo.TickerType {
-	list := make(
-		[]okxInfo.TickerType,
-		len(arr),
-		len(arr)*2,
-	)
-
+	// 设置 U_RIdx
+	listIDX := []okxInfo.TickerType{}
 	j := 0
 	for i := len(arr) - 1; i > -1; i-- {
-		list[j] = arr[i]
+		Ticker := arr[i]
+		Ticker.U_RIdx = j + 1
+		listIDX = append(listIDX, Ticker)
 		j++
 	}
-
-	return list
+	return listIDX
 }

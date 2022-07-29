@@ -58,7 +58,9 @@ type TickerType struct {
 	OKXVol24H      string `json:"OKXVol24H"`      // OKX 24小时成交量 USDT 数量
 	BinanceVol24H  string `json:"BinanceVol24H"`  // 24 小时成交 USDT 数量
 	U_R24          string `json:"U_R24"`          // 涨幅 = (最新价-开盘价)/开盘价 =
+	U_RIdx         int    `json:"U_RIdx"`         // 涨幅 = (最新价-开盘价)/开盘价 =
 	Volume         string `json:"Volume"`         // 成交量总和
+	VolIdx         int    `json:"VolIdx"`         // 成交量排名
 	OkxVolRose     string `json:"OkxVolRose"`     // 欧意占比总交易量
 	BinanceVolRose string `json:"BinanceVolRose"` // 币安占比总交易量
 	Ts             string `json:"Ts"`

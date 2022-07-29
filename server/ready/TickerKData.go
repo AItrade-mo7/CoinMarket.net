@@ -13,7 +13,7 @@ func TickerKdata() {
 		time.Sleep(time.Second / 5) // 1秒最多 5 次
 		list := kdata.GetKdata(item.InstID)
 		okxInfo.MarketKdata[item.InstID] = list
-		// AnalyseTicker_single(list)
+		tickerAnalyse.SingleAnalyse(list)
 	}
-	tickerAnalyse.SingleAnalyse(okxInfo.MarketKdata["ETH-USDT"])
+	// tickerAnalyse.SingleAnalyse(okxInfo.MarketKdata["ETH-USDT"])
 }
