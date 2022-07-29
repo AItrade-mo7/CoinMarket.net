@@ -80,7 +80,6 @@ type WholeTickerAnalyseType struct {
 	DirIndex int        `json:"DirIndex"` // 当前市场情况  -1 下跌   0 震荡   1 上涨
 	MaxUP    TickerType `json:"MaxUP"`    // 最大涨幅币种
 	MaxDown  TickerType `json:"MaxDown"`  // 最大跌幅币种
-	Suggest  TickerType `json:"Suggest"`  // 持仓建议
 	Ts       int64      `json:"Ts"`       // 生成时间
 }
 
