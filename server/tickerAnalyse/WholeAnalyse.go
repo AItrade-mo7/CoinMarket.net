@@ -59,7 +59,8 @@ func WholeAnalyse() (resData okxInfo.WholeTickerAnalyseType) {
 	// 涨跌均值
 	upAvg := mCount.Average(Up_Num)
 	downAvg := mCount.Average(Down_Num)
-	resData.UDAvg = mCount.Add(upAvg, downAvg)
+	UDAvg := mCount.Add(upAvg, downAvg)
+	resData.UDAvg = mCount.Cent(UDAvg, 3)
 
 	// 上涨趋势方向
 	resData.UPLe = mCount.Le(resData.UPIndex, "50")
