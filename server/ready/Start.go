@@ -35,7 +35,7 @@ func Start() {
 	// 获取 OKX 交易产品信息
 	mCycle.New(mCycle.Opt{
 		Func:      inst.Start,
-		SleepTime: time.Hour * 8, // 每 8 时获取一次
+		SleepTime: time.Hour * 16, // 每 16 时获取一次
 	}).Start()
 	go mFile.Write(config.Dir.JsonData+"/SPOT_inst.json", mJson.ToStr(okxInfo.SPOT_inst))
 	go mFile.Write(config.Dir.JsonData+"/SWAP_inst.json", mJson.ToStr(okxInfo.SWAP_inst))
