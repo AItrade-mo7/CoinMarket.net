@@ -35,6 +35,7 @@ var (
 
 func WholeAnalyse() (resData okxInfo.WholeTickerAnalyseType) {
 	resData = okxInfo.WholeTickerAnalyseType{}
+	okxInfo.WholeTickerAnalyse = resData
 
 	if len(okxInfo.TickerList) < 3 {
 		return
