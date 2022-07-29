@@ -29,6 +29,12 @@ type AnalyseType struct {
 
 */
 
+func AnalyseTicker() {
+	for _, val := range okxInfo.TickerList {
+		fmt.Println(val)
+	}
+}
+
 // 开始进行市场分析
 func AnalyseTicker_single(list []okxInfo.Kd) (resData AnalyseType) {
 	InstID := list[0].InstID
