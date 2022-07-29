@@ -5,7 +5,6 @@ import (
 
 	"CoinMarket.net/server/okxApi/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
-	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
 )
@@ -89,8 +88,6 @@ func WholeAnalyse() (resData WholeResultType) {
 
 	resData.MaxUP = okxInfo.TickerU_R24[0]
 	resData.MaxDown = okxInfo.TickerU_R24[len(okxInfo.TickerU_R24)-1]
-
-	mJson.Println(resData)
 
 	return resData
 }
