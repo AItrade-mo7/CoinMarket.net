@@ -51,10 +51,10 @@ func TickerCount(OKXTicker okxInfo.OKXTickerType, BinanceTicker okxInfo.BinanceT
 }
 
 // 成交量排序
-func VolumeSort(arr []okxInfo.TickerType) []okxInfo.TickerType {
-	size := len(arr)
+func VolumeSort(data []okxInfo.TickerType) []okxInfo.TickerType {
+	size := len(data)
 	list := make([]okxInfo.TickerType, size)
-	copy(list, arr)
+	copy(list, data)
 
 	var swapped bool
 	for i := size - 1; i > 0; i-- {
@@ -76,8 +76,8 @@ func VolumeSort(arr []okxInfo.TickerType) []okxInfo.TickerType {
 
 	listIDX := []okxInfo.TickerType{}
 	j := 0
-	for i := len(arr) - 1; i > -1; i-- {
-		Ticker := arr[i]
+	for i := len(list) - 1; i > -1; i-- {
+		Ticker := list[i]
 		Ticker.VolIdx = j + 1
 		listIDX = append(listIDX, Ticker)
 		j++
@@ -87,10 +87,10 @@ func VolumeSort(arr []okxInfo.TickerType) []okxInfo.TickerType {
 }
 
 // 涨跌幅排序
-func U_R24Sort(arr []okxInfo.TickerType) []okxInfo.TickerType {
-	size := len(arr)
+func U_R24Sort(data []okxInfo.TickerType) []okxInfo.TickerType {
+	size := len(data)
 	list := make([]okxInfo.TickerType, size)
-	copy(list, arr)
+	copy(list, data)
 
 	var swapped bool
 	for i := size - 1; i > 0; i-- {
@@ -111,8 +111,8 @@ func U_R24Sort(arr []okxInfo.TickerType) []okxInfo.TickerType {
 	// 设置 U_RIdx 并翻转
 	listIDX := []okxInfo.TickerType{}
 	j := 0
-	for i := len(arr) - 1; i > -1; i-- {
-		Ticker := arr[i]
+	for i := len(list) - 1; i > -1; i-- {
+		Ticker := list[i]
 		Ticker.U_RIdx = j + 1
 		listIDX = append(listIDX, Ticker)
 		j++
