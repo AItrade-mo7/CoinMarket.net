@@ -72,7 +72,7 @@ func VolumeSort(arr []okxInfo.TickerType) []okxInfo.TickerType {
 		}
 	}
 
-	// 设置 VolIdx 并倒序
+	// 设置 VolIdx 并翻转
 
 	listIDX := []okxInfo.TickerType{}
 	j := 0
@@ -108,7 +108,7 @@ func U_R24Sort(arr []okxInfo.TickerType) []okxInfo.TickerType {
 		}
 	}
 
-	// 设置 U_RIdx
+	// 设置 U_RIdx 并翻转
 	listIDX := []okxInfo.TickerType{}
 	j := 0
 	for i := len(arr) - 1; i > -1; i-- {
