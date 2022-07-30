@@ -21,6 +21,15 @@ import (
 榜单整体上涨情况
 */
 
+type SliceType struct {
+	List          []okxInfo.Kd
+	StartTime     time.Time `json:"StartTime"` // 开始时间
+	StartTimeUnix int64     `json:"StartTimeUnix"`
+	EndTime       time.Time `json:"EndTime"` // 结束时间
+	EndTimeUnix   int64     `json:"EndTimeUnix"`
+	DiffHour      int64     `json:"DiffHour"` // 总时长
+}
+
 type NewSingleType struct {
 	List          []okxInfo.Kd `json:"List"`      // list
 	InstID        string       `json:"InstID"`    // InstID
@@ -29,12 +38,12 @@ type NewSingleType struct {
 	EndTime       time.Time    `json:"EndTime"` // 结束时间
 	EndTimeUnix   int64        `json:"EndTimeUnix"`
 	DiffHour      int64        `json:"DiffHour"` // 总时长
-	List1         []okxInfo.Kd `json:"List1"`    // 1 小时切片
-	List2         []okxInfo.Kd `json:"List2"`    // 2 小时切片
-	List4         []okxInfo.Kd `json:"List4"`    // 4 小时切片
-	List8         []okxInfo.Kd `json:"List8"`    // 8 小时切片
-	List12        []okxInfo.Kd `json:"List12"`   // 12 小时切片
-	List24        []okxInfo.Kd `json:"List24"`   // 24 小时切片
+	List1         SliceType    `json:"List1"`    // 1 小时切片
+	List2         SliceType    `json:"List2"`    // 2 小时切片
+	List4         SliceType    `json:"List4"`    // 4 小时切片
+	List8         SliceType    `json:"List8"`    // 8 小时切片
+	List12        SliceType    `json:"List12"`   // 12 小时切片
+	List24        SliceType    `json:"List24"`   // 24 小时切片
 }
 
 func NewSingle(list []okxInfo.Kd) *NewSingleType {
@@ -72,8 +81,8 @@ func (_this *NewSingleType) SetTime() *NewSingleType {
 	return _this
 }
 
-func (_this *NewSingleType) SliceList(hour int64) (resData []okxInfo.Kd) {
-	resData = []okxInfo.Kd{}
+func (_this *NewSingleType) SliceList(hour int64) (resData SliceType) {
+	resData = SliceType{}
 	list := _this.List
 	Len := len(_this.List)
 
@@ -88,9 +97,18 @@ func (_this *NewSingleType) SliceList(hour int64) (resData []okxInfo.Kd) {
 
 	for _, item := range list {
 		if item.TimeUnix >= startTimeUnix {
-			resData = append(resData, item)
+			resData.List = append(resData.List, item)
 		}
 	}
+
+	cList := resData.List
+	cLen := len(resData.List)
+
+	resData.StartTime = cList[0].Time
+	resData.StartTimeUnix = cList[0].TimeUnix
+	resData.EndTime = cList[cLen-1].Time
+	resData.EndTimeUnix = cList[cLen-1].TimeUnix
+	resData.DiffHour = (_this.EndTimeUnix - _this.StartTimeUnix) / mTime.UnixTimeInt64.Hour
 
 	return
 }
