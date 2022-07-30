@@ -1,26 +1,12 @@
 package tickerAnalyse
 
 import (
-	"fmt"
 	"time"
 
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
 )
-
-/*
-单个币种历史数据分析
-
-需要分析的部分：
-近1小时上涨情况
-近2小时上涨情况
-近3小时上涨情况
-近4小时上涨情况
-近5小时上涨情况
-
-榜单整体上涨情况
-*/
 
 type SliceType struct {
 	List          []okxInfo.Kd
@@ -65,12 +51,12 @@ func NewSingle(list []okxInfo.Kd) *NewSingleType {
 	_this.List12 = _this.SliceList(12)
 	_this.List24 = _this.SliceList(24)
 
-	fmt.Println(_this.List2.StartTime, _this.List2.EndTime)
+	_this.List1.SliceAnalyse()
 
 	return _this
 }
 
-// 设置起止时间
+// 设置大数据的起止时间
 func (_this *NewSingleType) SetTime() *NewSingleType {
 	list := _this.List
 	Len := len(_this.List)
@@ -84,6 +70,7 @@ func (_this *NewSingleType) SetTime() *NewSingleType {
 	return _this
 }
 
+// 对数据进行切片
 func (_this *NewSingleType) SliceList(hour int64) (resData SliceType) {
 	resData = SliceType{}
 	list := _this.List
@@ -114,4 +101,15 @@ func (_this *NewSingleType) SliceList(hour int64) (resData SliceType) {
 	resData.DiffHour = (_this.EndTimeUnix - _this.StartTimeUnix) / mTime.UnixTimeInt64.Hour
 
 	return
+}
+
+// 对切片数据进行分析
+/*
+
+最高价、最低价、震动均值、首尾价差、
+
+
+*/
+func (slice *SliceType) SliceAnalyse() {
+	slice.DiffHour = 5
 }
