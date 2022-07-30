@@ -1,20 +1,10 @@
 package tickerAnalyse
 
 import (
-	"time"
-
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mStr"
 )
-
-type AnalyseType struct {
-	StartTime     time.Time `json:"StartTime"`
-	StartTimeUnix int64     `json:"StartTimeUnix"`
-	EndTime       time.Time `json:"EndTime"`
-	EndTimeUnix   int64     `json:"EndTimeUnix"`
-	DiffHour      int64     `json:"DiffHour"`
-}
 
 /*
 
