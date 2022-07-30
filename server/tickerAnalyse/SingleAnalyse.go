@@ -1,6 +1,7 @@
 package tickerAnalyse
 
 import (
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/okxInfo"
@@ -63,6 +64,8 @@ func NewSingle(list []okxInfo.Kd) *NewSingleType {
 	_this.List8 = _this.SliceList(8)
 	_this.List12 = _this.SliceList(12)
 	_this.List24 = _this.SliceList(24)
+
+	fmt.Println(_this.List2.StartTime, _this.List2.EndTime)
 
 	return _this
 }
