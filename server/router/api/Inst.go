@@ -3,7 +3,7 @@ package api
 import (
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/router/result"
-	"github.com/EasyGolang/goTools/mRes/mFiber"
+	"github.com/EasyGolang/goTools/mFiber"
 	"github.com/gofiber/fiber/v2"
 )
 

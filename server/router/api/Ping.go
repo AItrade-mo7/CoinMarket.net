@@ -4,7 +4,7 @@ import (
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/router/middle"
 	"CoinMarket.net/server/router/result"
-	"github.com/EasyGolang/goTools/mRes/mFiber"
+	"github.com/EasyGolang/goTools/mFiber"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/gofiber/fiber/v2"
 )
