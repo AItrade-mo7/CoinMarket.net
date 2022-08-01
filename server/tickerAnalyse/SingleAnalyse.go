@@ -45,12 +45,12 @@ func NewSingle(list []okxInfo.Kd) *NewSingleType {
 	_this.List12 = _this.SliceList(12)
 	_this.List24 = _this.SliceList(24)
 
-	_this.List1.SliceAnalyse()
+	// _this.List1.SliceAnalyse()
 	// _this.List2.SliceAnalyse()
 	// _this.List4.SliceAnalyse()
 	// _this.List8.SliceAnalyse()
 	// _this.List12.SliceAnalyse()
-	// _this.List24.SliceAnalyse()
+	_this.List24.SliceAnalyse()
 
 	return _this
 }
