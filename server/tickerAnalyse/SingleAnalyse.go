@@ -97,7 +97,7 @@ func (_this *SingleType) AnalyseSlice(Index int) {
 	list := _this.GetSliceList(Index)
 	mJson.Println(slice)
 
-	fmt.Println(list[0].Time)
+	fmt.Println(list[0].Time, len(list), list[len(list)-1].Time)
 }
 
 // 获取数组
