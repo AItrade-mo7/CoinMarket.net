@@ -26,6 +26,7 @@ func NewSingle(list []okxInfo.Kd) *SingleType {
 	_this.List = make([]okxInfo.Kd, size)
 	copy(_this.List, list)
 	_this.Single.InstID = list[0].InstID
+	_this.Slice = make(map[int]SliceType)
 
 	_this.SetTime()
 	SliceHour := []int{1, 2, 4, 8, 12, 16, 24}
