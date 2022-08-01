@@ -1,7 +1,6 @@
 package ready
 
 import (
-	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -42,7 +41,8 @@ func Start() {
 		SleepTime: time.Minute * 5, // 每 5 分钟 获取一次
 	}).Start()
 
-	fmt.Println("")
+	// ana := tickerAnalyse.Single["ETC-USDT"]
+	// fmt.Println("ana", ana.DiffHour)
 }
 
 func GetTicker() {
