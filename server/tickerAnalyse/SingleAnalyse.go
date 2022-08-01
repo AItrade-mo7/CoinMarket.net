@@ -1,6 +1,7 @@
 package tickerAnalyse
 
 import (
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/okxInfo"
@@ -52,6 +53,11 @@ func NewSingle(list []okxInfo.Kd) *NewSingleType {
 	_this.List24 = _this.SliceList(24)
 
 	_this.List1.SliceAnalyse()
+	_this.List2.SliceAnalyse()
+	_this.List4.SliceAnalyse()
+	_this.List8.SliceAnalyse()
+	_this.List12.SliceAnalyse()
+	_this.List24.SliceAnalyse()
 
 	return _this
 }
@@ -107,9 +113,7 @@ func (_this *NewSingleType) SliceList(hour int64) (resData SliceType) {
 /*
 
 最高价、最低价、震动均值、首尾价差、
-
-
 */
 func (slice *SliceType) SliceAnalyse() {
-	slice.DiffHour = 5
+	fmt.Println(len(slice.List))
 }
