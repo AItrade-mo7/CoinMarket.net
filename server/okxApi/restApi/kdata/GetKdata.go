@@ -1,11 +1,11 @@
 package kdata
 
 import (
-	"CoinMarket.net/server/analyse"
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/restApi"
 	"CoinMarket.net/server/okxInfo"
+	"CoinMarket.net/server/okxInfo/analyse"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mStr"

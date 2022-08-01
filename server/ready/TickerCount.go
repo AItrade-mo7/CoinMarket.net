@@ -3,10 +3,10 @@ package ready
 import (
 	"strings"
 
-	"CoinMarket.net/server/analyse/sort"
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
+	"CoinMarket.net/server/okxInfo/analyse/sort"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mTime"
 )
