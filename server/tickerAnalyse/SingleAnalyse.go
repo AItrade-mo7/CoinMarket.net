@@ -18,7 +18,7 @@ type SliceType struct {
 	DiffHour      int64     `json:"DiffHour"` // 总时长
 }
 
-type NewSingleType struct {
+type SingleType struct {
 	List          []okxInfo.Kd `json:"List"`      // list
 	InstID        string       `json:"InstID"`    // InstID
 	StartTime     time.Time    `json:"StartTime"` // 开始时间
@@ -34,11 +34,11 @@ type NewSingleType struct {
 	List24        SliceType    `json:"List24"`   // 24 小时切片
 }
 
-func NewSingle(list []okxInfo.Kd) *NewSingleType {
+func NewSingle(list []okxInfo.Kd) *SingleType {
 	if len(list) != 300 { // 数组不为300条的一概不理睬
 		return nil
 	}
-	_this := &NewSingleType{}
+	_this := &SingleType{}
 	size := len(list)
 	_this.List = make([]okxInfo.Kd, size)
 	copy(_this.List, list)
@@ -67,7 +67,7 @@ func NewSingle(list []okxInfo.Kd) *NewSingleType {
 }
 
 // 设置大数据的起止时间
-func (_this *NewSingleType) SetTime() *NewSingleType {
+func (_this *SingleType) SetTime() *SingleType {
 	list := _this.List
 	Len := len(_this.List)
 
@@ -81,7 +81,7 @@ func (_this *NewSingleType) SetTime() *NewSingleType {
 }
 
 // 对数据进行切片
-func (_this *NewSingleType) SliceList(hour int64) (resData SliceType) {
+func (_this *SingleType) SliceList(hour int64) (resData SliceType) {
 	resData = SliceType{}
 	list := _this.List
 	Len := len(_this.List)
