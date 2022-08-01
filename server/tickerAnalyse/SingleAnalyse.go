@@ -44,6 +44,8 @@ func NewSingle(list []okxInfo.Kd) *NewSingleType {
 	copy(_this.List, list)
 	_this.InstID = list[0].InstID
 
+	fmt.Println("长度:", _this.InstID)
+
 	_this.SetTime()
 	_this.List1 = _this.SliceList(1)
 	_this.List2 = _this.SliceList(2)
@@ -53,11 +55,11 @@ func NewSingle(list []okxInfo.Kd) *NewSingleType {
 	_this.List24 = _this.SliceList(24)
 
 	_this.List1.SliceAnalyse()
-	_this.List2.SliceAnalyse()
-	_this.List4.SliceAnalyse()
-	_this.List8.SliceAnalyse()
-	_this.List12.SliceAnalyse()
-	_this.List24.SliceAnalyse()
+	// _this.List2.SliceAnalyse()
+	// _this.List4.SliceAnalyse()
+	// _this.List8.SliceAnalyse()
+	// _this.List12.SliceAnalyse()
+	// _this.List24.SliceAnalyse()
 
 	return _this
 }
@@ -104,17 +106,20 @@ func (_this *NewSingleType) SliceList(hour int64) (resData SliceType) {
 	resData.StartTimeUnix = cList[0].TimeUnix
 	resData.EndTime = cList[cLen-1].Time
 	resData.EndTimeUnix = cList[cLen-1].TimeUnix
-	resData.DiffHour = (_this.EndTimeUnix - _this.StartTimeUnix) / mTime.UnixTimeInt64.Hour
+	resData.DiffHour = (resData.EndTimeUnix - resData.StartTimeUnix) / mTime.UnixTimeInt64.Hour
 
 	return
 }
 
 // 对切片数据进行分析
 /*
-
 最高价、最低价、震动均值、首尾价差、
 */
 func (slice *SliceType) SliceAnalyse() {
-	fmt.Println(slice.List[0].InstID)
-	fmt.Println(len(slice.List))
+	Len := len(slice.List)
+	fmt.Println("Len:", Len, "DiffHour:", slice.DiffHour, "Star:", slice.StartTime, "End:", slice.EndTime)
+
+	for _, el := range slice.List {
+		fmt.Println(el.Time, el.C)
+	}
 }
