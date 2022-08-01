@@ -115,5 +115,6 @@ func (_this *NewSingleType) SliceList(hour int64) (resData SliceType) {
 最高价、最低价、震动均值、首尾价差、
 */
 func (slice *SliceType) SliceAnalyse() {
+	fmt.Println(slice.List[0].InstID)
 	fmt.Println(len(slice.List))
 }

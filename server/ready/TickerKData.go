@@ -11,7 +11,7 @@ import (
 
 func TickerKdata() {
 	if config.AppEnv.RunMod == 1 {
-		item := okxInfo.TickerList[0]
+		item := okxInfo.TickerList[1]
 		list := kdata.GetKdata(item.InstID)
 		tickerAnalyse.NewSingle(list)
 		return
