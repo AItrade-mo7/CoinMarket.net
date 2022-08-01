@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"CoinMarket.net/server/okxInfo"
+	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
@@ -30,8 +31,9 @@ func NewSingle(list []okxInfo.Kd) *SingleType {
 	SliceHour := []int{1, 2, 4, 8, 12, 16, 24}
 	for _, item := range SliceHour {
 		_this.Slice[item] = _this.SliceKdata(item)
-		_this.AnalyseSlice(item)
+		// _this.AnalyseSlice(item)
 	}
+	_this.AnalyseSlice(24)
 
 	return _this
 }
@@ -92,24 +94,28 @@ func (_this *SingleType) SliceKdata(hour int) (resData okxInfo.AnalyseSliceType)
 最高价、最低价、震动均值、首尾价差、
 */
 
-func (_this *SingleType) AnalyseSlice(Index int) {
-	slice := _this.Slice[Index]
-	list := _this.GetSliceList(Index)
-	mJson.Println(slice)
-
-	fmt.Println(list[0].Time, len(list), list[len(list)-1].Time)
-}
-
 // 获取数组
 func (_this *SingleType) GetSliceList(Index int) []okxInfo.Kd {
 	Slice := _this.Slice[Index]
 	AllLen := len(_this.List)
 	Len := Slice.Len
 	List := _this.List[AllLen-Len : AllLen]
-
 	size := len(List)
 	reList := make([]okxInfo.Kd, size)
 	copy(reList, List)
-
 	return reList
+}
+
+func (_this *SingleType) AnalyseSlice(Index int) {
+	slice := _this.Slice[Index]
+	list := _this.GetSliceList(Index)
+	fmt.Println(list[0].InstID, len(list), list[len(list)-1].Time)
+	mJson.Println(slice)
+
+	Volume := "0" // 成交量总和
+	for _, item := range list {
+		Volume = mCount.Add(Volume, item.VolCcy)
+	}
+
+	slice.Volume = Volume
 }

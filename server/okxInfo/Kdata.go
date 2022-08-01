@@ -29,3 +29,25 @@ type Kd struct {
 
 // 榜单币种 近 300 条数据 15 分钟间隔 共 75 小时
 var MarketKdata = map[string][]Kd{}
+
+// 基于 近 300 条数据的分析结果
+type AnalyseSliceType struct {
+	StartTime     time.Time `json:"StartTime"` // 开始时间
+	StartTimeUnix int64     `json:"StartTimeUnix"`
+	EndTime       time.Time `json:"EndTime"` // 结束时间
+	EndTimeUnix   int64     `json:"EndTimeUnix"`
+	DiffHour      int       `json:"DiffHour"` // 总时长
+	Len           int       `json:"Len"`      // 数据的总长度
+	Volume        string    `json:"Volume"`   // 成交量总和
+}
+
+type AnalyseSingleType struct {
+	InstID        string    `json:"InstID"`    // InstID
+	StartTime     time.Time `json:"StartTime"` // 开始时间
+	StartTimeUnix int64     `json:"StartTimeUnix"`
+	EndTime       time.Time `json:"EndTime"` // 结束时间
+	EndTimeUnix   int64     `json:"EndTimeUnix"`
+	DiffHour      int64     `json:"DiffHour"` // 总时长
+}
+
+var TickerAnalyseSingle = map[string]AnalyseSingleType{}

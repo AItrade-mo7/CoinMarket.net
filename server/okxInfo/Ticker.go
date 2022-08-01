@@ -1,9 +1,5 @@
 package okxInfo
 
-import (
-	"time"
-)
-
 type BinanceTickerType struct {
 	Symbol             string `json:"symbol"`
 	InstID             string `json:"InstID"`
@@ -88,24 +84,3 @@ type WholeTickerAnalyseType struct {
 }
 
 var TickerAnalyseWhole WholeTickerAnalyseType
-
-// 基于 近 300 条数据的分析结果
-type AnalyseSliceType struct {
-	StartTime     time.Time `json:"StartTime"` // 开始时间
-	StartTimeUnix int64     `json:"StartTimeUnix"`
-	EndTime       time.Time `json:"EndTime"` // 结束时间
-	EndTimeUnix   int64     `json:"EndTimeUnix"`
-	DiffHour      int       `json:"DiffHour"` // 总时长
-	Len           int       `json:"Len"`      // 数据的总长度
-}
-
-type AnalyseSingleType struct {
-	InstID        string    `json:"InstID"`    // InstID
-	StartTime     time.Time `json:"StartTime"` // 开始时间
-	StartTimeUnix int64     `json:"StartTimeUnix"`
-	EndTime       time.Time `json:"EndTime"` // 结束时间
-	EndTimeUnix   int64     `json:"EndTimeUnix"`
-	DiffHour      int64     `json:"DiffHour"` // 总时长
-}
-
-var TickerAnalyseSingle = map[string]AnalyseSingleType{}
