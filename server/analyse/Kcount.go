@@ -31,8 +31,6 @@ func NewKdata(now okxInfo.Kd, list []okxInfo.Kd) (kdata okxInfo.Kd) {
 
 	kdata.HLPer = mCount.RoseCent(now.H, now.L)
 
-	kdata.SolidPer = mCount.RoseCent(now.C, now.O)
-
 	U_shade, D_shade := ShadeCount(kdata)
 	kdata.U_shade = mCount.PriceCent(U_shade, now.C)
 	kdata.D_shade = mCount.PriceCent(D_shade, now.C)

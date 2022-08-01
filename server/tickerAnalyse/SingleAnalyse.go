@@ -112,10 +112,14 @@ func (_this *SingleType) AnalyseSlice(Index int) {
 	fmt.Println(list[0].InstID, len(list), list[len(list)-1].Time)
 	mJson.Println(slice)
 
-	Volume := "0" // 成交量总和
+	firstElm := list[0]
+	lastElm := list[len(list)-1]
+
+	RosePer := mCount.RoseCent(lastElm.C, firstElm.O) // 最后一个的收盘价 - 一开始的开盘价
+	Volume := "0"                                     // 成交量总和
 	for _, item := range list {
 		Volume = mCount.Add(Volume, item.VolCcy)
 	}
-
 	slice.Volume = Volume
+	slice.RosePer = RosePer
 }
