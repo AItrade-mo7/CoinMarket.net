@@ -1,6 +1,7 @@
 package ready
 
 import (
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -8,12 +9,9 @@ import (
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/tickers"
-	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnalyse"
 	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mCycle"
-	"github.com/EasyGolang/goTools/mFile"
-	"github.com/EasyGolang/goTools/mJson"
 )
 
 func Start() {
@@ -37,20 +35,20 @@ func Start() {
 		Func:      inst.Start,
 		SleepTime: time.Hour * 16, // 每 16 时获取一次
 	}).Start()
-	go mFile.Write(config.Dir.JsonData+"/SPOT_inst.json", mJson.ToStr(okxInfo.SPOT_inst))
-	go mFile.Write(config.Dir.JsonData+"/SWAP_inst.json", mJson.ToStr(okxInfo.SWAP_inst))
 
 	// 获取当前的行情与交易量榜单
 	mCycle.New(mCycle.Opt{
 		Func:      GetTicker,
 		SleepTime: time.Minute * 5, // 每 5 分钟 获取一次
 	}).Start()
+
+	fmt.Println("")
 }
 
 func GetTicker() {
 	binanceApi.GetTicker()
 	tickers.GetTicker()
-	SetTicker()                  // 在这里计算综合排行榜单
-	TickerKdata()                // 遍历历史数据
-	tickerAnalyse.WholeAnalyse() // 设置整体分析结果
+	SetTicker()           // 计算并设置综合排行榜单
+	TickerKdata()         // 获取并设置榜单币种最近 75 小时的历史数据 okxInfo.MarketKdata
+	tickerAnalyse.Start() // 开始数据分析模块
 }

@@ -9,15 +9,6 @@ import (
 	"github.com/EasyGolang/goTools/mTime"
 )
 
-type SliceType struct {
-	List          []okxInfo.Kd
-	StartTime     time.Time `json:"StartTime"` // 开始时间
-	StartTimeUnix int64     `json:"StartTimeUnix"`
-	EndTime       time.Time `json:"EndTime"` // 结束时间
-	EndTimeUnix   int64     `json:"EndTimeUnix"`
-	DiffHour      int64     `json:"DiffHour"` // 总时长
-}
-
 type NewSingleType struct {
 	List          []okxInfo.Kd `json:"List"`      // list
 	InstID        string       `json:"InstID"`    // InstID
@@ -115,10 +106,20 @@ func (_this *NewSingleType) SliceList(hour int64) (resData SliceType) {
 /*
 最高价、最低价、震动均值、首尾价差、
 */
+
+type SliceType struct {
+	List          []okxInfo.Kd
+	StartTime     time.Time `json:"StartTime"` // 开始时间
+	StartTimeUnix int64     `json:"StartTimeUnix"`
+	EndTime       time.Time `json:"EndTime"` // 结束时间
+	EndTimeUnix   int64     `json:"EndTimeUnix"`
+	DiffHour      int64     `json:"DiffHour"` // 总时长
+}
+
 func (slice *SliceType) SliceAnalyse() {
 	Len := len(slice.List)
 	fmt.Println("Len:", Len, "DiffHour:", slice.DiffHour, "Star:", slice.StartTime, "End:", slice.EndTime)
-
+	slice.DiffHour = slice.DiffHour + 3
 	for _, el := range slice.List {
 		fmt.Println(el.Time, el.C)
 	}
