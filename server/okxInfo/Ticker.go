@@ -1,5 +1,7 @@
 package okxInfo
 
+import "time"
+
 type BinanceTickerType struct {
 	Symbol             string `json:"symbol"`
 	InstID             string `json:"InstID"`
@@ -71,7 +73,7 @@ var (
 	TickerU_R24 []TickerType
 )
 
-// 市场分析
+//  基于 TickerList  的市场分析
 type WholeTickerAnalyseType struct {
 	UPIndex  string     `json:"UPIndex"`  // 上涨指数
 	UDAvg    string     `json:"UDAvg"`    // 综合涨幅均值
@@ -83,4 +85,32 @@ type WholeTickerAnalyseType struct {
 	Ts       int64      `json:"Ts"`       // 生成时间
 }
 
-var WholeTickerAnalyse WholeTickerAnalyseType
+var TickerAnalyseWhole WholeTickerAnalyseType
+
+// 基于 近 300 条数据的分析结果
+type SliceType struct {
+	List          []Kd
+	StartTime     time.Time `json:"StartTime"` // 开始时间
+	StartTimeUnix int64     `json:"StartTimeUnix"`
+	EndTime       time.Time `json:"EndTime"` // 结束时间
+	EndTimeUnix   int64     `json:"EndTimeUnix"`
+	DiffHour      int64     `json:"DiffHour"` // 总时长
+}
+
+type NewSingleType struct {
+	List          []Kd      `json:"List"`      // list
+	InstID        string    `json:"InstID"`    // InstID
+	StartTime     time.Time `json:"StartTime"` // 开始时间
+	StartTimeUnix int64     `json:"StartTimeUnix"`
+	EndTime       time.Time `json:"EndTime"` // 结束时间
+	EndTimeUnix   int64     `json:"EndTimeUnix"`
+	DiffHour      int64     `json:"DiffHour"` // 总时长
+	List1         SliceType `json:"List1"`    // 1 小时切片
+	List2         SliceType `json:"List2"`    // 2 小时切片
+	List4         SliceType `json:"List4"`    // 4 小时切片
+	List8         SliceType `json:"List8"`    // 8 小时切片
+	List12        SliceType `json:"List12"`   // 12 小时切片
+	List24        SliceType `json:"List24"`   // 24 小时切片
+}
+
+var TickerAnalyseSingle = map[string]NewSingleType{}

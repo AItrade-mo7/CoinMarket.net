@@ -22,7 +22,7 @@ func Tickers(c *fiber.Ctx) error {
 
 	TickerRes := TickerResType{}
 	TickerRes.List = okxInfo.TickerList
-	TickerRes.Analyse = okxInfo.WholeTickerAnalyse
+	TickerRes.Analyse = okxInfo.TickerAnalyseWhole
 
 	if json.SortType == "U_R24" {
 		TickerRes.List = okxInfo.TickerU_R24

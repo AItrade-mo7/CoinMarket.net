@@ -14,7 +14,7 @@ import (
 
 func WholeAnalyse() (resData okxInfo.WholeTickerAnalyseType) {
 	resData = okxInfo.WholeTickerAnalyseType{}
-	okxInfo.WholeTickerAnalyse = resData
+	okxInfo.TickerAnalyseWhole = resData
 
 	if len(okxInfo.TickerList) < 3 {
 		return
@@ -65,6 +65,6 @@ func WholeAnalyse() (resData okxInfo.WholeTickerAnalyseType) {
 	resData.MaxUP = okxInfo.TickerU_R24[0]
 	resData.MaxDown = okxInfo.TickerU_R24[len(okxInfo.TickerU_R24)-1]
 
-	okxInfo.WholeTickerAnalyse = resData
+	okxInfo.TickerAnalyseWhole = resData
 	return resData
 }
