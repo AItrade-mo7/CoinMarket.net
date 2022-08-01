@@ -1,7 +1,6 @@
 package inst
 
 import (
-	"io/ioutil"
 	"strings"
 
 	"CoinMarket.net/server/global"
@@ -16,20 +15,16 @@ import (
 
 // 获取可交易现货列表
 func SPOT() {
-	SWAP_file := mStr.Join(config.Dir.JsonData, "/SPOT.json")
+	SPOT_file := mStr.Join(config.Dir.JsonData, "/SPOT.json")
 
 	resData, err := restApi.Fetch(restApi.FetchOpt{
-		Path:   "/api/v5/public/instruments",
-		Method: "get",
+		Path:          "/api/v5/public/instruments",
+		Method:        "get",
+		LocalJsonData: SPOT_file,
 		Data: map[string]any{
 			"instType": "SPOT",
 		},
 	})
-	// 本地模式
-	if config.AppEnv.RunMod == 1 {
-		resData, err = ioutil.ReadFile(SWAP_file)
-	}
-
 	if err != nil {
 		global.InstLog.Println("SPOT", err)
 		return
@@ -44,7 +39,7 @@ func SPOT() {
 	setSPOT_list(result.Data)
 
 	// 写入数据文件
-	go mFile.Write(SWAP_file, mStr.ToStr(resData))
+	go mFile.Write(SPOT_file, mStr.ToStr(resData))
 }
 
 func setSPOT_list(data any) {

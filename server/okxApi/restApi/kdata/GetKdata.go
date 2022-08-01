@@ -1,8 +1,6 @@
 package kdata
 
 import (
-	"io/ioutil"
-
 	"CoinMarket.net/server/analyse"
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
@@ -18,12 +16,13 @@ import (
 var KdataList []okxInfo.Kd
 
 func GetKdata(InstID string) []okxInfo.Kd {
-	SWAP_file := mStr.Join(config.Dir.JsonData, "/", InstID, ".json")
+	Kdata_file := mStr.Join(config.Dir.JsonData, "/", InstID, ".json")
 
 	KdataList = []okxInfo.Kd{}
 	resData, err := restApi.Fetch(restApi.FetchOpt{
-		Path:   "/api/v5/market/candles",
-		Method: "get",
+		Path:          "/api/v5/market/candles",
+		Method:        "get",
+		LocalJsonData: Kdata_file,
 		Data: map[string]any{
 			"instId": InstID,
 			"bar":    "15m",
@@ -31,12 +30,6 @@ func GetKdata(InstID string) []okxInfo.Kd {
 			"limit":  300,
 		},
 	})
-
-	// 本地模式
-	if config.AppEnv.RunMod == 1 {
-		resData, err = ioutil.ReadFile(SWAP_file)
-	}
-
 	if err != nil {
 		global.KdataLog.Println(InstID, err)
 		return nil
@@ -51,7 +44,7 @@ func GetKdata(InstID string) []okxInfo.Kd {
 	FormatKdata(result.Data, InstID)
 
 	// 写入数据文件
-	go mFile.Write(SWAP_file, mStr.ToStr(resData))
+	go mFile.Write(Kdata_file, mStr.ToStr(resData))
 	return KdataList
 }
 

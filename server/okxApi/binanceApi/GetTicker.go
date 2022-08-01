@@ -1,7 +1,6 @@
 package binanceApi
 
 import (
-	"io/ioutil"
 	"strings"
 
 	"CoinMarket.net/server/global"
@@ -17,13 +16,10 @@ import (
 func GetTicker() {
 	Ticker_file := mStr.Join(config.Dir.JsonData, "/BinanceTicker.json")
 	resData, err := Fetch(FetchOpt{
-		Path:   "/api/v3/ticker/24hr",
-		Method: "get",
+		Path:          "/api/v3/ticker/24hr",
+		LocalJsonData: Ticker_file,
+		Method:        "get",
 	})
-	// 本地模式
-	if config.AppEnv.RunMod == 1 {
-		resData, err = ioutil.ReadFile(Ticker_file)
-	}
 	if err != nil {
 		global.InstLog.Println("BinanceTicker", err)
 		return

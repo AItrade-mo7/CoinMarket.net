@@ -1,7 +1,6 @@
 package inst
 
 import (
-	"io/ioutil"
 	"strings"
 
 	"CoinMarket.net/server/global"
@@ -19,16 +18,13 @@ func SWAP() {
 	SWAP_file := mStr.Join(config.Dir.JsonData, "/SWAP.json")
 
 	resData, err := restApi.Fetch(restApi.FetchOpt{
-		Path:   "/api/v5/public/instruments",
-		Method: "get",
+		Path:          "/api/v5/public/instruments",
+		Method:        "get",
+		LocalJsonData: SWAP_file,
 		Data: map[string]any{
 			"instType": "SWAP",
 		},
 	})
-	// 本地模式
-	if config.AppEnv.RunMod == 1 {
-		resData, err = ioutil.ReadFile(SWAP_file)
-	}
 	if err != nil {
 		global.InstLog.Println("SWAP", err)
 		return
