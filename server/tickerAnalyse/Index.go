@@ -5,14 +5,14 @@ import (
 	"CoinMarket.net/server/okxInfo"
 )
 
-var Single map[string]NewSingleType
+var Single map[string]SingleType
 
 func Start() {
 	// 基于  okxInfo.TickerList  进行数据分析
 	WholeAnalyse()
 
 	// 基于  okxInfo.MarketKdata  进行数据分析
-	Single = make(map[string]NewSingleType)
+	Single = make(map[string]SingleType)
 
 	if config.AppEnv.RunMod == 1 {
 		list := okxInfo.MarketKdata["ETC-USDT"]
