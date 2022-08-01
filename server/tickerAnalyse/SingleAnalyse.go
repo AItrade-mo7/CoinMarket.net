@@ -1,37 +1,20 @@
 package tickerAnalyse
 
 import (
-	"fmt"
-	"time"
-
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
 )
 
 type SliceType struct {
-	List          []okxInfo.Kd
-	StartTime     time.Time `json:"StartTime"` // 开始时间
-	StartTimeUnix int64     `json:"StartTimeUnix"`
-	EndTime       time.Time `json:"EndTime"` // 结束时间
-	EndTimeUnix   int64     `json:"EndTimeUnix"`
-	DiffHour      int64     `json:"DiffHour"` // 总时长
+	List  []okxInfo.Kd
+	Slice okxInfo.AnalyseSliceType
 }
 
 type SingleType struct {
-	List          []okxInfo.Kd `json:"List"`      // list
-	InstID        string       `json:"InstID"`    // InstID
-	StartTime     time.Time    `json:"StartTime"` // 开始时间
-	StartTimeUnix int64        `json:"StartTimeUnix"`
-	EndTime       time.Time    `json:"EndTime"` // 结束时间
-	EndTimeUnix   int64        `json:"EndTimeUnix"`
-	DiffHour      int64        `json:"DiffHour"` // 总时长
-	List1         SliceType    `json:"List1"`    // 1 小时切片
-	List2         SliceType    `json:"List2"`    // 2 小时切片
-	List4         SliceType    `json:"List4"`    // 4 小时切片
-	List8         SliceType    `json:"List8"`    // 8 小时切片
-	List12        SliceType    `json:"List12"`   // 12 小时切片
-	List24        SliceType    `json:"List24"`   // 24 小时切片
+	List   []okxInfo.Kd // list
+	Single okxInfo.AnalyseSingleType
+	Slice  map[int]SliceType
 }
 
 func NewSingle(list []okxInfo.Kd) *SingleType {
@@ -42,27 +25,14 @@ func NewSingle(list []okxInfo.Kd) *SingleType {
 	size := len(list)
 	_this.List = make([]okxInfo.Kd, size)
 	copy(_this.List, list)
-	_this.InstID = list[0].InstID
-
-	fmt.Println("长度:", _this.InstID)
+	_this.Single.InstID = list[0].InstID
 
 	_this.SetTime()
-	_this.List1 = _this.SliceList(1)
-	_this.List2 = _this.SliceList(2)
-	_this.List4 = _this.SliceList(4)
-	_this.List8 = _this.SliceList(8)
-	_this.List12 = _this.SliceList(12)
-	_this.List24 = _this.SliceList(24)
+	SliceHour := []int{1, 2, 4, 8, 12, 16, 24}
+	for _, item := range SliceHour {
+		_this.Slice[item] = _this.SliceKdata(item)
+	}
 
-	_this.List1.SliceAnalyse()
-	_this.List2.SliceAnalyse()
-	_this.List4.SliceAnalyse()
-	_this.List8.SliceAnalyse()
-	_this.List12.SliceAnalyse()
-	_this.List24.SliceAnalyse()
-
-	// 赋值
-	Single[_this.InstID] = *_this
 	return _this
 }
 
@@ -71,22 +41,22 @@ func (_this *SingleType) SetTime() *SingleType {
 	list := _this.List
 	Len := len(_this.List)
 
-	_this.StartTime = list[0].Time
-	_this.StartTimeUnix = list[0].TimeUnix
-	_this.EndTime = list[Len-1].Time
-	_this.EndTimeUnix = list[Len-1].TimeUnix
-	_this.DiffHour = (_this.EndTimeUnix - _this.StartTimeUnix) / mTime.UnixTimeInt64.Hour
+	_this.Single.StartTime = list[0].Time
+	_this.Single.StartTimeUnix = list[0].TimeUnix
+	_this.Single.EndTime = list[Len-1].Time
+	_this.Single.EndTimeUnix = list[Len-1].TimeUnix
+	_this.Single.DiffHour = (_this.Single.EndTimeUnix - _this.Single.StartTimeUnix) / mTime.UnixTimeInt64.Hour
 
 	return _this
 }
 
 // 对数据进行切片
-func (_this *SingleType) SliceList(hour int64) (resData SliceType) {
+func (_this *SingleType) SliceKdata(hour int) (resData SliceType) {
 	resData = SliceType{}
 	list := _this.List
 	Len := len(_this.List)
 
-	backward := hour
+	backward := int64(hour)
 	nowTimeUnix := list[Len-1].TimeUnix
 	tarTime := mTime.MsToTime(nowTimeUnix, mStr.Join("-", backward*mTime.UnixTimeInt64.Hour))
 
@@ -104,11 +74,12 @@ func (_this *SingleType) SliceList(hour int64) (resData SliceType) {
 	cList := resData.List
 	cLen := len(resData.List)
 
-	resData.StartTime = cList[0].Time
-	resData.StartTimeUnix = cList[0].TimeUnix
-	resData.EndTime = cList[cLen-1].Time
-	resData.EndTimeUnix = cList[cLen-1].TimeUnix
-	resData.DiffHour = (resData.EndTimeUnix - resData.StartTimeUnix) / mTime.UnixTimeInt64.Hour
+	resData.Slice.StartTime = cList[0].Time
+	resData.Slice.StartTimeUnix = cList[0].TimeUnix
+	resData.Slice.EndTime = cList[cLen-1].Time
+	resData.Slice.EndTimeUnix = cList[cLen-1].TimeUnix
+	DiffHour := (resData.Slice.EndTimeUnix - resData.Slice.StartTimeUnix) / mTime.UnixTimeInt64.Hour
+	resData.Slice.DiffHour = int(DiffHour)
 
 	return
 }
@@ -117,12 +88,3 @@ func (_this *SingleType) SliceList(hour int64) (resData SliceType) {
 /*
 最高价、最低价、震动均值、首尾价差、
 */
-
-func (slice *SliceType) SliceAnalyse() {
-	Len := len(slice.List)
-	fmt.Println("Len:", Len, "DiffHour:", slice.DiffHour, "Star:", slice.StartTime, "End:", slice.EndTime)
-	slice.DiffHour = slice.DiffHour + 3
-	for _, el := range slice.List {
-		fmt.Println(el.Time, el.C)
-	}
-}
