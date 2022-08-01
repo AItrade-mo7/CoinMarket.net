@@ -1,6 +1,8 @@
 package okxInfo
 
-import "time"
+import (
+	"time"
+)
 
 type BinanceTickerType struct {
 	Symbol             string `json:"symbol"`
@@ -94,6 +96,7 @@ type AnalyseSliceType struct {
 	EndTime       time.Time `json:"EndTime"` // 结束时间
 	EndTimeUnix   int64     `json:"EndTimeUnix"`
 	DiffHour      int       `json:"DiffHour"` // 总时长
+	Len           int       `json:"Len"`      // 数据的总长度
 }
 
 type AnalyseSingleType struct {
