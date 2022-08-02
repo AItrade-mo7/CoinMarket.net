@@ -19,7 +19,7 @@ func SPOT() {
 	resData, err := mOKX.FetchOKX(mOKX.OptFetchOKX{
 		Path: "/api/v5/public/instruments",
 		Data: map[string]any{
-			"TypeInst": "SPOT",
+			"instType": "SPOT",
 		},
 		Method:        "get",
 		LocalJsonPath: SPOT_file,

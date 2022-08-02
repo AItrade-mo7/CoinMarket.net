@@ -18,7 +18,7 @@ func SWAP() {
 	resData, err := mOKX.FetchOKX(mOKX.OptFetchOKX{
 		Path: "/api/v5/public/instruments",
 		Data: map[string]any{
-			"TypeInst": "SWAP",
+			"instType": "SWAP",
 		},
 		Method:        "get",
 		LocalJsonPath: SWAP_file,
