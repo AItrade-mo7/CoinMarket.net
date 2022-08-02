@@ -1,8 +1,6 @@
 package tickerAnalyse
 
 import (
-	"fmt"
-
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -34,6 +32,8 @@ func NewSingle(list []mOKX.TypeKd) *SingleType {
 		// _this.AnalySlice(item)
 	}
 	_this.AnalySlice(1)
+
+	mJson.Println(_this.Slice[1])
 
 	return _this
 }
@@ -109,8 +109,7 @@ func (_this *SingleType) GetSliceList(Index int) []mOKX.TypeKd {
 func (_this *SingleType) AnalySlice(Index int) {
 	slice := _this.Slice[Index]
 	list := _this.GetSliceList(Index)
-	fmt.Println(list[0].InstID, len(list), list[len(list)-1].Time)
-	mJson.Println(slice)
+	slice.InstID = list[0].InstID
 
 	firstElm := list[0]
 	lastElm := list[len(list)-1]
@@ -132,4 +131,6 @@ func (_this *SingleType) AnalySlice(Index int) {
 	slice.L = Sort_L[len(Sort_H)-1].L
 	slice.U_shade = U_shade
 	slice.D_shade = D_shade
+
+	_this.Slice[Index] = slice
 }
