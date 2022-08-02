@@ -12,7 +12,7 @@ import (
 )
 
 func SetTicker() {
-	if len(okxInfo.BinanceTickerList) != 10 || len(okxInfo.OKXTickerList) != 10 {
+	if len(okxInfo.BinanceTickerList) != 15 || len(okxInfo.OKXTickerList) != 15 {
 		global.InstLog.Println("TickerList 数据条目不正确", len(okxInfo.BinanceTickerList), len(okxInfo.OKXTickerList))
 	}
 
