@@ -1,13 +1,13 @@
 package analyse
 
 import (
-	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
+	"github.com/EasyGolang/goTools/mOKX"
 )
 
 // 构造新的Kdata
-func NewKdata(now okxInfo.Kd, list []okxInfo.Kd) (kdata okxInfo.Kd) {
-	kdata = okxInfo.Kd{
+func NewKdata(now mOKX.Kd, list []mOKX.Kd) (kdata mOKX.Kd) {
+	kdata = mOKX.Kd{
 		InstID:   now.InstID,
 		TimeUnix: now.TimeUnix,
 		Time:     now.Time,
@@ -45,7 +45,7 @@ func NewKdata(now okxInfo.Kd, list []okxInfo.Kd) (kdata okxInfo.Kd) {
 	return
 }
 
-func ShadeCount(now okxInfo.Kd) (U_shade, D_shade string) {
+func ShadeCount(now mOKX.Kd) (U_shade, D_shade string) {
 	if now.Dir > 0 { // 上涨时
 		// 最高 - 收盘价 = 上影线
 		U_shade = mCount.Rose(now.H, now.C)
@@ -60,7 +60,7 @@ func ShadeCount(now okxInfo.Kd) (U_shade, D_shade string) {
 	return
 }
 
-func C_dirCount(now, pre okxInfo.Kd) int {
+func C_dirCount(now, pre mOKX.Kd) int {
 	// 格子方向
 	C_dir := mCount.Le(now.Center, pre.Center) // 以中心点为基准来计算，当前-过去的
 	return C_dir

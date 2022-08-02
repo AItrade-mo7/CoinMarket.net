@@ -9,6 +9,7 @@ import (
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
+	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
 	jsoniter "github.com/json-iterator/go"
 )
@@ -43,7 +44,7 @@ func SPOT() {
 }
 
 func setSPOT_list(data any) {
-	var list []okxInfo.InstType
+	var list []mOKX.InstType
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
 

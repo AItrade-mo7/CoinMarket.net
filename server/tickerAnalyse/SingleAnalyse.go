@@ -3,29 +3,29 @@ package tickerAnalyse
 import (
 	"fmt"
 
-	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mJson"
+	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
 )
 
 type SingleType struct {
-	List  []okxInfo.Kd // list
-	Info  okxInfo.AnalyseSingleType
-	Slice map[int]okxInfo.AnalyseSliceType
+	List  []mOKX.Kd // list
+	Info  mOKX.AnalyseSingleType
+	Slice map[int]mOKX.AnalyseSliceType
 }
 
-func NewSingle(list []okxInfo.Kd) *SingleType {
+func NewSingle(list []mOKX.Kd) *SingleType {
 	if len(list) != 300 { // 数组不为300条的一概不理睬
 		return nil
 	}
 	_this := &SingleType{}
 	size := len(list)
-	_this.List = make([]okxInfo.Kd, size)
+	_this.List = make([]mOKX.Kd, size)
 	copy(_this.List, list)
 	_this.Info.InstID = list[0].InstID
-	_this.Slice = make(map[int]okxInfo.AnalyseSliceType)
+	_this.Slice = make(map[int]mOKX.AnalyseSliceType)
 
 	_this.SetTime()
 	SliceHour := []int{1, 2, 4, 8, 12, 16, 24}
@@ -53,13 +53,13 @@ func (_this *SingleType) SetTime() *SingleType {
 }
 
 // 对数据进行切片
-func (_this *SingleType) SliceKdata(hour int) (resData okxInfo.AnalyseSliceType) {
-	resData = okxInfo.AnalyseSliceType{}
+func (_this *SingleType) SliceKdata(hour int) (resData mOKX.AnalyseSliceType) {
+	resData = mOKX.AnalyseSliceType{}
 	list := _this.List
 	Len := len(_this.List)
 
 	// 切片数组
-	cList := []okxInfo.Kd{}
+	cList := []mOKX.Kd{}
 
 	backward := int64(hour)
 	nowTimeUnix := list[Len-1].TimeUnix
@@ -95,13 +95,13 @@ func (_this *SingleType) SliceKdata(hour int) (resData okxInfo.AnalyseSliceType)
 */
 
 // 获取数组
-func (_this *SingleType) GetSliceList(Index int) []okxInfo.Kd {
+func (_this *SingleType) GetSliceList(Index int) []mOKX.Kd {
 	Slice := _this.Slice[Index]
 	AllLen := len(_this.List)
 	Len := Slice.Len
 	List := _this.List[AllLen-Len : AllLen]
 	size := len(List)
-	reList := make([]okxInfo.Kd, size)
+	reList := make([]mOKX.Kd, size)
 	copy(reList, List)
 	return reList
 }

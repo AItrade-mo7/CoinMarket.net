@@ -1,14 +1,14 @@
 package sort
 
 import (
-	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
+	"github.com/EasyGolang/goTools/mOKX"
 )
 
 // 按照最高价排序
-func H_sort(data []okxInfo.Kd) []okxInfo.Kd {
+func H_sort(data []mOKX.Kd) []mOKX.Kd {
 	size := len(data)
-	list := make([]okxInfo.Kd, size)
+	list := make([]mOKX.Kd, size)
 	copy(list, data)
 
 	var swapped bool
@@ -27,7 +27,7 @@ func H_sort(data []okxInfo.Kd) []okxInfo.Kd {
 		}
 	}
 	// 设置 Idx 并翻转
-	listIDX := []okxInfo.Kd{}
+	listIDX := []mOKX.Kd{}
 	j := 0
 	for i := len(list) - 1; i > -1; i-- {
 		Ticker := list[i]

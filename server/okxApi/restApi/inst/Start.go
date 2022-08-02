@@ -5,11 +5,12 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/okxInfo"
+	"github.com/EasyGolang/goTools/mOKX"
 )
 
 var (
-	SPOT_list = make(map[string]okxInfo.InstType)
-	SWAP_list = make(map[string]okxInfo.InstType)
+	SPOT_list = make(map[string]mOKX.InstType)
+	SWAP_list = make(map[string]mOKX.InstType)
 )
 
 func Start() {
@@ -20,8 +21,8 @@ func Start() {
 		global.InstLog.Println("inst 数据条目不正确", len(SPOT_list), len(SWAP_list))
 		return
 	}
-	SPOT_inst := make(map[string]okxInfo.InstType)
-	SWAP_inst := make(map[string]okxInfo.InstType)
+	SPOT_inst := make(map[string]mOKX.InstType)
+	SWAP_inst := make(map[string]mOKX.InstType)
 	for key, val := range SWAP_list {
 		SPOT_key := strings.Replace(key, "-SWAP", "", -1)
 		SPOT := SPOT_list[SPOT_key]
