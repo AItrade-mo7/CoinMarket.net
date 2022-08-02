@@ -6,7 +6,6 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
-	"CoinMarket.net/server/okxInfo/analyse/sort"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mTime"
@@ -29,9 +28,9 @@ func SetTicker() {
 		}
 	}
 
-	VolumeSortList := sort.Volume(tickerList)
+	VolumeSortList := mOKX.SortVolume(tickerList)
 	okxInfo.TickerList = VolumeSortList
-	okxInfo.TickerU_R24 = sort.U_R24(VolumeSortList)
+	okxInfo.TickerU_R24 = mOKX.SortU_R24(VolumeSortList)
 }
 
 func TickerCount(OKXTicker mOKX.OKXTickerType, BinanceTicker mOKX.BinanceTickerType) (Ticker mOKX.TickerType) {
