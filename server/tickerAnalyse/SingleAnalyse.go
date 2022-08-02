@@ -12,8 +12,8 @@ import (
 
 type SingleType struct {
 	List  []mOKX.TypeKd // list
-	Info  mOKX.AnalyseSingleType
-	Slice map[int]mOKX.AnalyseSliceType
+	Info  mOKX.AnalySingleType
+	Slice map[int]mOKX.AnalySliceType
 }
 
 func NewSingle(list []mOKX.TypeKd) *SingleType {
@@ -25,15 +25,15 @@ func NewSingle(list []mOKX.TypeKd) *SingleType {
 	_this.List = make([]mOKX.TypeKd, size)
 	copy(_this.List, list)
 	_this.Info.InstID = list[0].InstID
-	_this.Slice = make(map[int]mOKX.AnalyseSliceType)
+	_this.Slice = make(map[int]mOKX.AnalySliceType)
 
 	_this.SetTime()
 	SliceHour := []int{1, 2, 4, 8, 12, 16, 24}
 	for _, item := range SliceHour {
 		_this.Slice[item] = _this.SliceKdata(item)
-		// _this.AnalyseSlice(item)
+		// _this.AnalySlice(item)
 	}
-	_this.AnalyseSlice(24)
+	_this.AnalySlice(24)
 
 	return _this
 }
@@ -53,8 +53,8 @@ func (_this *SingleType) SetTime() *SingleType {
 }
 
 // 对数据进行切片
-func (_this *SingleType) SliceKdata(hour int) (resData mOKX.AnalyseSliceType) {
-	resData = mOKX.AnalyseSliceType{}
+func (_this *SingleType) SliceKdata(hour int) (resData mOKX.AnalySliceType) {
+	resData = mOKX.AnalySliceType{}
 	list := _this.List
 	Len := len(_this.List)
 
@@ -106,7 +106,7 @@ func (_this *SingleType) GetSliceList(Index int) []mOKX.TypeKd {
 	return reList
 }
 
-func (_this *SingleType) AnalyseSlice(Index int) {
+func (_this *SingleType) AnalySlice(Index int) {
 	slice := _this.Slice[Index]
 	list := _this.GetSliceList(Index)
 	fmt.Println(list[0].InstID, len(list), list[len(list)-1].Time)

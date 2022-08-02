@@ -24,7 +24,7 @@ var TickerU_R24 []mOKX.TypeTicker
 var MarketKdata = map[string][]mOKX.TypeKd{}
 
 // 单个币种的分析结果
-var TickerAnalyseSingle = map[string]mOKX.AnalyseSingleType{}
+var TickerAnalySingle = map[string]mOKX.AnalySliceType{}
 
 // 榜单数据分析
-var TickerAnalyseWhole mOKX.TypeWholeTickerAnaly
+var TickerAnalyWhole mOKX.TypeWholeTickerAnaly

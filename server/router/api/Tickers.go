@@ -13,8 +13,8 @@ type TickersParam struct {
 }
 
 type TickerResType struct {
-	List    []mOKX.TypeTicker         `json:"List"`    // 列表
-	Analyse mOKX.TypeWholeTickerAnaly `json:"Analyse"` // 分析结果
+	List  []mOKX.TypeTicker         `json:"List"`  // 列表
+	Analy mOKX.TypeWholeTickerAnaly `json:"Analy"` // 分析结果
 }
 
 func Tickers(c *fiber.Ctx) error {
@@ -23,7 +23,7 @@ func Tickers(c *fiber.Ctx) error {
 
 	TickerRes := TickerResType{}
 	TickerRes.List = okxInfo.TickerList
-	TickerRes.Analyse = okxInfo.TickerAnalyseWhole
+	TickerRes.Analy = okxInfo.TickerAnalyWhole
 
 	if json.SortType == "U_R24" {
 		TickerRes.List = okxInfo.TickerU_R24
