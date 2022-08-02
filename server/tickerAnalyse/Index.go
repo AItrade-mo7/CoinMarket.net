@@ -1,25 +1,23 @@
 package tickerAnalyse
 
 import (
-	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
+	"github.com/EasyGolang/goTools/mOKX"
 )
-
-var Single map[string]SingleType
 
 func Start() {
 	// 基于  mOKX.TickerList  进行数据分析
-	WholeAnalyse()
+	okxInfo.TickerAnalyWhole = mOKX.TypeWholeTickerAnaly{}
+	WholeAnaly()
 
 	// 基于  mOKX.MarketKdata  进行数据分析
-	Single = make(map[string]SingleType)
+	okxInfo.TickerAnalySingle = map[string][]mOKX.AnalySliceType{}
 
-	if config.AppEnv.RunMod == 1 {
-		list := okxInfo.MarketKdata["ETH-USDT"]
-		NewSingle(list)
-		return
-	}
-
+	// if config.AppEnv.RunMod == 1 {
+	// 	list := okxInfo.MarketKdata["ETH-USDT"]
+	// 	NewSingle(list)
+	// 	return
+	// }
 	for _, list := range okxInfo.MarketKdata {
 		NewSingle(list)
 	}

@@ -13,7 +13,7 @@ import (
 
 */
 
-func WholeAnalyse() (resData mOKX.TypeWholeTickerAnaly) {
+func WholeAnaly() (resData mOKX.TypeWholeTickerAnaly) {
 	resData = mOKX.TypeWholeTickerAnaly{}
 	okxInfo.TickerAnalyWhole = resData
 
