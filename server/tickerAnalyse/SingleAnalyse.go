@@ -33,7 +33,7 @@ func NewSingle(list []mOKX.TypeKd) *SingleType {
 		_this.Slice[item] = _this.SliceKdata(item)
 		// _this.AnalySlice(item)
 	}
-	_this.AnalySlice(24)
+	_this.AnalySlice(1)
 
 	return _this
 }
@@ -115,11 +115,21 @@ func (_this *SingleType) AnalySlice(Index int) {
 	firstElm := list[0]
 	lastElm := list[len(list)-1]
 
-	RosePer := mCount.RoseCent(lastElm.C, firstElm.O) // 最后一个的收盘价 - 一开始的开盘价
-	Volume := "0"                                     // 成交量总和
+	Volume := "0" // 成交量总和
+	U_shade := []string{}
+	D_shade := []string{}
 	for _, item := range list {
 		Volume = mCount.Add(Volume, item.VolCcy)
+		U_shade = append(U_shade, item.U_shade)
+		D_shade = append(D_shade, item.D_shade)
 	}
+	Sort_H := mOKX.Sort_H(list) // 最高价排序 高 - 低
+	Sort_L := mOKX.Sort_L(list) // 最低价排序 高 - 低
+
 	slice.Volume = Volume
-	slice.RosePer = RosePer
+	slice.RosePer = mCount.RoseCent(lastElm.C, firstElm.O) // 最后一个的收盘价 - 一开始的开盘价
+	slice.H = Sort_H[0].H
+	slice.L = Sort_L[len(Sort_H)-1].L
+	slice.U_shade = U_shade
+	slice.D_shade = D_shade
 }

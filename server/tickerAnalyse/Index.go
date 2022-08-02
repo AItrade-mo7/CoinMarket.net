@@ -15,7 +15,7 @@ func Start() {
 	Single = make(map[string]SingleType)
 
 	if config.AppEnv.RunMod == 1 {
-		list := okxInfo.MarketKdata["ETC-USDT"]
+		list := okxInfo.MarketKdata["ETH-USDT"]
 		NewSingle(list)
 		return
 	}
