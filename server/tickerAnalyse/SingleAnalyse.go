@@ -1,8 +1,8 @@
 package tickerAnalyse
 
 import (
+	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
-	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
@@ -27,14 +27,14 @@ func NewSingle(list []mOKX.TypeKd) *SingleType {
 
 	_this.SetTime()
 	SliceHour := []int{1, 2, 4, 8, 12, 16, 24}
+	AnalySliceList := []mOKX.AnalySliceType{}
 	for _, item := range SliceHour {
 		_this.Slice[item] = _this.SliceKdata(item)
-		// _this.AnalySlice(item)
+		sliceInfo := _this.AnalySlice(item)
+		AnalySliceList = append(AnalySliceList, sliceInfo)
 	}
-	_this.AnalySlice(1)
 
-	mJson.Println(_this.Slice[1])
-
+	okxInfo.TickerAnalySingle[_this.Info.InstID] = AnalySliceList
 	return _this
 }
 
@@ -106,7 +106,7 @@ func (_this *SingleType) GetSliceList(Index int) []mOKX.TypeKd {
 	return reList
 }
 
-func (_this *SingleType) AnalySlice(Index int) {
+func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 	slice := _this.Slice[Index]
 	list := _this.GetSliceList(Index)
 	slice.InstID = list[0].InstID
@@ -117,13 +117,16 @@ func (_this *SingleType) AnalySlice(Index int) {
 	Volume := "0" // 成交量总和
 	U_shade := []string{}
 	D_shade := []string{}
+	HLPer := []string{}
 	for _, item := range list {
 		Volume = mCount.Add(Volume, item.VolCcy)
 		U_shade = append(U_shade, item.U_shade)
 		D_shade = append(D_shade, item.D_shade)
+		HLPer = append(HLPer, item.HLPer)
 	}
-	Sort_H := mOKX.Sort_H(list) // 最高价排序 高 - 低
-	Sort_L := mOKX.Sort_L(list) // 最低价排序 高 - 低
+	Sort_H := mOKX.Sort_H(list)         // 最高价排序 高 - 低
+	Sort_L := mOKX.Sort_L(list)         // 最低价排序 高 - 低
+	Sort_HLPer := mOKX.Sort_HLPer(list) // 最低价排序 高 - 低
 
 	slice.Volume = Volume
 	slice.RosePer = mCount.RoseCent(lastElm.C, firstElm.O) // 最后一个的收盘价 - 一开始的开盘价
@@ -131,6 +134,10 @@ func (_this *SingleType) AnalySlice(Index int) {
 	slice.L = Sort_L[len(Sort_H)-1].L
 	slice.U_shadeAvg = mCount.Average(U_shade)
 	slice.D_shadeAvg = mCount.Average(D_shade)
+	slice.HLPerMax = Sort_HLPer[0].HLPer
+	slice.HLPerAvg = mCount.Average(HLPer)
 
 	_this.Slice[Index] = slice
+
+	return slice
 }
