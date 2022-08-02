@@ -5,7 +5,6 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/okxApi/restApi"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -16,14 +15,14 @@ import (
 // 获取可交易合约列表
 func SWAP() {
 	SWAP_file := mStr.Join(config.Dir.JsonData, "/SWAP.json")
-
-	resData, err := restApi.Fetch(restApi.FetchOpt{
-		Path:          "/api/v5/public/instruments",
-		Method:        "get",
-		LocalJsonData: SWAP_file,
+	resData, err := mOKX.FetchOKX(mOKX.OptFetchOKX{
+		Path: "/api/v5/public/instruments",
 		Data: map[string]any{
 			"TypeInst": "SWAP",
 		},
+		Method:        "get",
+		LocalJsonPath: SWAP_file,
+		IsLocalJson:   config.AppEnv.RunMod == 1,
 	})
 	if err != nil {
 		global.InstLog.Println("SWAP", err)

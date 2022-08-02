@@ -5,7 +5,6 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/okxApi/restApi"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -17,13 +16,14 @@ import (
 func SPOT() {
 	SPOT_file := mStr.Join(config.Dir.JsonData, "/SPOT.json")
 
-	resData, err := restApi.Fetch(restApi.FetchOpt{
-		Path:          "/api/v5/public/instruments",
-		Method:        "get",
-		LocalJsonData: SPOT_file,
+	resData, err := mOKX.FetchOKX(mOKX.OptFetchOKX{
+		Path: "/api/v5/public/instruments",
 		Data: map[string]any{
 			"TypeInst": "SPOT",
 		},
+		Method:        "get",
+		LocalJsonPath: SPOT_file,
+		IsLocalJson:   config.AppEnv.RunMod == 1,
 	})
 	if err != nil {
 		global.InstLog.Println("SPOT", err)

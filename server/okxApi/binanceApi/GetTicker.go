@@ -16,10 +16,11 @@ import (
 // 币安的 ticker 数据
 func GetTicker() {
 	Ticker_file := mStr.Join(config.Dir.JsonData, "/BinanceTicker.json")
-	resData, err := Fetch(FetchOpt{
+	resData, err := mOKX.FetchBinance(mOKX.FetchBinanceOpt{
 		Path:          "/api/v3/ticker/24hr",
-		LocalJsonData: Ticker_file,
 		Method:        "get",
+		LocalJsonPath: Ticker_file,
+		IsLocalJson:   config.AppEnv.RunMod == 1,
 	})
 	if err != nil {
 		global.InstLog.Println("BinanceTicker", err)

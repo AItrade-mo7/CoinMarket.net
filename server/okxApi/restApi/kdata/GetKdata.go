@@ -3,7 +3,6 @@ package kdata
 import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/okxApi/restApi"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -18,16 +17,17 @@ func GetKdata(InstID string) []mOKX.TypeKd {
 	Kdata_file := mStr.Join(config.Dir.JsonData, "/", InstID, ".json")
 
 	KdataList = []mOKX.TypeKd{}
-	resData, err := restApi.Fetch(restApi.FetchOpt{
-		Path:          "/api/v5/market/candles",
-		Method:        "get",
-		LocalJsonData: Kdata_file,
+	resData, err := mOKX.FetchOKX(mOKX.OptFetchOKX{
+		Path: "/api/v5/market/candles",
 		Data: map[string]any{
 			"instId": InstID,
 			"bar":    "15m",
 			"after":  mTime.GetUnix(),
 			"limit":  300,
 		},
+		Method:        "get",
+		LocalJsonPath: Kdata_file,
+		IsLocalJson:   config.AppEnv.RunMod == 1,
 	})
 	if err != nil {
 		global.KdataLog.Println(InstID, err)
