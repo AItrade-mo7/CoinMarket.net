@@ -4,7 +4,6 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/restApi"
-	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/okxInfo/analyse"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
@@ -35,7 +34,7 @@ func GetKdata(InstID string) []mOKX.Kd {
 		global.KdataLog.Println(InstID, err)
 		return nil
 	}
-	var result okxInfo.ReqType
+	var result mOKX.ReqType
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {
 		global.KdataLog.Println(InstID, "Err", result)

@@ -8,6 +8,7 @@ import (
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
+	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
 	jsoniter "github.com/json-iterator/go"
 )
@@ -28,7 +29,7 @@ func GetTicker() {
 		return
 	}
 
-	var result okxInfo.ReqType
+	var result mOKX.ReqType
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {
 		global.TickerLog.Println("Ticker-err", result)

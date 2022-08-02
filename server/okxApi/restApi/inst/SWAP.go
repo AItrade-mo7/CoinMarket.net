@@ -6,7 +6,6 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/restApi"
-	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -31,7 +30,7 @@ func SWAP() {
 		return
 	}
 
-	var result okxInfo.ReqType
+	var result mOKX.ReqType
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {
 		global.InstLog.Println("SPOT-err", result)
