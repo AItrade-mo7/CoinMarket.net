@@ -13,8 +13,8 @@ type TickersParam struct {
 }
 
 type TickerResType struct {
-	List    []mOKX.TickerType           `json:"List"`    // 列表
-	Analyse mOKX.WholeTickerAnalyseType `json:"Analyse"` // 分析结果
+	List    []mOKX.TypeTicker         `json:"List"`    // 列表
+	Analyse mOKX.TypeWholeTickerAnaly `json:"Analyse"` // 分析结果
 }
 
 func Tickers(c *fiber.Ctx) error {

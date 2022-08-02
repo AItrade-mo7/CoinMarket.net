@@ -22,7 +22,7 @@ func SWAP() {
 		Method:        "get",
 		LocalJsonData: SWAP_file,
 		Data: map[string]any{
-			"instType": "SWAP",
+			"TypeInst": "SWAP",
 		},
 	})
 	if err != nil {
@@ -30,7 +30,7 @@ func SWAP() {
 		return
 	}
 
-	var result mOKX.ReqType
+	var result mOKX.TypeReq
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {
 		global.InstLog.Println("SPOT-err", result)
@@ -44,7 +44,7 @@ func SWAP() {
 }
 
 func setSWAP_list(data any) {
-	var list []mOKX.InstType
+	var list []mOKX.TypeInst
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
 

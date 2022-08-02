@@ -11,18 +11,18 @@ import (
 )
 
 type SingleType struct {
-	List  []mOKX.Kd // list
+	List  []mOKX.TypeKd // list
 	Info  mOKX.AnalyseSingleType
 	Slice map[int]mOKX.AnalyseSliceType
 }
 
-func NewSingle(list []mOKX.Kd) *SingleType {
+func NewSingle(list []mOKX.TypeKd) *SingleType {
 	if len(list) != 300 { // 数组不为300条的一概不理睬
 		return nil
 	}
 	_this := &SingleType{}
 	size := len(list)
-	_this.List = make([]mOKX.Kd, size)
+	_this.List = make([]mOKX.TypeKd, size)
 	copy(_this.List, list)
 	_this.Info.InstID = list[0].InstID
 	_this.Slice = make(map[int]mOKX.AnalyseSliceType)
@@ -59,7 +59,7 @@ func (_this *SingleType) SliceKdata(hour int) (resData mOKX.AnalyseSliceType) {
 	Len := len(_this.List)
 
 	// 切片数组
-	cList := []mOKX.Kd{}
+	cList := []mOKX.TypeKd{}
 
 	backward := int64(hour)
 	nowTimeUnix := list[Len-1].TimeUnix
@@ -95,13 +95,13 @@ func (_this *SingleType) SliceKdata(hour int) (resData mOKX.AnalyseSliceType) {
 */
 
 // 获取数组
-func (_this *SingleType) GetSliceList(Index int) []mOKX.Kd {
+func (_this *SingleType) GetSliceList(Index int) []mOKX.TypeKd {
 	Slice := _this.Slice[Index]
 	AllLen := len(_this.List)
 	Len := Slice.Len
 	List := _this.List[AllLen-Len : AllLen]
 	size := len(List)
-	reList := make([]mOKX.Kd, size)
+	reList := make([]mOKX.TypeKd, size)
 	copy(reList, List)
 	return reList
 }

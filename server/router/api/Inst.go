@@ -8,20 +8,20 @@ import (
 )
 
 type InstParam struct {
-	InstType string `json:"instType"`
+	TypeInst string `json:"TypeInst"`
 }
 
 func Inst(c *fiber.Ctx) error {
 	var json InstParam
 	mFiber.Parser(c, &json)
 
-	if json.InstType == "SPOT" {
+	if json.TypeInst == "SPOT" {
 		return c.JSON(result.Succeed.WithData(okxInfo.SPOT_inst))
 	}
 
-	if json.InstType == "SWAP" {
+	if json.TypeInst == "SWAP" {
 		return c.JSON(result.Succeed.WithData(okxInfo.SWAP_inst))
 	}
 
-	return c.JSON(result.Fail.WithMsg("缺少 InstType"))
+	return c.JSON(result.Fail.WithMsg("缺少 TypeInst"))
 }

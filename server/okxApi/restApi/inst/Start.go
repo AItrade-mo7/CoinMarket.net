@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	SPOT_list = make(map[string]mOKX.InstType)
-	SWAP_list = make(map[string]mOKX.InstType)
+	SPOT_list = make(map[string]mOKX.TypeInst)
+	SWAP_list = make(map[string]mOKX.TypeInst)
 )
 
 func Start() {
@@ -21,8 +21,8 @@ func Start() {
 		global.InstLog.Println("inst 数据条目不正确", len(SPOT_list), len(SWAP_list))
 		return
 	}
-	SPOT_inst := make(map[string]mOKX.InstType)
-	SWAP_inst := make(map[string]mOKX.InstType)
+	SPOT_inst := make(map[string]mOKX.TypeInst)
+	SWAP_inst := make(map[string]mOKX.TypeInst)
 	for key, val := range SWAP_list {
 		SPOT_key := strings.Replace(key, "-SWAP", "", -1)
 		SPOT := SPOT_list[SPOT_key]

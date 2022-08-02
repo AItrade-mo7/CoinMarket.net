@@ -26,7 +26,7 @@ func GetTicker() {
 		return
 	}
 
-	var result []mOKX.BinanceTickerType
+	var result []mOKX.TypeBinanceTicker
 	err = jsoniter.Unmarshal(resData, &result)
 	if err != nil {
 		global.InstLog.Println("BinanceTicker-err", result)
@@ -38,8 +38,8 @@ func GetTicker() {
 	go mFile.Write(Ticker_file, mStr.ToStr(resData))
 }
 
-func SetInstID(data []mOKX.BinanceTickerType) {
-	var list []mOKX.BinanceTickerType
+func SetInstID(data []mOKX.TypeBinanceTicker) {
+	var list []mOKX.TypeBinanceTicker
 	for _, val := range data {
 		find := strings.Contains(val.Symbol, config.Unit)
 		if find {
@@ -62,9 +62,9 @@ func SetInstID(data []mOKX.BinanceTickerType) {
 }
 
 // 成交量排序
-func VolumeSort(arr []mOKX.BinanceTickerType) []mOKX.BinanceTickerType {
+func VolumeSort(arr []mOKX.TypeBinanceTicker) []mOKX.TypeBinanceTicker {
 	size := len(arr)
-	list := make([]mOKX.BinanceTickerType, size)
+	list := make([]mOKX.TypeBinanceTicker, size)
 	copy(list, arr)
 
 	var swapped bool
@@ -86,9 +86,9 @@ func VolumeSort(arr []mOKX.BinanceTickerType) []mOKX.BinanceTickerType {
 }
 
 // 翻转数组
-func Reverse(arr []mOKX.BinanceTickerType) []mOKX.BinanceTickerType {
+func Reverse(arr []mOKX.TypeBinanceTicker) []mOKX.TypeBinanceTicker {
 	list := make(
-		[]mOKX.BinanceTickerType,
+		[]mOKX.TypeBinanceTicker,
 		len(arr),
 		len(arr)*2,
 	)

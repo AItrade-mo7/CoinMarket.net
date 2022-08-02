@@ -22,14 +22,14 @@ func SPOT() {
 		Method:        "get",
 		LocalJsonData: SPOT_file,
 		Data: map[string]any{
-			"instType": "SPOT",
+			"TypeInst": "SPOT",
 		},
 	})
 	if err != nil {
 		global.InstLog.Println("SPOT", err)
 		return
 	}
-	var result mOKX.ReqType
+	var result mOKX.TypeReq
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {
 		global.InstLog.Println("SPOT-err", result)
@@ -43,7 +43,7 @@ func SPOT() {
 }
 
 func setSPOT_list(data any) {
-	var list []mOKX.InstType
+	var list []mOKX.TypeInst
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
 

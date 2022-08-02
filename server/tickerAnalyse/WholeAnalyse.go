@@ -13,8 +13,8 @@ import (
 
 */
 
-func WholeAnalyse() (resData mOKX.WholeTickerAnalyseType) {
-	resData = mOKX.WholeTickerAnalyseType{}
+func WholeAnalyse() (resData mOKX.TypeWholeTickerAnaly) {
+	resData = mOKX.TypeWholeTickerAnaly{}
 	okxInfo.TickerAnalyseWhole = resData
 
 	if len(okxInfo.TickerList) < 3 {

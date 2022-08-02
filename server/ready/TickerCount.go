@@ -16,7 +16,7 @@ func SetTicker() {
 		global.InstLog.Println("TickerList 数据条目不正确", len(okxInfo.BinanceTickerList), len(okxInfo.OKXTickerList))
 	}
 
-	tickerList := []mOKX.TickerType{}
+	tickerList := []mOKX.TypeTicker{}
 
 	for _, okx := range okxInfo.OKXTickerList {
 		for _, binance := range okxInfo.BinanceTickerList {
@@ -33,8 +33,8 @@ func SetTicker() {
 	okxInfo.TickerU_R24 = mOKX.SortU_R24(VolumeSortList)
 }
 
-func TickerCount(OKXTicker mOKX.OKXTickerType, BinanceTicker mOKX.BinanceTickerType) (Ticker mOKX.TickerType) {
-	Ticker = mOKX.TickerType{}
+func TickerCount(OKXTicker mOKX.TypeOKXTicker, BinanceTicker mOKX.TypeBinanceTicker) (Ticker mOKX.TypeTicker) {
+	Ticker = mOKX.TypeTicker{}
 	Ticker.InstID = OKXTicker.InstID
 	Ticker.CcyName = strings.Replace(Ticker.InstID, config.SPOT_suffix, "", -1)
 	Ticker.Last = OKXTicker.Last

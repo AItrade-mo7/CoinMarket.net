@@ -4,7 +4,6 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/restApi"
-	"CoinMarket.net/server/okxInfo/analyse"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -13,12 +12,12 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-var KdataList []mOKX.Kd
+var KdataList []mOKX.TypeKd
 
-func GetKdata(InstID string) []mOKX.Kd {
+func GetKdata(InstID string) []mOKX.TypeKd {
 	Kdata_file := mStr.Join(config.Dir.JsonData, "/", InstID, ".json")
 
-	KdataList = []mOKX.Kd{}
+	KdataList = []mOKX.TypeKd{}
 	resData, err := restApi.Fetch(restApi.FetchOpt{
 		Path:          "/api/v5/market/candles",
 		Method:        "get",
@@ -34,7 +33,7 @@ func GetKdata(InstID string) []mOKX.Kd {
 		global.KdataLog.Println(InstID, err)
 		return nil
 	}
-	var result mOKX.ReqType
+	var result mOKX.TypeReq
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {
 		global.KdataLog.Println(InstID, "Err", result)
@@ -55,7 +54,7 @@ func FormatKdata(data any, InstID string) {
 	for i := len(list) - 1; i >= 0; i-- {
 		item := list[i]
 
-		kdata := mOKX.Kd{
+		kdata := mOKX.TypeKd{
 			InstID:   InstID,
 			Time:     mTime.MsToTime(item[0], "0"),
 			TimeUnix: mTime.ToUnixMsec(mTime.MsToTime(item[0], "0")),
@@ -71,8 +70,8 @@ func FormatKdata(data any, InstID string) {
 	}
 }
 
-func Storage(kdata mOKX.Kd) {
-	new_Kdata := analyse.NewKdata(kdata, KdataList)
+func Storage(kdata mOKX.TypeKd) {
+	new_Kdata := mOKX.AnalyNewKd(kdata, KdataList)
 	KdataList = append(KdataList, new_Kdata)
 	global.KdataLog.Println(mJson.JsonFormat(mJson.ToJson(new_Kdata)))
 }
