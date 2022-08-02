@@ -8,6 +8,7 @@ import (
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/okxInfo/analyse/sort"
 	"github.com/EasyGolang/goTools/mCount"
+	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mTime"
 )
 
@@ -16,7 +17,7 @@ func SetTicker() {
 		global.InstLog.Println("TickerList 数据条目不正确", len(okxInfo.BinanceTickerList), len(okxInfo.OKXTickerList))
 	}
 
-	tickerList := []okxInfo.TickerType{}
+	tickerList := []mOKX.TickerType{}
 
 	for _, okx := range okxInfo.OKXTickerList {
 		for _, binance := range okxInfo.BinanceTickerList {
@@ -33,8 +34,8 @@ func SetTicker() {
 	okxInfo.TickerU_R24 = sort.U_R24(VolumeSortList)
 }
 
-func TickerCount(OKXTicker okxInfo.OKXTickerType, BinanceTicker okxInfo.BinanceTickerType) (Ticker okxInfo.TickerType) {
-	Ticker = okxInfo.TickerType{}
+func TickerCount(OKXTicker mOKX.OKXTickerType, BinanceTicker mOKX.BinanceTickerType) (Ticker mOKX.TickerType) {
+	Ticker = mOKX.TickerType{}
 	Ticker.InstID = OKXTicker.InstID
 	Ticker.CcyName = strings.Replace(Ticker.InstID, config.SPOT_suffix, "", -1)
 	Ticker.Last = OKXTicker.Last

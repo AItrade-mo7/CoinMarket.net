@@ -42,11 +42,11 @@ func GetTicker() {
 }
 
 func setTicker(data any) {
-	var list []okxInfo.OKXTickerType
+	var list []mOKX.OKXTickerType
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
 
-	var tickerList []okxInfo.OKXTickerType
+	var tickerList []mOKX.OKXTickerType
 	for _, val := range list {
 		SPOT := okxInfo.SPOT_inst[val.InstID]
 		if SPOT.State == "live" {
@@ -63,9 +63,9 @@ func setTicker(data any) {
 }
 
 // 成交量排序
-func VolumeSort(arr []okxInfo.OKXTickerType) []okxInfo.OKXTickerType {
+func VolumeSort(arr []mOKX.OKXTickerType) []mOKX.OKXTickerType {
 	size := len(arr)
-	list := make([]okxInfo.OKXTickerType, size)
+	list := make([]mOKX.OKXTickerType, size)
 	copy(list, arr)
 
 	var swapped bool
@@ -87,9 +87,9 @@ func VolumeSort(arr []okxInfo.OKXTickerType) []okxInfo.OKXTickerType {
 }
 
 // 翻转数组
-func Reverse(arr []okxInfo.OKXTickerType) []okxInfo.OKXTickerType {
+func Reverse(arr []mOKX.OKXTickerType) []mOKX.OKXTickerType {
 	list := make(
-		[]okxInfo.OKXTickerType,
+		[]mOKX.OKXTickerType,
 		len(arr),
 		len(arr)*2,
 	)

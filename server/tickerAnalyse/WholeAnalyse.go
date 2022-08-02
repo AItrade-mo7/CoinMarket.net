@@ -3,6 +3,7 @@ package tickerAnalyse
 import (
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
+	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
 )
 
@@ -12,8 +13,8 @@ import (
 
 */
 
-func WholeAnalyse() (resData okxInfo.WholeTickerAnalyseType) {
-	resData = okxInfo.WholeTickerAnalyseType{}
+func WholeAnalyse() (resData mOKX.WholeTickerAnalyseType) {
+	resData = mOKX.WholeTickerAnalyseType{}
 	okxInfo.TickerAnalyseWhole = resData
 
 	if len(okxInfo.TickerList) < 3 {

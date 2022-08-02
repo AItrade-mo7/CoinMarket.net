@@ -4,6 +4,7 @@ import (
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/router/result"
 	"github.com/EasyGolang/goTools/mFiber"
+	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -12,8 +13,8 @@ type TickersParam struct {
 }
 
 type TickerResType struct {
-	List    []okxInfo.TickerType           `json:"List"`    // 列表
-	Analyse okxInfo.WholeTickerAnalyseType `json:"Analyse"` // 分析结果
+	List    []mOKX.TickerType           `json:"List"`    // 列表
+	Analyse mOKX.WholeTickerAnalyseType `json:"Analyse"` // 分析结果
 }
 
 func Tickers(c *fiber.Ctx) error {

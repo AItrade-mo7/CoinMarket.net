@@ -8,6 +8,7 @@ import (
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mFile"
+	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
 	jsoniter "github.com/json-iterator/go"
 )
@@ -25,7 +26,7 @@ func GetTicker() {
 		return
 	}
 
-	var result []okxInfo.BinanceTickerType
+	var result []mOKX.BinanceTickerType
 	err = jsoniter.Unmarshal(resData, &result)
 	if err != nil {
 		global.InstLog.Println("BinanceTicker-err", result)
@@ -37,8 +38,8 @@ func GetTicker() {
 	go mFile.Write(Ticker_file, mStr.ToStr(resData))
 }
 
-func SetInstID(data []okxInfo.BinanceTickerType) {
-	var list []okxInfo.BinanceTickerType
+func SetInstID(data []mOKX.BinanceTickerType) {
+	var list []mOKX.BinanceTickerType
 	for _, val := range data {
 		find := strings.Contains(val.Symbol, config.Unit)
 		if find {
@@ -61,9 +62,9 @@ func SetInstID(data []okxInfo.BinanceTickerType) {
 }
 
 // 成交量排序
-func VolumeSort(arr []okxInfo.BinanceTickerType) []okxInfo.BinanceTickerType {
+func VolumeSort(arr []mOKX.BinanceTickerType) []mOKX.BinanceTickerType {
 	size := len(arr)
-	list := make([]okxInfo.BinanceTickerType, size)
+	list := make([]mOKX.BinanceTickerType, size)
 	copy(list, arr)
 
 	var swapped bool
@@ -85,9 +86,9 @@ func VolumeSort(arr []okxInfo.BinanceTickerType) []okxInfo.BinanceTickerType {
 }
 
 // 翻转数组
-func Reverse(arr []okxInfo.BinanceTickerType) []okxInfo.BinanceTickerType {
+func Reverse(arr []mOKX.BinanceTickerType) []mOKX.BinanceTickerType {
 	list := make(
-		[]okxInfo.BinanceTickerType,
+		[]mOKX.BinanceTickerType,
 		len(arr),
 		len(arr)*2,
 	)

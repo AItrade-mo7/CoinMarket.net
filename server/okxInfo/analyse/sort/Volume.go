@@ -1,14 +1,14 @@
 package sort
 
 import (
-	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
+	"github.com/EasyGolang/goTools/mOKX"
 )
 
 // 成交量排序
-func Volume(data []okxInfo.TickerType) []okxInfo.TickerType {
+func Volume(data []mOKX.TickerType) []mOKX.TickerType {
 	size := len(data)
-	list := make([]okxInfo.TickerType, size)
+	list := make([]mOKX.TickerType, size)
 	copy(list, data)
 
 	var swapped bool
@@ -29,7 +29,7 @@ func Volume(data []okxInfo.TickerType) []okxInfo.TickerType {
 
 	// 设置 VolIdx 并翻转
 
-	listIDX := []okxInfo.TickerType{}
+	listIDX := []mOKX.TickerType{}
 	j := 0
 	for i := len(list) - 1; i > -1; i-- {
 		Ticker := list[i]

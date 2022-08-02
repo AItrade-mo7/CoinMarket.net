@@ -48,8 +48,8 @@ func Start() {
 func GetTicker() {
 	binanceApi.GetTicker() //  获取币安的 Ticker
 	tickers.GetTicker()    // 获取 okx 的Ticker
-	SetTicker()            // 计算并设置综合排行榜单    okxInfo.TickerList  数据
-	TickerKdata()          // 获取并设置榜单币种最近 75 小时的历史数据 okxInfo.MarketKdata   数据
+	SetTicker()            // 计算并设置综合排行榜单    mOKX.TickerList  数据
+	TickerKdata()          // 获取并设置榜单币种最近 75 小时的历史数据 mOKX.MarketKdata   数据
 
 	tickerAnalyse.Start() // 开始对数据进行分析
 }

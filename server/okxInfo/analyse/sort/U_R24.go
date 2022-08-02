@@ -1,14 +1,14 @@
 package sort
 
 import (
-	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
+	"github.com/EasyGolang/goTools/mOKX"
 )
 
 // 涨跌幅排序
-func U_R24(data []okxInfo.TickerType) []okxInfo.TickerType {
+func U_R24(data []mOKX.TickerType) []mOKX.TickerType {
 	size := len(data)
-	list := make([]okxInfo.TickerType, size)
+	list := make([]mOKX.TickerType, size)
 	copy(list, data)
 
 	var swapped bool
@@ -28,7 +28,7 @@ func U_R24(data []okxInfo.TickerType) []okxInfo.TickerType {
 	}
 
 	// 设置 U_RIdx 并翻转
-	listIDX := []okxInfo.TickerType{}
+	listIDX := []mOKX.TickerType{}
 	j := 0
 	for i := len(list) - 1; i > -1; i-- {
 		Ticker := list[i]
