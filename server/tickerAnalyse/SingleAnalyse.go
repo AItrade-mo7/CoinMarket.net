@@ -129,8 +129,8 @@ func (_this *SingleType) AnalySlice(Index int) {
 	slice.RosePer = mCount.RoseCent(lastElm.C, firstElm.O) // 最后一个的收盘价 - 一开始的开盘价
 	slice.H = Sort_H[0].H
 	slice.L = Sort_L[len(Sort_H)-1].L
-	slice.U_shade = U_shade
-	slice.D_shade = D_shade
+	slice.U_shadeAvg = mCount.Average(U_shade)
+	slice.D_shadeAvg = mCount.Average(D_shade)
 
 	_this.Slice[Index] = slice
 }
