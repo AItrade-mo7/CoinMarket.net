@@ -132,8 +132,13 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 	slice.RosePer = mCount.RoseCent(lastElm.C, firstElm.O) // 最后一个的收盘价 - 一开始的开盘价
 	slice.H = Sort_H[0].H
 	slice.L = Sort_L[len(Sort_H)-1].L
-	slice.U_shadeAvg = mCount.Average(U_shade)
-	slice.D_shadeAvg = mCount.Average(D_shade)
+
+	U_shadeAvg := mCount.Average(U_shade)
+	slice.U_shadeAvg = mCount.Cent(U_shadeAvg, 3)
+
+	D_shadeAvg := mCount.Average(D_shade)
+	slice.D_shadeAvg = mCount.Cent(D_shadeAvg, 3)
+
 	slice.HLPerMax = Sort_HLPer[0].HLPer
 	slice.HLPerAvg = mCount.Average(HLPer)
 
