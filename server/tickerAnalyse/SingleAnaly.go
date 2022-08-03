@@ -140,7 +140,9 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 	slice.D_shadeAvg = mCount.Cent(D_shadeAvg, 3)
 
 	slice.HLPerMax = Sort_HLPer[0].HLPer
-	slice.HLPerAvg = mCount.Average(HLPer)
+
+	HLPerAvg := mCount.Average(HLPer)
+	slice.HLPerAvg = mCount.Cent(HLPerAvg, 3)
 
 	_this.Slice[Index] = slice
 
