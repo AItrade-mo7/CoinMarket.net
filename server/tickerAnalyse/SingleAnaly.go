@@ -115,6 +115,7 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 	lastElm := list[len(list)-1]
 
 	Volume := "0" // 成交量总和
+	VolumeArr := []string{}
 	U_shade := []string{}
 	D_shade := []string{}
 	HLPer := []string{}
@@ -123,6 +124,7 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 		U_shade = append(U_shade, item.U_shade)
 		D_shade = append(D_shade, item.D_shade)
 		HLPer = append(HLPer, item.HLPer)
+		VolumeArr = append(VolumeArr, item.VolCcy)
 	}
 	Sort_H := mOKX.Sort_H(list)         // 最高价排序 高 - 低
 	Sort_L := mOKX.Sort_L(list)         // 最低价排序 高 - 低
@@ -143,6 +145,9 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 
 	HLPerAvg := mCount.Average(HLPer)
 	slice.HLPerAvg = mCount.Cent(HLPerAvg, 3)
+
+	VolumeAvg := mCount.Average(VolumeArr)
+	slice.HLPerAvg = mCount.Cent(VolumeAvg, 3)
 
 	_this.Slice[Index] = slice
 
