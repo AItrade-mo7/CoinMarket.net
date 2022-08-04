@@ -36,6 +36,7 @@ func SetTicker() {
 func TickerCount(OKXTicker mOKX.TypeOKXTicker, BinanceTicker mOKX.TypeBinanceTicker) (Ticker mOKX.TypeTicker) {
 	Ticker = mOKX.TypeTicker{}
 	Ticker.InstID = OKXTicker.InstID
+	Ticker.Symbol = BinanceTicker.Symbol
 	Ticker.CcyName = strings.Replace(Ticker.InstID, config.SPOT_suffix, "", -1)
 	Ticker.Last = OKXTicker.Last
 	Ticker.Open24H = OKXTicker.Open24H
