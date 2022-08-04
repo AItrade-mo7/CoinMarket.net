@@ -54,17 +54,18 @@ func FormatKdata(data []byte, Symbol string) {
 
 	for i := len(listStr) - 1; i >= 0; i-- {
 		item := listStr[i]
+		TimeStr := mStr.ToStr(mJson.ToJson(item[0]))
 
 		kdata := mOKX.TypeKd{
 			InstID:   InstID,
-			Time:     mTime.MsToTime(ToStr(item[0]), "0"),
-			TimeUnix: mTime.ToUnixMsec(mTime.MsToTime(ToStr(item[0]), "0")),
-			O:        ToStr(item[1]),
-			H:        ToStr(item[2]),
-			L:        ToStr(item[3]),
-			C:        ToStr(item[4]),
-			Vol:      ToStr(item[5]),
-			VolCcy:   ToStr(item[7]),
+			Time:     mTime.MsToTime(TimeStr, "0"),
+			TimeUnix: mTime.ToUnixMsec(mTime.MsToTime(TimeStr, "0")),
+			O:        mStr.ToStr(item[1]),
+			H:        mStr.ToStr(item[2]),
+			L:        mStr.ToStr(item[3]),
+			C:        mStr.ToStr(item[4]),
+			Vol:      mStr.ToStr(item[5]),
+			VolCcy:   mStr.ToStr(item[7]),
 			Type:     "BinanceKdata",
 		}
 
@@ -75,9 +76,7 @@ func FormatKdata(data []byte, Symbol string) {
 func Storage(kdata mOKX.TypeKd) {
 	new_Kdata := mOKX.AnalyNewKd(kdata, KdataList)
 	KdataList = append(KdataList, new_Kdata)
-	global.KdataLog.Println(mJson.JsonFormat(mJson.ToJson(new_Kdata)))
-}
 
-func ToStr(data any) string {
-	return mStr.ToStr(mJson.ToJson(data))
+	mJson.Println(new_Kdata)
+	global.KdataLog.Println(mJson.JsonFormat(mJson.ToJson(new_Kdata)))
 }
