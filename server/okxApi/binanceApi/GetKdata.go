@@ -14,7 +14,7 @@ import (
 
 var KdataList []mOKX.TypeKd
 
-func GetKdata(Symbol string) {
+func GetKdata(Symbol string) []mOKX.TypeKd {
 	Kdata_file := mStr.Join(config.Dir.JsonData, "/B-", Symbol, ".json")
 
 	KdataList = []mOKX.TypeKd{}
@@ -31,12 +31,13 @@ func GetKdata(Symbol string) {
 	})
 	if err != nil {
 		global.InstLog.Println("BinanceTicker", err)
-		return
+		return nil
 	}
 
 	FormatKdata(resData, Symbol)
 
 	go mFile.Write(Kdata_file, mStr.ToStr(resData))
+	return KdataList
 }
 
 func FormatKdata(data []byte, Symbol string) {
@@ -77,6 +78,5 @@ func Storage(kdata mOKX.TypeKd) {
 	new_Kdata := mOKX.AnalyNewKd(kdata, KdataList)
 	KdataList = append(KdataList, new_Kdata)
 
-	mJson.Println(new_Kdata)
 	global.KdataLog.Println(mJson.JsonFormat(mJson.ToJson(new_Kdata)))
 }
