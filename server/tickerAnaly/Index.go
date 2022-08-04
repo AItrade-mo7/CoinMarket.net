@@ -1,4 +1,4 @@
-package tickerAnalyse
+package tickerAnaly
 
 import (
 	"CoinMarket.net/server/okxInfo"

@@ -8,7 +8,7 @@ import (
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/tickers"
-	"CoinMarket.net/server/tickerAnalyse"
+	"CoinMarket.net/server/tickerAnaly"
 	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mCycle"
 )
@@ -51,5 +51,5 @@ func GetTicker() {
 	SetTicker()            // 计算并设置综合排行榜单    mOKX.TickerList  数据
 	TickerKdata()          // 获取并设置榜单币种最近 75 小时的历史数据 mOKX.MarketKdata   数据
 
-	tickerAnalyse.Start() // 开始对数据进行分析
+	tickerAnaly.Start() // 开始对数据进行分析
 }
