@@ -1,8 +1,6 @@
 package binanceApi
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
@@ -10,6 +8,7 @@ import (
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
+	"github.com/EasyGolang/goTools/mTime"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -41,7 +40,7 @@ func GetKdata(Symbol string) {
 }
 
 func FormatKdata(data []byte, Symbol string) {
-	var listStr [][12]string
+	var listStr [][12]any
 	jsoniter.Unmarshal(data, &listStr)
 
 	InstID := Symbol
@@ -54,22 +53,19 @@ func FormatKdata(data []byte, Symbol string) {
 	}
 
 	for i := len(listStr) - 1; i >= 0; i-- {
-		strItem := listStr[i]
-		// intItem := listInt[i]
-
-		fmt.Println(strItem)
+		item := listStr[i]
 
 		kdata := mOKX.TypeKd{
-			InstID: InstID,
-			// Time:     mTime.MsToTime(intItem[0], "0"),
-			// TimeUnix: mTime.ToUnixMsec(mTime.MsToTime(intItem[0], "0")),
-			// O:        strItem[1],
-			// H:        strItem[2],
-			// L:        strItem[3],
-			// C:        strItem[4],
-			// Vol:      strItem[5],
-			// VolCcy:   strItem[7],
-			Type: "BinanceKdata",
+			InstID:   InstID,
+			Time:     mTime.MsToTime(ToStr(item[0]), "0"),
+			TimeUnix: mTime.ToUnixMsec(mTime.MsToTime(ToStr(item[0]), "0")),
+			O:        ToStr(item[1]),
+			H:        ToStr(item[2]),
+			L:        ToStr(item[3]),
+			C:        ToStr(item[4]),
+			Vol:      ToStr(item[5]),
+			VolCcy:   ToStr(item[7]),
+			Type:     "BinanceKdata",
 		}
 
 		Storage(kdata)
@@ -80,4 +76,8 @@ func Storage(kdata mOKX.TypeKd) {
 	new_Kdata := mOKX.AnalyNewKd(kdata, KdataList)
 	KdataList = append(KdataList, new_Kdata)
 	global.KdataLog.Println(mJson.JsonFormat(mJson.ToJson(new_Kdata)))
+}
+
+func ToStr(data any) string {
+	return mStr.ToStr(mJson.ToJson(data))
 }

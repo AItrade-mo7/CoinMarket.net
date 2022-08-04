@@ -13,7 +13,7 @@ func TickerKdata() {
 		time.Sleep(time.Second / 5) // 1秒最多 5 次
 		list := kdata.GetKdata(item.InstID)
 		okxInfo.MarketKdata[item.InstID] = list
-
-		binanceApi.GetKdata(item.Symbol)
 	}
+
+	binanceApi.GetKdata(okxInfo.TickerList[0].Symbol)
 }
