@@ -147,7 +147,7 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 	slice.HLPerAvg = mCount.Cent(HLPerAvg, 3)
 
 	VolumeAvg := mCount.Average(VolumeArr)
-	slice.HLPerAvg = mCount.Cent(VolumeAvg, 3)
+	slice.VolumeAvg = mCount.Cent(VolumeAvg, 3)
 
 	_this.Slice[Index] = slice
 
