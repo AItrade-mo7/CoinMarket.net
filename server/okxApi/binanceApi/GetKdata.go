@@ -10,6 +10,7 @@ import (
 
 func GetKdata(Symbol string) {
 	Kdata_file := mStr.Join(config.Dir.JsonData, "/B-", Symbol, ".json")
+
 	resData, err := mOKX.FetchBinance(mOKX.FetchBinanceOpt{
 		Path:   "/api/v3/klines",
 		Method: "get",
