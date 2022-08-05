@@ -16,9 +16,12 @@ type SingleType struct {
 }
 
 func NewSingle(list []mOKX.TypeKd) *SingleType {
-	if len(list) != 300 { // 数组不为300条的一概不理睬
+	SliceHour := []int{1, 2, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40}
+
+	if len(list) < SliceHour[len(SliceHour)-1]*4 {
 		return nil
 	}
+
 	_this := &SingleType{}
 	size := len(list)
 	_this.List = make([]mOKX.TypeKd, size)
@@ -27,7 +30,6 @@ func NewSingle(list []mOKX.TypeKd) *SingleType {
 	_this.Slice = make(map[int]mOKX.AnalySliceType)
 
 	_this.SetTime()
-	SliceHour := []int{1, 2, 4, 8, 12, 16, 20, 24, 28, 32}
 	AnalySliceList := []mOKX.AnalySliceType{}
 	for _, item := range SliceHour {
 		_this.Slice[item] = _this.SliceKdata(item)
