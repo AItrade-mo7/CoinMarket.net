@@ -1,6 +1,8 @@
 package tickerAnaly
 
 import (
+	"fmt"
+
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -24,6 +26,13 @@ func NewSingle(list []mOKX.TypeKd) *SingleType {
 	copy(_this.List, list)
 	_this.Info.InstID = list[0].InstID
 	_this.Slice = make(map[int]mOKX.AnalySliceType)
+
+	BinanceList := okxInfo.BinanceMarketKdata[_this.Info.InstID]
+	if len(BinanceList) != 300 { // 数组不为300条的一概不理睬
+		return nil
+	}
+
+	fmt.Println(len(list), len(BinanceList))
 
 	_this.SetTime()
 	SliceHour := []int{1, 2, 4, 8, 12, 16, 24}

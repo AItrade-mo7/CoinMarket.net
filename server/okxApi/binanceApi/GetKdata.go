@@ -1,8 +1,6 @@
 package binanceApi
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
@@ -70,9 +68,6 @@ func FormatKdata(data []byte, Symbol string) {
 			VolCcy:   mStr.ToStr(item[7]),
 			Type:     "BinanceKdata",
 		}
-
-		fmt.Println(kdata.Time)
-
 		Storage(kdata)
 	}
 }
