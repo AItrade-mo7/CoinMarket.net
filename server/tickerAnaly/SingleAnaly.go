@@ -1,6 +1,8 @@
 package tickerAnaly
 
 import (
+	"fmt"
+
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -39,6 +41,7 @@ func NewSingle(list []mOKX.TypeKd) *SingleType {
 	for _, item := range SliceHour {
 		_this.Slice[item] = _this.SliceKdata(item)
 		sliceInfo := _this.AnalySlice(item)
+		fmt.Println("小时数", item)
 		AnalySliceList = append(AnalySliceList, sliceInfo)
 	}
 
@@ -138,7 +141,9 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 	lastElm := list[len(list)-1]
 
 	Volume := "0" // 成交量总和
-	VolumeArr := []string{}
+
+	VolumeHour := make(map[string][]string)
+
 	U_shade := []string{}
 	D_shade := []string{}
 	HLPer := []string{}
@@ -148,13 +153,25 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 
 		VolumeAnd := mCount.Add(BinanceItem.VolCcy, item.VolCcy)
 		Volume = mCount.Add(Volume, VolumeAnd)
-		VolumeArr = append(VolumeArr, VolumeAnd)
 
 		U_shade = append(U_shade, item.U_shade)
 		D_shade = append(D_shade, item.D_shade)
 		HLPer = append(HLPer, item.HLPer)
 
+		TimeKey := item.Time.Format("2006-01-02_15")
+		VolumeHour[TimeKey] = append(VolumeHour[TimeKey], Volume)
+
 	}
+
+	VolumeHourArr := []string{}
+	for _, l := range VolumeHour {
+		Vol := "0"
+		for _, v := range l {
+			Vol = mCount.Add(Vol, v)
+		}
+		VolumeHourArr = append(VolumeHourArr, Vol)
+	}
+
 	Sort_H := mOKX.Sort_H(list)         // 最高价排序 高 - 低
 	Sort_L := mOKX.Sort_L(list)         // 最低价排序 高 - 低
 	Sort_HLPer := mOKX.Sort_HLPer(list) // 最低价排序 高 - 低
@@ -175,7 +192,7 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 	HLPerAvg := mCount.Average(HLPer)
 	slice.HLPerAvg = mCount.Cent(HLPerAvg, 3)
 
-	VolumeAvg := mCount.Average(VolumeArr)
+	VolumeAvg := mCount.Average(VolumeHourArr)
 	slice.VolumeAvg = mCount.Cent(VolumeAvg, 3)
 
 	_this.Slice[Index] = slice
