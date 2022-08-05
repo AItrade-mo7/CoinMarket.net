@@ -1,8 +1,6 @@
 package tickerAnaly
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -41,7 +39,6 @@ func NewSingle(list []mOKX.TypeKd) *SingleType {
 	for _, item := range SliceHour {
 		_this.Slice[item] = _this.SliceKdata(item)
 		sliceInfo := _this.AnalySlice(item)
-		fmt.Println("小时数", item)
 		AnalySliceList = append(AnalySliceList, sliceInfo)
 	}
 
