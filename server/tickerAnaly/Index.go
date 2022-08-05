@@ -14,10 +14,11 @@ func Start() {
 	// 	return
 	// }
 	for _, list := range okxInfo.MarketKdata {
-		NewSingle(list)
+		Single := NewSingle(list)
+		okxInfo.TickerAnalySingle[Single.Info.InstID] = Single.ResData
 	}
 
-	// 基于  mOKX.TickerList  进行数据分析
+	// 基于 开始进行整体分析
 	okxInfo.TickerAnalyWhole = mOKX.TypeWholeTickerAnaly{}
 	WholeAnaly()
 }

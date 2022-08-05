@@ -1,7 +1,6 @@
 package tickerAnaly
 
 import (
-	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
@@ -12,6 +11,8 @@ type SingleType struct {
 	List  []mOKX.TypeKd // list
 	Info  mOKX.AnalySingleType
 	Slice map[int]mOKX.AnalySliceType
+
+	ResData []mOKX.AnalySliceType
 }
 
 func NewSingle(list []mOKX.TypeKd) *SingleType {
@@ -34,7 +35,7 @@ func NewSingle(list []mOKX.TypeKd) *SingleType {
 		AnalySliceList = append(AnalySliceList, sliceInfo)
 	}
 
-	okxInfo.TickerAnalySingle[_this.Info.InstID] = AnalySliceList
+	_this.ResData = AnalySliceList
 	return _this
 }
 
