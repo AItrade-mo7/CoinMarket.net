@@ -40,9 +40,6 @@ func Start() {
 		Func:      GetTicker,
 		SleepTime: time.Minute * 5, // 每 5 分钟 获取一次
 	}).Start()
-
-	// ana := tickerAnalyse.Single["ETC-USDT"]
-	// fmt.Println("ana", ana.DiffHour)
 }
 
 func GetTicker() {
