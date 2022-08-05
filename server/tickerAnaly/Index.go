@@ -7,7 +7,7 @@ import (
 
 func Start() {
 	// 基于  mOKX.MarketKdata  进行数据分析
-	okxInfo.TickerAnalySingle = map[string][]mOKX.AnalySliceType{}
+	okxInfo.TickerAnalySingle = make(map[string][]mOKX.AnalySliceType)
 	// if config.AppEnv.RunMod == 1 {
 	// 	list := okxInfo.MarketKdata["ETH-USDT"]
 	// 	NewSingle(list)
