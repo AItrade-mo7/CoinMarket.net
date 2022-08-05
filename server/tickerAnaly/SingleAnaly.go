@@ -34,7 +34,7 @@ func NewSingle(list []mOKX.TypeKd) *SingleType {
 	copy(_this.BinanceList, BinanceList)
 
 	_this.SetTime()
-	SliceHour := []int{1, 2, 4, 8, 12, 16, 24}
+	SliceHour := []int{1, 2, 4, 8, 14, 18, 24}
 	AnalySliceList := []mOKX.AnalySliceType{}
 	for _, item := range SliceHour {
 		_this.Slice[item] = _this.SliceKdata(item)
