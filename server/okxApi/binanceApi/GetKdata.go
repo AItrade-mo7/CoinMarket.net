@@ -1,6 +1,8 @@
 package binanceApi
 
 import (
+	"fmt"
+
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
@@ -53,8 +55,7 @@ func FormatKdata(data []byte, Symbol string) {
 		}
 	}
 
-	for i := len(listStr) - 1; i >= 0; i-- {
-		item := listStr[i]
+	for _, item := range listStr {
 		TimeStr := mStr.ToStr(mJson.ToJson(item[0]))
 
 		kdata := mOKX.TypeKd{
@@ -70,6 +71,8 @@ func FormatKdata(data []byte, Symbol string) {
 			Type:     "BinanceKdata",
 		}
 
+		fmt.Println(kdata.Time)
+
 		Storage(kdata)
 	}
 }
@@ -78,5 +81,5 @@ func Storage(kdata mOKX.TypeKd) {
 	new_Kdata := mOKX.AnalyNewKd(kdata, KdataList)
 	KdataList = append(KdataList, new_Kdata)
 
-	global.KdataLog.Println(mJson.JsonFormat(mJson.ToJson(new_Kdata)))
+	global.BinanceKdataLog.Println(mJson.JsonFormat(mJson.ToJson(new_Kdata)))
 }
