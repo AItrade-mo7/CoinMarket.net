@@ -9,10 +9,9 @@ import (
 )
 
 type SingleType struct {
-	List        []mOKX.TypeKd // list
-	BinanceList []mOKX.TypeKd // list
-	Info        mOKX.AnalySingleType
-	Slice       map[int]mOKX.AnalySliceType
+	List  []mOKX.TypeKd // list
+	Info  mOKX.AnalySingleType
+	Slice map[int]mOKX.AnalySliceType
 }
 
 func NewSingle(list []mOKX.TypeKd) *SingleType {
@@ -30,8 +29,6 @@ func NewSingle(list []mOKX.TypeKd) *SingleType {
 	if len(BinanceList) != 300 { // 数组不为300条的一概不理睬
 		return nil
 	}
-	_this.BinanceList = make([]mOKX.TypeKd, size)
-	copy(_this.BinanceList, BinanceList)
 
 	_this.SetTime()
 	SliceHour := []int{1, 2, 4, 8, 14, 18, 24}
@@ -115,24 +112,10 @@ func (_this *SingleType) GetSliceList(Index int) []mOKX.TypeKd {
 	return reList
 }
 
-func (_this *SingleType) GetBinanceSliceList(Index int) []mOKX.TypeKd {
-	Slice := _this.Slice[Index]
-	AllLen := len(_this.BinanceList)
-	Len := Slice.Len
-	List := _this.BinanceList[AllLen-Len : AllLen]
-	size := len(List)
-	reList := make([]mOKX.TypeKd, size)
-	copy(reList, List)
-
-	return reList
-}
-
 func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 	slice := _this.Slice[Index]
 	list := _this.GetSliceList(Index)
 	slice.InstID = list[0].InstID
-
-	BinanceList := _this.GetBinanceSliceList(Index)
 
 	firstElm := list[0]
 	lastElm := list[len(list)-1]
@@ -144,19 +127,16 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 	U_shade := []string{}
 	D_shade := []string{}
 	HLPer := []string{}
-	for key, item := range list {
+	for _, item := range list {
 
-		BinanceItem := BinanceList[key]
-
-		VolumeAnd := mCount.Add(BinanceItem.VolCcy, item.VolCcy)
-		Volume = mCount.Add(Volume, VolumeAnd)
+		Volume = mCount.Add(Volume, item.VolCcy)
 
 		U_shade = append(U_shade, item.U_shade)
 		D_shade = append(D_shade, item.D_shade)
 		HLPer = append(HLPer, item.HLPer)
 
 		TimeKey := item.Time.Format("2006-01-02_15")
-		VolumeHour[TimeKey] = append(VolumeHour[TimeKey], VolumeAnd)
+		VolumeHour[TimeKey] = append(VolumeHour[TimeKey], item.VolCcy)
 	}
 
 	VolumeHourArr := []string{}
