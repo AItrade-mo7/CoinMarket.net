@@ -159,8 +159,7 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 		HLPer = append(HLPer, item.HLPer)
 
 		TimeKey := item.Time.Format("2006-01-02_15")
-		VolumeHour[TimeKey] = append(VolumeHour[TimeKey], Volume)
-
+		VolumeHour[TimeKey] = append(VolumeHour[TimeKey], VolumeAnd)
 	}
 
 	VolumeHourArr := []string{}
