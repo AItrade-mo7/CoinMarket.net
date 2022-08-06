@@ -3,7 +3,6 @@ package tickerAnaly
 import (
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
-	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
 )
@@ -26,16 +25,17 @@ func WholeAnaly() {
 		}
 	}
 	for key, list := range TickerSingle {
-		TickerVolumeList[key] = mOKX.SortAnalySlice_Volume(list)
-		TickerRoseList[key] = mOKX.SortAnalySlice_UR(list)
-	}
+		if key == 24 {
+			TickerVolumeList[key] = mOKX.SortAnalySlice_Volume(list)
+			TickerRoseList[key] = mOKX.SortAnalySlice_UR(list)
 
-	mJson.Println(TickerVolumeList)
+			TickerWholeAnaly(list)
+		}
+	}
 }
 
 func TickerWholeAnaly(list []mOKX.AnalySliceType) (resData mOKX.TypeWholeTickerAnaly) {
 	resData = mOKX.TypeWholeTickerAnaly{}
-	okxInfo.TickerAnalyWhole = resData
 
 	if len(okxInfo.TickerList) < 3 {
 		return
@@ -86,6 +86,5 @@ func TickerWholeAnaly(list []mOKX.AnalySliceType) (resData mOKX.TypeWholeTickerA
 	resData.MaxUP = okxInfo.TickerU_R24[0]
 	resData.MaxDown = okxInfo.TickerU_R24[len(okxInfo.TickerU_R24)-1]
 
-	okxInfo.TickerAnalyWhole = resData
 	return resData
 }

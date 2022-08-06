@@ -27,4 +27,4 @@ var MarketKdata = map[string][]mOKX.TypeKd{}
 var TickerAnalySingle = map[string][]mOKX.AnalySliceType{}
 
 // 榜单数据分析
-var TickerAnalyWhole mOKX.TypeWholeTickerAnaly
+var TickerAnalyWhole []mOKX.TypeWholeTickerAnaly

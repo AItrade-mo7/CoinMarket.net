@@ -14,7 +14,7 @@ type TickersParam struct {
 
 type TickerResType struct {
 	List        []mOKX.TypeTicker                `json:"List"`        // 列表
-	AnalyWhole  mOKX.TypeWholeTickerAnaly        `json:"AnalyWhole"`  // 大盘分析结果
+	AnalyWhole  []mOKX.TypeWholeTickerAnaly      `json:"AnalyWhole"`  // 大盘分析结果
 	AnalySingle map[string][]mOKX.AnalySliceType `json:"AnalySingle"` // 单个币种分析结果
 }
 

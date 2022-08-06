@@ -19,6 +19,6 @@ func Start() {
 	}
 
 	// 基于 开始进行整体分析
-	okxInfo.TickerAnalyWhole = mOKX.TypeWholeTickerAnaly{}
+	okxInfo.TickerAnalyWhole = []mOKX.TypeWholeTickerAnaly{}
 	WholeAnaly()
 }
