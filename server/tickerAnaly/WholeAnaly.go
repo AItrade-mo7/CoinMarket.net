@@ -3,6 +3,7 @@ package tickerAnaly
 import (
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
+	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
 )
@@ -13,7 +14,26 @@ import (
 
 */
 
-func WholeAnaly() (resData mOKX.TypeWholeTickerAnaly) {
+func WholeAnaly() {
+	TickerSingle := make(map[int][]mOKX.AnalySliceType)
+
+	TickerVolumeList := make(map[int][]mOKX.AnalySliceType)
+	TickerRoseList := make(map[int][]mOKX.AnalySliceType)
+
+	for _, Slice := range okxInfo.TickerAnalySingle {
+		for _, Single := range Slice {
+			TickerSingle[Single.DiffHour] = append(TickerSingle[Single.DiffHour], Single)
+		}
+	}
+	for key, list := range TickerSingle {
+		TickerVolumeList[key] = mOKX.SortAnalySlice_Volume(list)
+		TickerRoseList[key] = mOKX.SortAnalySlice_UR(list)
+	}
+
+	mJson.Println(TickerVolumeList)
+}
+
+func TickerWholeAnaly(list []mOKX.AnalySliceType) (resData mOKX.TypeWholeTickerAnaly) {
 	resData = mOKX.TypeWholeTickerAnaly{}
 	okxInfo.TickerAnalyWhole = resData
 
