@@ -1,8 +1,6 @@
 package tickerAnaly
 
 import (
-	"fmt"
-
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
@@ -23,7 +21,6 @@ func NewSingle(list []mOKX.TypeKd) *SingleType {
 	if len(list) < SliceHour[len(SliceHour)-1]*4 {
 		return nil
 	}
-	fmt.Println("=====NewSingle======")
 
 	_this := &SingleType{}
 	size := len(list)

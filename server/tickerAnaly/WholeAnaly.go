@@ -22,6 +22,8 @@ func WholeAnaly() {
 
 	TickerVolumeList := make(map[int][]mOKX.AnalySliceType)
 
+	TickerURList := make(map[int][]mOKX.AnalySliceType)
+
 	/*
 		币种时间切片
 		okxInfo.TickerAnalySingle
@@ -35,17 +37,19 @@ func WholeAnaly() {
 
 	for key, list := range TickerSingle {
 		TickerVolumeList[key] = mOKX.SortAnalySlice_Volume(list)
+		TickerURList[key] = mOKX.SortAnalySlice_UR(list)
 	}
-	for _, list := range TickerVolumeList {
-		Analy := TickerWholeAnaly(list)
 
+	for key, list := range TickerVolumeList {
+		URList := TickerURList[key]
+		Analy := TickerWholeAnaly(list, URList)
 		TickerAnalyWhole = append(TickerAnalyWhole, Analy)
 	}
 
 	okxInfo.TickerAnalyWhole = mOKX.Sort_DiffHour(TickerAnalyWhole)
 }
 
-func TickerWholeAnaly(list []mOKX.AnalySliceType) (resData mOKX.TypeWholeTickerAnaly) {
+func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWholeTickerAnaly) {
 	resData = mOKX.TypeWholeTickerAnaly{}
 
 	if len(list) != len(okxInfo.TickerList) {
@@ -96,8 +100,9 @@ func TickerWholeAnaly(list []mOKX.AnalySliceType) (resData mOKX.TypeWholeTickerA
 	resData.EndTime = list[0].EndTime
 	resData.EndTimeUnix = list[0].EndTimeUnix
 
-	resData.MaxUP = list[0]
-	resData.MaxDown = list[len(list)-1]
+	resData.MaxUP = URList[0] // 这里要按照涨跌幅 排序
+	resData.MaxDown = URList[len(URList)-1]
+
 	resData.DiffHour = list[0].DiffHour
 	return resData
 }
