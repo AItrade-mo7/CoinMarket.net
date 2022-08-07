@@ -1,6 +1,8 @@
 package tickerAnaly
 
 import (
+	"fmt"
+
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -38,6 +40,8 @@ func WholeAnaly() {
 	}
 	for _, list := range TickerVolumeList {
 		Analy := TickerWholeAnaly(list)
+
+		fmt.Println("========")
 		TickerAnalyWhole = append(TickerAnalyWhole, Analy)
 	}
 
@@ -58,6 +62,7 @@ func TickerWholeAnaly(list []mOKX.AnalySliceType) (resData mOKX.TypeWholeTickerA
 	)
 
 	for _, val := range list {
+		fmt.Println(val.StartTime, val.EndTime)
 		U_R_diff := mCount.Le(val.RosePer, "0")
 		if U_R_diff > -1 {
 			Up_Num = append(Up_Num, val.RosePer)
@@ -90,7 +95,10 @@ func TickerWholeAnaly(list []mOKX.AnalySliceType) (resData mOKX.TypeWholeTickerA
 		resData.DirIndex = -1
 	}
 
-	resData.Ts = list[0].EndTimeUnix
+	resData.StartTime = list[0].StartTime
+	resData.StartTimeUnix = list[0].StartTimeUnix
+	resData.EndTime = list[0].EndTime
+	resData.EndTimeUnix = list[0].EndTimeUnix
 
 	resData.MaxUP = list[0]
 	resData.MaxDown = list[len(list)-1]
