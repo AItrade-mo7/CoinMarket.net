@@ -16,8 +16,6 @@ import (
 func WholeAnaly() {
 	TickerAnalyWhole := []mOKX.TypeWholeTickerAnaly{}
 
-	okxInfo.TickerAnalyWhole = []mOKX.TypeWholeTickerAnaly{}
-
 	TickerSingle := make(map[int][]mOKX.AnalySliceType)
 
 	TickerVolumeList := make(map[int][]mOKX.AnalySliceType)
@@ -46,6 +44,7 @@ func WholeAnaly() {
 		TickerAnalyWhole = append(TickerAnalyWhole, Analy)
 	}
 
+	okxInfo.TickerAnalyWhole = make([]mOKX.TypeWholeTickerAnaly, len(TickerAnalyWhole))
 	okxInfo.TickerAnalyWhole = mOKX.Sort_DiffHour(TickerAnalyWhole)
 }
 
