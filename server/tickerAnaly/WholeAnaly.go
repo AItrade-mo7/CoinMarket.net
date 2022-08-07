@@ -95,6 +95,5 @@ func TickerWholeAnaly(list []mOKX.AnalySliceType) (resData mOKX.TypeWholeTickerA
 	resData.MaxUP = list[0]
 	resData.MaxDown = list[len(list)-1]
 	resData.DiffHour = list[0].DiffHour
-
 	return resData
 }
