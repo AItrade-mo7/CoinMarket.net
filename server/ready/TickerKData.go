@@ -13,7 +13,7 @@ import (
 func TickerKdata() {
 	okxInfo.MarketKdata = make(map[string][]mOKX.TypeKd)
 	for _, item := range okxInfo.TickerList {
-		time.Sleep(time.Second / 5) // 1秒最多 5 次
+		time.Sleep(time.Second) // 1秒最多 1 次
 		List := DataMerge(DataMergeOpt{
 			OKXList:     kdata.GetKdata(item.InstID),
 			BinanceList: binanceApi.GetKdata(item.Symbol),
