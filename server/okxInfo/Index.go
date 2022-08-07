@@ -21,7 +21,7 @@ var TickerList []mOKX.TypeTicker
 var TickerU_R24 []mOKX.TypeTicker
 
 // K线数据 榜单币种 近 300 条 15 分钟间隔 共 75 小时
-var MarketKdata = map[string][]mOKX.TypeKd{}
+var MarketKdata map[string][]mOKX.TypeKd
 
 // 单个币种的分析结果
 var TickerAnalySingle map[string][]mOKX.AnalySliceType
