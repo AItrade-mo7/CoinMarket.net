@@ -3,10 +3,10 @@ package okxInfo
 import "github.com/EasyGolang/goTools/mOKX"
 
 // 产品信息 - 现货
-var SPOT_inst = make(map[string]mOKX.TypeInst)
+var SPOT_inst map[string]mOKX.TypeInst
 
 // 产品信息 - 合约
-var SWAP_inst = make(map[string]mOKX.TypeInst)
+var SWAP_inst map[string]mOKX.TypeInst
 
 // Binance 的榜单数据
 var BinanceTickerList []mOKX.TypeBinanceTicker // 币安的Ticker 排行
@@ -24,7 +24,7 @@ var TickerU_R24 []mOKX.TypeTicker
 var MarketKdata = map[string][]mOKX.TypeKd{}
 
 // 单个币种的分析结果
-var TickerAnalySingle = map[string][]mOKX.AnalySliceType{}
+var TickerAnalySingle map[string][]mOKX.AnalySliceType
 
 // 榜单数据分析
 var TickerAnalyWhole []mOKX.TypeWholeTickerAnaly
