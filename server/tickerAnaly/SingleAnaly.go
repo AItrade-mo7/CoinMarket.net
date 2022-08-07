@@ -1,6 +1,8 @@
 package tickerAnaly
 
 import (
+	"fmt"
+
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
@@ -21,12 +23,14 @@ func NewSingle(list []mOKX.TypeKd) *SingleType {
 	if len(list) < SliceHour[len(SliceHour)-1]*4 {
 		return nil
 	}
+	fmt.Println("=====NewSingle======")
 
 	_this := &SingleType{}
 	size := len(list)
 	_this.List = make([]mOKX.TypeKd, size)
 	copy(_this.List, list)
 	_this.Info.InstID = list[0].InstID
+
 	_this.Slice = make(map[int]mOKX.AnalySliceType)
 
 	_this.SetTime()
@@ -87,6 +91,7 @@ func (_this *SingleType) SliceKdata(hour int) (resData mOKX.AnalySliceType) {
 	resData.EndTimeUnix = cList[cLen-1].TimeUnix
 	DiffHour := (resData.EndTimeUnix - resData.StartTimeUnix) / mTime.UnixTimeInt64.Hour
 	resData.DiffHour = int(DiffHour)
+
 	resData.Len = len(cList)
 
 	return
