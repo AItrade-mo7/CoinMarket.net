@@ -1,6 +1,8 @@
 package tickerAnaly
 
 import (
+	"CoinMarket.net/server/global"
+	"CoinMarket.net/server/global/config"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
@@ -15,14 +17,14 @@ type SingleType struct {
 	ResData []mOKX.AnalySliceType
 }
 
-func NewSingle(list []mOKX.TypeKd) *SingleType {
-	SliceHour := []int{1, 2, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40}
+func NewSingle(list []mOKX.TypeKd) (_this *SingleType) {
+	_this = &SingleType{}
 
-	if len(list) < SliceHour[len(SliceHour)-1]*4 {
-		return nil
+	if len(list) < config.SliceHour[len(config.SliceHour)-1]*4 {
+		global.LogErr("NewSingle list 长度不足")
+		return
 	}
 
-	_this := &SingleType{}
 	size := len(list)
 	_this.List = make([]mOKX.TypeKd, size)
 	copy(_this.List, list)
@@ -32,14 +34,15 @@ func NewSingle(list []mOKX.TypeKd) *SingleType {
 
 	_this.SetTime()
 	AnalySliceList := []mOKX.AnalySliceType{}
-	for _, item := range SliceHour {
+	for _, item := range config.SliceHour {
 		_this.Slice[item] = _this.SliceKdata(item)
 		sliceInfo := _this.AnalySlice(item)
 		AnalySliceList = append(AnalySliceList, sliceInfo)
 	}
 
 	_this.ResData = AnalySliceList
-	return _this
+
+	return
 }
 
 // 设置大数据的起止时间

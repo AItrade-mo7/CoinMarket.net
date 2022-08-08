@@ -1,6 +1,7 @@
 package tickerAnaly
 
 import (
+	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mOKX"
 )
@@ -10,10 +11,11 @@ func Start() {
 	TickerAnalySingle := make(map[string][]mOKX.AnalySliceType)
 	for _, list := range okxInfo.MarketKdata {
 		Single := NewSingle(list)
-		TickerAnalySingle[Single.Info.InstID] = Single.ResData
+		if len(Single.ResData) == len(config.SliceHour) {
+			TickerAnalySingle[Single.Info.InstID] = Single.ResData
+		}
 	}
 
-	okxInfo.TickerAnalySingle = make(map[string][]mOKX.AnalySliceType)
 	okxInfo.TickerAnalySingle = TickerAnalySingle
 
 	WholeAnaly()

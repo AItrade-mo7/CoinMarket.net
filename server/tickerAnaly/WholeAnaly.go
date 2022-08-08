@@ -1,6 +1,8 @@
 package tickerAnaly
 
 import (
+	"CoinMarket.net/server/global"
+	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -31,6 +33,11 @@ func WholeAnaly() {
 		for _, Single := range Slice {
 			TickerSingle[Single.DiffHour] = append(TickerSingle[Single.DiffHour], Single)
 		}
+	}
+
+	if len(TickerSingle) != len(config.SliceHour) {
+		global.LogErr("WholeAnaly  config.SliceHour 长度不正确")
+		return
 	}
 
 	for key, list := range TickerSingle {
