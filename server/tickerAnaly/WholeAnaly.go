@@ -59,6 +59,7 @@ func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWhol
 	resData = mOKX.TypeWholeTickerAnaly{}
 
 	if len(list) != len(okxInfo.TickerList) {
+		global.LogErr("tickerAnaly.TickerWholeAnaly  len(list) 数据长度不足")
 		return
 	}
 

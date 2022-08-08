@@ -23,14 +23,14 @@ func GetTicker() {
 		IsLocalJson:   config.AppEnv.RunMod == 1,
 	})
 	if err != nil {
-		global.LogErr("BinanceTicker", err)
+		global.LogErr("binanceApi.GetTicker BinanceTicker", err)
 		return
 	}
 
 	var result []mOKX.TypeBinanceTicker
 	err = jsoniter.Unmarshal(resData, &result)
 	if err != nil {
-		global.LogErr("BinanceTicker-err", result)
+		global.LogErr("binanceApi.GetTicker BinanceTicker-err", result)
 		return
 	}
 

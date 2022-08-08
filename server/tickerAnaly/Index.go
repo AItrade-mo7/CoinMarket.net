@@ -1,6 +1,7 @@
 package tickerAnaly
 
 import (
+	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -13,6 +14,8 @@ func Start() {
 		Single := NewSingle(list)
 		if len(Single.ResData) == len(config.SliceHour) {
 			TickerAnalySingle[Single.Info.InstID] = Single.ResData
+		} else {
+			global.LogErr("tickerAnaly.Start  数据长度不足")
 		}
 	}
 
