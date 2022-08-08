@@ -45,7 +45,7 @@ func Start() {
 	SetKdata()
 	go mClock.New(mClock.OptType{
 		Func: SetKdata,
-		Spec: "0/1 * * * * ?",
+		Spec: "0 0,15,30,45 0/1 * * ?",
 	})
 }
 

@@ -15,11 +15,11 @@ func TickerKdata() {
 	okxInfo.MarketKdata = make(map[string][]mOKX.TypeKd)
 	TickerList := []mOKX.TypeTicker{}
 	for key, item := range okxInfo.TickerList {
+		time.Sleep(time.Second) // 1秒最多 1 次
 		List := DataMerge(DataMergeOpt{
 			OKXList:     kdata.GetKdata(item.InstID),
 			BinanceList: binanceApi.GetKdata(item.Symbol),
 		})
-		time.Sleep(time.Second) // 1秒最多 1 次
 		if len(List) == 300 {
 			TickerList = append(TickerList, item)
 			okxInfo.MarketKdata[item.InstID] = List
