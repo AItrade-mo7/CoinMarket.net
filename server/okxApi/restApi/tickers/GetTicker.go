@@ -25,14 +25,14 @@ func GetTicker() {
 		IsLocalJson:   config.AppEnv.RunMod == 1,
 	})
 	if err != nil {
-		global.TickerLog.Println("OKXTicker", err)
+		global.LogErr("tickers.GetTicker OKXTicker", err)
 		return
 	}
 
 	var result mOKX.TypeReq
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {
-		global.TickerLog.Println("Ticker-err", result)
+		global.LogErr("tickers.GetTicker Ticker-err", result)
 		return
 	}
 

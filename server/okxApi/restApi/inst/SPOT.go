@@ -26,13 +26,13 @@ func SPOT() {
 		IsLocalJson:   config.AppEnv.RunMod == 1,
 	})
 	if err != nil {
-		global.InstLog.Println("SPOT", err)
+		global.LogErr("SPOT", err)
 		return
 	}
 	var result mOKX.TypeReq
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {
-		global.InstLog.Println("SPOT-err", result)
+		global.LogErr("SPOT-err", result)
 		return
 	}
 

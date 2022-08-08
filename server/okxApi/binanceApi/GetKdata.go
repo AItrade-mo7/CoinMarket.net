@@ -30,7 +30,7 @@ func GetKdata(Symbol string) []mOKX.TypeKd {
 		IsLocalJson:   config.AppEnv.RunMod == 1,
 	})
 	if err != nil {
-		global.InstLog.Println("BinanceTicker", err)
+		global.LogErr("BinanceTicker", err)
 		return nil
 	}
 

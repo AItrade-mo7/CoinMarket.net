@@ -36,7 +36,7 @@ func LogInit() {
 	// 创建一个log
 	Log = mLog.NewLog(mLog.NewLogParam{
 		Path: config.Dir.Log,
-		Name: "Sys",
+		Name: "SysErr",
 	})
 
 	InstLog = mLog.NewLog(mLog.NewLogParam{

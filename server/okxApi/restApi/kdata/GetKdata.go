@@ -32,13 +32,13 @@ func GetKdata(InstID string) []mOKX.TypeKd {
 		IsLocalJson:   config.AppEnv.RunMod == 1,
 	})
 	if err != nil {
-		global.KdataLog.Println(InstID, err)
+		global.LogErr("kdata.GetKdata", InstID, err)
 		return nil
 	}
 	var result mOKX.TypeReq
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {
-		global.KdataLog.Println(InstID, "Err", result)
+		global.LogErr("kdata.GetKdata", InstID, "Err", result)
 		return nil
 	}
 
