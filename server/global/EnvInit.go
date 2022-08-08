@@ -10,7 +10,6 @@ func AppEnvInit() {
 	// 检查配置文件在不在
 	isUserEnvPath := mPath.Exists(config.File.AppEnv)
 	if !isUserEnvPath {
-		LogErr("config.File.AppEnv 文件不存在")
 		return
 	}
 
