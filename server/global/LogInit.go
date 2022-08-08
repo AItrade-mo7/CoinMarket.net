@@ -13,10 +13,8 @@ import (
 
 var (
 	Log             *log.Logger // 系统日志& 重大错误或者事件
-	InstLog         *log.Logger // 产品信息接口报错
-	KdataLog        *log.Logger //
-	TickerLog       *log.Logger //
-	BinanceKdataLog *log.Logger //
+	KdataLog        *log.Logger //  OKX Kdata 日志
+	BinanceKdataLog *log.Logger //  币安 Kdata 日志
 )
 
 func LogInit() {
@@ -39,19 +37,9 @@ func LogInit() {
 		Name: "SysErr",
 	})
 
-	InstLog = mLog.NewLog(mLog.NewLogParam{
-		Path: config.Dir.Log,
-		Name: "Inst",
-	})
-
 	KdataLog = mLog.NewLog(mLog.NewLogParam{
 		Path: config.Dir.Log,
 		Name: "Kdata",
-	})
-
-	TickerLog = mLog.NewLog(mLog.NewLogParam{
-		Path: config.Dir.Log,
-		Name: "Ticker",
 	})
 
 	BinanceKdataLog = mLog.NewLog(mLog.NewLogParam{
