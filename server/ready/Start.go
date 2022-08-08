@@ -10,6 +10,7 @@ import (
 	"CoinMarket.net/server/okxApi/restApi/tickers"
 	"CoinMarket.net/server/tickerAnaly"
 	"CoinMarket.net/server/tmpl"
+	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mCycle"
 )
 
@@ -36,10 +37,11 @@ func Start() {
 	}).Start()
 
 	// 获取当前的行情与交易量榜单
-	mCycle.New(mCycle.Opt{
-		Func:      GetTicker,
-		SleepTime: time.Minute * 5, // 每 5 分钟 获取一次
-	}).Start()
+	GetTicker()
+	go mClock.New(mClock.OptType{
+		Func: GetTicker,
+		Spec: "0 0,15,30,45 0/1 * * ?", // 15 分钟的倍数执行
+	})
 }
 
 func GetTicker() {
@@ -47,6 +49,5 @@ func GetTicker() {
 	tickers.GetTicker()    // 获取 okx 的Ticker
 	SetTicker()            // 计算并设置综合排行榜单    mOKX.TickerList  数据
 	TickerKdata()          // 获取并设置榜单币种最近 75 小时的历史数据 mOKX.MarketKdata   数据
-
-	tickerAnaly.Start() // 开始对数据进行分析
+	tickerAnaly.Start()    // 开始对数据进行分析
 }
