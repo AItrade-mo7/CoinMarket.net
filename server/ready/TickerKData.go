@@ -3,6 +3,7 @@ package ready
 import (
 	"time"
 
+	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"CoinMarket.net/server/okxInfo"
@@ -13,15 +14,17 @@ import (
 func TickerKdata() {
 	okxInfo.MarketKdata = make(map[string][]mOKX.TypeKd)
 	TickerList := []mOKX.TypeTicker{}
-	for _, item := range okxInfo.TickerList {
-		time.Sleep(time.Second) // 1秒最多 1 次
+	for key, item := range okxInfo.TickerList {
 		List := DataMerge(DataMergeOpt{
 			OKXList:     kdata.GetKdata(item.InstID),
 			BinanceList: binanceApi.GetKdata(item.Symbol),
 		})
+		time.Sleep(time.Second) // 1秒最多 1 次
 		if len(List) == 300 {
 			TickerList = append(TickerList, item)
 			okxInfo.MarketKdata[item.InstID] = List
+		} else {
+			global.LogErr("ready.TickerKdata", key, "长度不足")
 		}
 	}
 	okxInfo.TickerList = make([]mOKX.TypeTicker, len(TickerList))
