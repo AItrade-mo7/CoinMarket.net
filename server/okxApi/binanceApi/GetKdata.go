@@ -1,6 +1,8 @@
 package binanceApi
 
 import (
+	"fmt"
+
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
@@ -46,6 +48,8 @@ func FormatKdata(data []byte, Symbol string) {
 
 	InstID := Symbol
 
+	fmt.Println(InstID, Symbol)
+
 	for _, item := range okxInfo.TickerList {
 		if item.Symbol == Symbol {
 			InstID = item.InstID
@@ -75,6 +79,4 @@ func FormatKdata(data []byte, Symbol string) {
 func Storage(kdata mOKX.TypeKd) {
 	new_Kdata := mOKX.AnalyNewKd(kdata, KdataList)
 	KdataList = append(KdataList, new_Kdata)
-
-	// global.BinanceKdataLog.Println(mJson.JsonFormat(mJson.ToJson(new_Kdata)))
 }
