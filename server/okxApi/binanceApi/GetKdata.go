@@ -76,5 +76,5 @@ func Storage(kdata mOKX.TypeKd) {
 	new_Kdata := mOKX.AnalyNewKd(kdata, KdataList)
 	KdataList = append(KdataList, new_Kdata)
 
-	global.BinanceKdataLog.Println(mJson.JsonFormat(mJson.ToJson(new_Kdata)))
+	// global.BinanceKdataLog.Println(mJson.JsonFormat(mJson.ToJson(new_Kdata)))
 }
