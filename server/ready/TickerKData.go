@@ -16,15 +16,19 @@ func TickerKdata() {
 	TickerList := []mOKX.TypeTicker{}
 	for _, item := range okxInfo.TickerList {
 		time.Sleep(time.Second) // 1秒最多 1 次
+
+		OKXList := kdata.GetKdata(item.InstID)
+		BinanceList := binanceApi.GetKdata(item.Symbol)
+
 		List := DataMerge(DataMergeOpt{
-			OKXList:     kdata.GetKdata(item.InstID),
-			BinanceList: binanceApi.GetKdata(item.Symbol),
+			OKXList:     OKXList,
+			BinanceList: BinanceList,
 		})
 		if len(List) == 300 {
 			TickerList = append(TickerList, item)
 			okxInfo.MarketKdata[item.InstID] = List
 		} else {
-			global.LogErr("ready.TickerKdata", item.InstID, "长度不足",len(List))
+			global.LogErr("ready.TickerKdata", item.InstID, "长度不足", len(List))
 		}
 	}
 	okxInfo.TickerList = make([]mOKX.TypeTicker, len(TickerList))
