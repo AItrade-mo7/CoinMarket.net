@@ -24,6 +24,7 @@ func TickerKdata() {
 			OKXList:     OKXList,
 			BinanceList: BinanceList,
 		})
+
 		if len(List) == 300 {
 			TickerList = append(TickerList, item)
 			okxInfo.MarketKdata[item.InstID] = List
