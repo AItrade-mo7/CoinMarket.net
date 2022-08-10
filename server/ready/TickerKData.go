@@ -14,7 +14,7 @@ import (
 func TickerKdata() {
 	okxInfo.MarketKdata = make(map[string][]mOKX.TypeKd)
 	TickerList := []mOKX.TypeTicker{}
-	for key, item := range okxInfo.TickerList {
+	for _, item := range okxInfo.TickerList {
 		time.Sleep(time.Second) // 1秒最多 1 次
 		List := DataMerge(DataMergeOpt{
 			OKXList:     kdata.GetKdata(item.InstID),
@@ -24,7 +24,7 @@ func TickerKdata() {
 			TickerList = append(TickerList, item)
 			okxInfo.MarketKdata[item.InstID] = List
 		} else {
-			global.LogErr("ready.TickerKdata", key, "长度不足")
+			global.LogErr("ready.TickerKdata", item.InstID, "长度不足",len(List))
 		}
 	}
 	okxInfo.TickerList = make([]mOKX.TypeTicker, len(TickerList))

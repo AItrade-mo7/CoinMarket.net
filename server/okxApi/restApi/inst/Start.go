@@ -14,11 +14,15 @@ var (
 )
 
 func Start() {
+	// 在这里清空数据
+	SPOT_list = make(map[string]mOKX.TypeInst)
+	SWAP_list = make(map[string]mOKX.TypeInst)
+
 	SWAP()
 	SPOT()
 	if len(SPOT_list) < 30 || len(SWAP_list) < 30 {
 		// 正确
-		global.LogErr("inst 数据条目不正确", len(SPOT_list), len(SWAP_list))
+		global.LogErr("inst.Start 数据条目不正确", len(SPOT_list), len(SWAP_list))
 		return
 	}
 	SPOT_inst := make(map[string]mOKX.TypeInst)

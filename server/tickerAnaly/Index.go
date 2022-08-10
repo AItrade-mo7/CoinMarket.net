@@ -15,7 +15,7 @@ func Start() {
 		if len(Single.ResData) == len(config.SliceHour) {
 			TickerAnalySingle[Single.Info.InstID] = Single.ResData
 		} else {
-			global.LogErr("tickerAnaly.Start  数据长度不足")
+			global.LogErr("tickerAnaly.Start  数据长度不足", Single.Info.InstID, len(Single.ResData))
 		}
 	}
 

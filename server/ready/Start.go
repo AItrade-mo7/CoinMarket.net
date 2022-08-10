@@ -8,6 +8,7 @@ import (
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/tickers"
+	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
 	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mClock"
@@ -35,6 +36,8 @@ func Start() {
 		SleepTime: time.Hour * 16, // 每 16 时获取一次
 	}).Start()
 
+	global.KdataLog.Println("okxInfo.SPOT_inst SWAP_inst", len(okxInfo.SPOT_inst), len(okxInfo.SWAP_inst))
+
 	// 获取排行榜单
 	mCycle.New(mCycle.Opt{
 		Func:      GetTicker,
@@ -59,4 +62,6 @@ func GetTicker() {
 func SetKdata() {
 	TickerKdata()       // 获取并设置榜单币种最近 75 小时的历史数据 mOKX.MarketKdata   数据
 	tickerAnaly.Start() // 开始对数据进行分析
+
+	global.KdataLog.Println("okxInfo.TickerList ", len(okxInfo.TickerList), len(okxInfo.MarketKdata))
 }
