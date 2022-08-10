@@ -36,6 +36,10 @@ func GetKdata(Symbol string) []mOKX.TypeKd {
 
 	FormatKdata(resData, Symbol)
 
+	if len(KdataList) != 300 {
+		global.KdataLog.Println("binanceApi.GetKdata resData", mStr.ToStr(resData))
+	}
+
 	mFile.Write(Kdata_file, mStr.ToStr(resData))
 	return KdataList
 }
