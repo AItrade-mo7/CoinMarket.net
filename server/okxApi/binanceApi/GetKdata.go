@@ -44,7 +44,7 @@ func FormatKdata(data []byte, Symbol string) {
 	var listStr [][12]any
 	jsoniter.Unmarshal(data, &listStr)
 
-	global.BinanceKdataLog.Println("binanceApi.GetKdata", len(listStr), Symbol)
+	global.BinanceKdataLog.Println("binanceApi.FormatKdata", len(listStr), Symbol)
 
 	InstID := Symbol
 
