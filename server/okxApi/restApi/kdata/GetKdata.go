@@ -45,7 +45,7 @@ func GetKdata(InstID string) []mOKX.TypeKd {
 	FormatKdata(result.Data, InstID)
 
 	// 写入数据文件
-	go mFile.Write(Kdata_file, mStr.ToStr(resData))
+	 mFile.Write(Kdata_file, mStr.ToStr(resData))
 	return KdataList
 }
 

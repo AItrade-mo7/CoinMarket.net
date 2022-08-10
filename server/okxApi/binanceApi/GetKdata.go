@@ -36,7 +36,7 @@ func GetKdata(Symbol string) []mOKX.TypeKd {
 
 	FormatKdata(resData, Symbol)
 
-	go mFile.Write(Kdata_file, mStr.ToStr(resData))
+	mFile.Write(Kdata_file, mStr.ToStr(resData))
 	return KdataList
 }
 

@@ -36,7 +36,7 @@ func GetTicker() {
 
 	SetInstID(result)
 
-	go mFile.Write(Ticker_file, mStr.ToStr(resData))
+	mFile.Write(Ticker_file, mStr.ToStr(resData))
 }
 
 func SetInstID(data []mOKX.TypeBinanceTicker) {

@@ -38,7 +38,7 @@ func GetTicker() {
 
 	setTicker(result.Data)
 
-	go mFile.Write(Ticker_file, mStr.ToStr(resData))
+	 mFile.Write(Ticker_file, mStr.ToStr(resData))
 }
 
 func setTicker(data any) {

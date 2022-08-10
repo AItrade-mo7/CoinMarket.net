@@ -39,7 +39,7 @@ func SWAP() {
 	setSWAP_list(result.Data)
 
 	// 写入日志文件
-	go mFile.Write(SWAP_file, mStr.ToStr(resData))
+	mFile.Write(SWAP_file, mStr.ToStr(resData))
 }
 
 func setSWAP_list(data any) {

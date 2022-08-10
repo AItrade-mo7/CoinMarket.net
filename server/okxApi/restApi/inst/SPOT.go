@@ -39,7 +39,7 @@ func SPOT() {
 	setSPOT_list(result.Data)
 
 	// 写入数据文件
-	go mFile.Write(SPOT_file, mStr.ToStr(resData))
+	mFile.Write(SPOT_file, mStr.ToStr(resData))
 }
 
 func setSPOT_list(data any) {
