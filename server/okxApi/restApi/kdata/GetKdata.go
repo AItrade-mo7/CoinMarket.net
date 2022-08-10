@@ -54,6 +54,8 @@ func FormatKdata(data any, InstID string) {
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
 
+	global.BinanceKdataLog.Println("binanceApi.GetKdata", len(list), InstID)
+
 	CcyName := strings.Replace(InstID, config.SPOT_suffix, "", -1)
 
 	for i := len(list) - 1; i >= 0; i-- {

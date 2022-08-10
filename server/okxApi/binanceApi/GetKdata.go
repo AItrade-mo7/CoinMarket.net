@@ -1,8 +1,6 @@
 package binanceApi
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
@@ -46,9 +44,9 @@ func FormatKdata(data []byte, Symbol string) {
 	var listStr [][12]any
 	jsoniter.Unmarshal(data, &listStr)
 
-	InstID := Symbol
+	global.BinanceKdataLog.Println("binanceApi.GetKdata", len(listStr), Symbol)
 
-	fmt.Println(InstID, Symbol)
+	InstID := Symbol
 
 	for _, item := range okxInfo.TickerList {
 		if item.Symbol == Symbol {
