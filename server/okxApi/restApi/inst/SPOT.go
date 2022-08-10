@@ -47,6 +47,8 @@ func setSPOT_list(data any) {
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
 
+	global.KdataLog.Println("inst.setSPOT_list", len(list), "SPOT")
+
 	for _, val := range list {
 		find := strings.Contains(val.InstID, config.SPOT_suffix)
 		if find && val.State == "live" {

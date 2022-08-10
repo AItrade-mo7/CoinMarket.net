@@ -41,6 +41,9 @@ func GetTicker() {
 
 func SetInstID(data []mOKX.TypeBinanceTicker) {
 	var list []mOKX.TypeBinanceTicker
+
+	global.BinanceKdataLog.Println("binanceApi.SetInstID", len(list), "GetTicker")
+
 	for _, val := range data {
 		find := strings.Contains(val.Symbol, config.Unit)
 		if find {

@@ -47,6 +47,8 @@ func setSWAP_list(data any) {
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
 
+	global.KdataLog.Println("inst.setSWAP_list", len(list), "SWAP")
+
 	for _, val := range list {
 
 		find := strings.Contains(val.InstID, config.SWAP_suffix) // 统一计价单位

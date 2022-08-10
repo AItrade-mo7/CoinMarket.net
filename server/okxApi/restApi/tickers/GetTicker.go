@@ -46,6 +46,8 @@ func setTicker(data any) {
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
 
+	global.KdataLog.Println("inst.setTicker", len(list), "GetTicker")
+
 	var tickerList []mOKX.TypeOKXTicker
 	for _, val := range list {
 		SPOT := okxInfo.SPOT_inst[val.InstID]
