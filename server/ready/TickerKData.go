@@ -29,7 +29,7 @@ func TickerKdata() {
 			TickerList = append(TickerList, item)
 			okxInfo.MarketKdata[item.InstID] = List
 		} else {
-			global.LogErr("ready.TickerKdata", item.InstID, len(OKXList), len(BinanceList))
+			global.LogErr("ready.TickerKdata", "长度不正确", item.InstID, len(OKXList), len(BinanceList))
 		}
 	}
 	okxInfo.TickerList = make([]mOKX.TypeTicker, len(TickerList))
