@@ -36,7 +36,7 @@ func WholeAnaly() {
 	}
 
 	if len(TickerSingle) != len(config.SliceHour) {
-		global.LogErr("WholeAnaly  config.SliceHour 长度不正确")
+		global.LogErr("tickerAnaly.WholeAnaly  config.SliceHour 长度不正确", len(TickerSingle), len(config.SliceHour))
 		return
 	}
 
