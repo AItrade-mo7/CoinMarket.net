@@ -29,7 +29,7 @@ func TickerKdata() {
 			TickerList = append(TickerList, item)
 			okxInfo.MarketKdata[item.InstID] = List
 		} else {
-			global.LogErr("ready.TickerKdata", "长度不正确", item.InstID, len(OKXList), len(BinanceList))
+			global.LogErr("ready.TickerKdata", "长度不正确", item.InstID, len(List), len(OKXList), len(BinanceList))
 		}
 	}
 	okxInfo.TickerList = make([]mOKX.TypeTicker, len(TickerList))
@@ -54,7 +54,6 @@ func DataMerge(opt DataMergeOpt) []mOKX.TypeKd {
 				OkxItem.VolCcy = VolCcy
 				Vol := mCount.Add(BinanceItem.Vol, OkxItem.Vol)
 				OkxItem.Vol = Vol
-				Kdata = append(Kdata, OkxItem)
 				break
 			}
 		}
