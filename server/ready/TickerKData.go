@@ -29,7 +29,7 @@ func TickerKdata() {
 			TickerList = append(TickerList, item)
 			okxInfo.MarketKdata[item.InstID] = List
 		} else {
-			global.LogErr("ready.TickerKdata", item.InstID, "长度不足", len(List))
+			global.LogErr("ready.TickerKdata", item.InstID, len(OKXList), len(BinanceList))
 		}
 	}
 	okxInfo.TickerList = make([]mOKX.TypeTicker, len(TickerList))
@@ -45,19 +45,21 @@ func DataMerge(opt DataMergeOpt) []mOKX.TypeKd {
 	OKXList := opt.OKXList
 	BinanceList := opt.BinanceList
 	Kdata := []mOKX.TypeKd{}
-	for key, item := range OKXList {
+	for _, item := range OKXList {
 		OkxItem := item
-		BinanceItem := BinanceList[key]
-		if OkxItem.TimeUnix == BinanceItem.TimeUnix {
-			VolCcy := mCount.Add(BinanceItem.VolCcy, OkxItem.VolCcy)
-			OkxItem.VolCcy = VolCcy
-			Vol := mCount.Add(BinanceItem.Vol, OkxItem.Vol)
-			OkxItem.Vol = Vol
-			Kdata = append(Kdata, OkxItem)
-		} else {
-			Kdata = []mOKX.TypeKd{} // 在这里清除
-			break
+
+		for _, BinanceItem := range BinanceList {
+			if OkxItem.TimeUnix == BinanceItem.TimeUnix {
+				VolCcy := mCount.Add(BinanceItem.VolCcy, OkxItem.VolCcy)
+				OkxItem.VolCcy = VolCcy
+				Vol := mCount.Add(BinanceItem.Vol, OkxItem.Vol)
+				OkxItem.Vol = Vol
+				Kdata = append(Kdata, OkxItem)
+				break
+			}
 		}
+
+		Kdata = append(Kdata, OkxItem)
 	}
 	return Kdata
 }
