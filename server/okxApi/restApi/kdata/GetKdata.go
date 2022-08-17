@@ -5,6 +5,7 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -16,9 +17,15 @@ import (
 var KdataList []mOKX.TypeKd
 
 func GetKdata(InstID string) []mOKX.TypeKd {
+	InstInfo := GetInstInfo(InstID)
+	KdataList = []mOKX.TypeKd{}
+
+	if InstInfo.InstID != InstID {
+		return KdataList
+	}
+
 	Kdata_file := mStr.Join(config.Dir.JsonData, "/", InstID, ".json")
 
-	KdataList = []mOKX.TypeKd{}
 	resData, err := mOKX.FetchOKX(mOKX.OptFetchOKX{
 		Path: "/api/v5/market/candles",
 		Data: map[string]any{
@@ -42,7 +49,7 @@ func GetKdata(InstID string) []mOKX.TypeKd {
 		return nil
 	}
 
-	FormatKdata(result.Data, InstID)
+	FormatKdata(result.Data, InstInfo)
 
 	if len(KdataList) != 300 {
 		global.KdataLog.Println("kdata.GetKdata resData", mStr.ToStr(resData))
@@ -53,21 +60,32 @@ func GetKdata(InstID string) []mOKX.TypeKd {
 	return KdataList
 }
 
-func FormatKdata(data any, InstID string) {
+func FormatKdata(data any, Inst mOKX.TypeInst) {
 	var list []mOKX.CandleDataType
 	jsonStr := mJson.ToJson(data)
 	jsoniter.Unmarshal(jsonStr, &list)
 
-	global.KdataLog.Println("kdata.FormatKdata", len(list), InstID)
+	global.KdataLog.Println("kdata.FormatKdata", len(list), Inst.InstID)
 
-	CcyName := strings.Replace(InstID, config.SPOT_suffix, "", -1)
+	CcyName := Inst.InstID
+	if Inst.InstType == "SWAP" {
+		CcyName = strings.Replace(Inst.InstID, config.SWAP_suffix, "", -1)
+	}
+	if Inst.InstType == "SPOT" {
+		CcyName = strings.Replace(Inst.InstID, config.SPOT_suffix, "", -1)
+	}
 
 	for i := len(list) - 1; i >= 0; i-- {
 		item := list[i]
 
 		kdata := mOKX.TypeKd{
-			InstID:   InstID,
+			InstID:   Inst.InstID,
 			CcyName:  CcyName,
+			TickSz:   Inst.TickSz,
+			InstType: Inst.InstType,
+			CtVal:    Inst.CtVal,
+			MinSz:    Inst.MinSz,
+			MaxMktSz: Inst.MaxMktSz,
 			Time:     mTime.MsToTime(item[0], "0"),
 			TimeUnix: mTime.ToUnixMsec(mTime.MsToTime(item[0], "0")),
 			O:        item[1],
@@ -76,15 +94,33 @@ func FormatKdata(data any, InstID string) {
 			C:        item[4],
 			Vol:      item[5],
 			VolCcy:   item[6],
-			Type:     "GetKdata",
+			DataType: "GetKdata",
 		}
-		Storage(kdata)
+		StorageKdata(kdata)
 	}
 }
 
-func Storage(kdata mOKX.TypeKd) {
-	new_Kdata := mOKX.AnalyNewKd(kdata, KdataList)
+func StorageKdata(kdata mOKX.TypeKd) {
+	new_Kdata := mOKX.NewKD(kdata, KdataList)
 	KdataList = append(KdataList, new_Kdata)
 
 	// global.KdataLog.Println(mJson.JsonFormat(mJson.ToJson(new_Kdata)))
+}
+
+func GetInstInfo(InstID string) (resData mOKX.TypeInst) {
+	resData = mOKX.TypeInst{}
+
+	for _, item := range okxInfo.SPOT_inst {
+		if item.InstID == InstID {
+			resData = item
+		}
+	}
+
+	for _, item := range okxInfo.SWAP_inst {
+		if item.InstID == InstID {
+			resData = item
+		}
+	}
+
+	return resData
 }

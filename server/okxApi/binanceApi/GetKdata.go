@@ -72,13 +72,13 @@ func FormatKdata(data []byte, Symbol string) {
 			C:        mStr.ToStr(item[4]),
 			Vol:      mStr.ToStr(item[5]),
 			VolCcy:   mStr.ToStr(item[7]),
-			Type:     "BinanceKdata",
+			DataType: "BinanceKdata",
 		}
 		Storage(kdata)
 	}
 }
 
 func Storage(kdata mOKX.TypeKd) {
-	new_Kdata := mOKX.AnalyNewKd(kdata, KdataList)
+	new_Kdata := mOKX.NewKD(kdata, KdataList)
 	KdataList = append(KdataList, new_Kdata)
 }
