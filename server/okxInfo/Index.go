@@ -28,3 +28,6 @@ var TickerAnalySingle map[string][]mOKX.AnalySliceType
 
 // 榜单数据分析
 var TickerAnalyWhole []mOKX.TypeWholeTickerAnaly
+
+// 最终的分析结果
+var WholeDir = 0

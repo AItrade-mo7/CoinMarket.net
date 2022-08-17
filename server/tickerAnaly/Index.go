@@ -22,4 +22,6 @@ func Start() {
 	okxInfo.TickerAnalySingle = TickerAnalySingle
 
 	WholeAnaly()
+
+	AnalyDir()
 }
