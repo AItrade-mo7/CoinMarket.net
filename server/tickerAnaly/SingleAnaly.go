@@ -153,10 +153,10 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 
 	Sort_H := mOKX.Sort_H(list)         // 最高价排序 高 - 低
 	Sort_L := mOKX.Sort_L(list)         // 最低价排序 高 - 低
-	Sort_HLPer := mOKX.Sort_HLPer(list) // 最低价排序 高 - 低
+	Sort_HLPer := mOKX.Sort_HLPer(list) // 振幅排序 高 - 低
 
 	slice.Volume = Volume
-	slice.RosePer = mCount.RoseCent(lastElm.C, firstElm.O) // 最后一个的收盘价 - 一开始的开盘价
+	slice.RosePer = mCount.RoseCent(lastElm.CBas, firstElm.CBas) // 最后一个的 CBas - 一开始的 CBas
 	slice.H = Sort_H[0].H
 	slice.L = Sort_L[len(Sort_H)-1].L
 
