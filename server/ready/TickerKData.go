@@ -16,21 +16,36 @@ func TickerKdata() {
 	TickerList := []mOKX.TypeTicker{}
 	for _, item := range okxInfo.TickerList {
 		time.Sleep(time.Second) // 1秒最多 1 次
+		// 开始设置 SWAP
+		SwapInst := mOKX.TypeInst{}
+		for _, SWAP := range okxInfo.SWAP_inst {
+			if SWAP.Uly == item.InstID {
+				SwapInst = SWAP
+				break
+			}
+		}
+		if len(SwapInst.InstID) < 3 {
+			continue
+		}
 
 		OKXList := kdata.GetKdata(item.InstID)
 		BinanceList := binanceApi.GetKdata(item.Symbol)
+
+		SWAPList := kdata.GetKdata(SwapInst.InstID)
 
 		List := DataMerge(DataMergeOpt{
 			OKXList:     OKXList,
 			BinanceList: BinanceList,
 		})
 
-		if len(List) == 300 {
+		if len(List) == 300 && len(SWAPList) == 300 {
 			TickerList = append(TickerList, item)
 			okxInfo.MarketKdata[item.InstID] = List
+			okxInfo.MarketKdata[SwapInst.InstID] = SWAPList
 		} else {
-			global.LogErr("ready.TickerKdata", "长度不正确", item.InstID, len(List), len(OKXList), len(BinanceList))
+			global.LogErr("ready.TickerKdata", "长度不正确", item.InstID, len(List), len(OKXList), len(BinanceList), len(SWAPList))
 		}
+
 	}
 	okxInfo.TickerList = make([]mOKX.TypeTicker, len(TickerList))
 	okxInfo.TickerList = TickerList
