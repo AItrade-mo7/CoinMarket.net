@@ -1,6 +1,8 @@
 package tickerAnaly
 
 import (
+	"fmt"
+
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
@@ -10,7 +12,10 @@ import (
 func Start() {
 	// 基于  mOKX.MarketKdata  进行数据分析
 	TickerAnalySingle := make(map[string][]mOKX.AnalySliceType)
-	for _, list := range okxInfo.MarketKdata {
+	for _, item := range okxInfo.TickerList {
+		list := okxInfo.MarketKdata[item.InstID]
+
+		fmt.Println(item.InstID)
 		Single := NewSingle(list)
 		if len(Single.ResData) == len(config.SliceHour) {
 			TickerAnalySingle[Single.Info.InstID] = Single.ResData
