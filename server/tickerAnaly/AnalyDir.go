@@ -13,6 +13,8 @@ func AnalyDir() {
 	upDir := []string{}
 	downDir := []string{}
 	zeroDir := []string{}
+	allDir := []string{}
+
 	for key, item := range okxInfo.TickerAnalyWhole {
 		fade := len(okxInfo.TickerAnalyWhole) - key
 		fadeStr := mStr.ToStr(fade)
@@ -25,14 +27,21 @@ func AnalyDir() {
 		if item.DirIndex < 0 {
 			downDir = append(downDir, fadeStr)
 		}
+
+		allDir = append(allDir, fadeStr)
+
 	}
 
 	upFade := mCount.Sum(upDir)
 	downFade := mCount.Sum(downDir)
 	zeroFade := mCount.Sum(zeroDir)
+	allFade := mCount.Sum(allDir)
 
-	upAV := mCount.Add(zeroFade, upFade)
-	downAV := mCount.Add(zeroFade, downFade)
+	zeroPer := mCount.PerCent(zeroFade, allFade)
 
-	okxInfo.WholeDir = mCount.Le(upAV, downAV)
+	okxInfo.WholeDir = mCount.Le(upFade, downFade)
+
+	if mCount.Le(zeroPer, "50") > 0 {
+		okxInfo.WholeDir = okxInfo.WholeDir * 2
+	}
 }

@@ -29,5 +29,5 @@ var TickerAnalySingle map[string][]mOKX.AnalySliceType
 // 榜单数据分析
 var TickerAnalyWhole []mOKX.TypeWholeTickerAnaly
 
-// 最终的分析结果
+// 最终的分析结果 0 无结果，1 上涨 -1 下跌 ， 2  震荡上涨， -2 震荡下跌
 var WholeDir = 0
