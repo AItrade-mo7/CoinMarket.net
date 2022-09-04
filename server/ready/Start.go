@@ -15,6 +15,7 @@ import (
 	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mCycle"
+	"github.com/EasyGolang/goTools/mMongo"
 )
 
 func Start() {
@@ -69,12 +70,27 @@ func TimerClickStart() {
 func SetKdata(lType string) {
 	TickerKdata()       // 获取并设置榜单币种最近 75 小时的历史数据 mOKX.MarketKdata   数据
 	tickerAnaly.Start() // 开始对数据进行分析
+	global.KdataLog.Println("okxInfo.TickerList ", len(okxInfo.TickerList), len(okxInfo.MarketKdata))
 
 	if lType == "mClock" {
-		// 在这里对分析结果进行存储
-		TickerDB := dbType.GetTickerDB()
-		fmt.Println("存储数据", TickerDB)
+		SetMarketTickerDB()
 	}
+}
 
-	global.KdataLog.Println("okxInfo.TickerList ", len(okxInfo.TickerList), len(okxInfo.MarketKdata))
+func SetMarketTickerDB() {
+	db := mMongo.New(mMongo.Opt{
+		UserName: config.SysEnv.MongoUserName,
+		Password: config.SysEnv.MongoPassword,
+		Address:  config.SysEnv.MongoAddress,
+		DBName:   "AITrade",
+	}).Connect().Collection("MarketTicker")
+	defer db.Close()
+
+	TickerDB := dbType.GetTickerDB()
+	_, err := db.Table.InsertOne(db.Ctx, TickerDB)
+	if err != nil {
+		resErr := fmt.Errorf("注册,插入数据失败 %+v", err)
+		global.LogErr(resErr)
+		return
+	}
 }
