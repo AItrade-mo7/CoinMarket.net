@@ -1,6 +1,8 @@
 package okxInfo
 
-import "github.com/EasyGolang/goTools/mOKX"
+import (
+	"github.com/EasyGolang/goTools/mOKX"
+)
 
 // 产品信息 - 现货
 var SPOT_inst map[string]mOKX.TypeInst

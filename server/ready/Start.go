@@ -1,10 +1,12 @@
 package ready
 
 import (
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/tickers"
@@ -44,10 +46,10 @@ func Start() {
 		SleepTime: time.Minute * 3, // 每 3 分钟获取一次
 	}).Start()
 
-	// 获取历史数据
-	SetKdata()
+	// 获取历史数据,并执行分析
+	SetKdata("Start")
 	go mClock.New(mClock.OptType{
-		Func: SetKdata,
+		Func: TimerClickStart,
 		Spec: "0 0,15,30,45 0/1 * * ?",
 	})
 }
@@ -59,9 +61,20 @@ func GetTicker() {
 }
 
 // 获取历史数据
-func SetKdata() {
+
+func TimerClickStart() {
+	SetKdata("mClock")
+}
+
+func SetKdata(lType string) {
 	TickerKdata()       // 获取并设置榜单币种最近 75 小时的历史数据 mOKX.MarketKdata   数据
 	tickerAnaly.Start() // 开始对数据进行分析
+
+	if lType == "mClock" {
+		// 在这里对分析结果进行存储
+		TickerDB := dbType.GetTickerDB()
+		fmt.Println("存储数据", TickerDB)
+	}
 
 	global.KdataLog.Println("okxInfo.TickerList ", len(okxInfo.TickerList), len(okxInfo.MarketKdata))
 }
