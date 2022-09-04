@@ -7,6 +7,8 @@ import (
 )
 
 func AppEnvInit() {
+	config.LoadSysEnv()
+
 	// 检查配置文件在不在
 	isUserEnvPath := mPath.Exists(config.File.AppEnv)
 	if !isUserEnvPath {
