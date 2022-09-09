@@ -60,5 +60,7 @@ func GetAnalyHistory(c *fiber.Ctx) error {
 		MarketTickerList = append(MarketTickerList, MarketTicker)
 	}
 
-	return c.JSON(result.Succeed.WithData(MarketTickerList))
+	returnData := resCur.GenerateData(MarketTickerList)
+
+	return c.JSON(result.Succeed.WithData(returnData))
 }
