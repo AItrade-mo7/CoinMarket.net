@@ -24,8 +24,13 @@ func GetAnalyHistory(c *fiber.Ctx) error {
 
 	FK := bson.D{}
 	findOpt := options.Find()
+
 	findOpt.SetLimit(300)
-	findOpt.SetSort(-1)
+	findOpt.SetSort(bson.D{{
+		Key:   "TimeUnix",
+		Value: -1,
+	}})
+
 	cur, err := db.Table.Find(db.Ctx, FK, findOpt)
 	if err != nil {
 		db.Close()
