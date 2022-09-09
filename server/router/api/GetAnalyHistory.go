@@ -6,7 +6,6 @@ import (
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/router/result"
-	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
@@ -42,7 +41,6 @@ func GetAnalyHistory(c *fiber.Ctx) error {
 	for cur.Next(db.Ctx) {
 		var result dbType.MarketTickerTable
 		cur.Decode(&result)
-		mJson.Println(result)
 		MarketTickerList = append(MarketTickerList, result)
 	}
 
