@@ -15,10 +15,6 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-type GetAnalyHistoryParam struct {
-	Current int64 `json:"Current"` // 列表
-}
-
 func GetAnalyHistory(c *fiber.Ctx) error {
 	var json dbSearch.FindParam
 	mFiber.Parser(c, &json)
@@ -61,6 +57,8 @@ func GetAnalyHistory(c *fiber.Ctx) error {
 	}
 
 	returnData := resCur.GenerateData(MarketTickerList)
+
+	mJson.Println(json)
 
 	return c.JSON(result.Succeed.WithData(returnData))
 }
