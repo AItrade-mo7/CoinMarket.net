@@ -25,7 +25,7 @@ func GetAnalyHistory(c *fiber.Ctx) error {
 	FK := bson.D{}
 	findOpt := options.Find()
 
-	findOpt.SetLimit(300)
+	findOpt.SetLimit(1400)
 	findOpt.SetSort(bson.D{{
 		Key:   "TimeUnix",
 		Value: -1,
