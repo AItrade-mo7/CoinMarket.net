@@ -66,6 +66,7 @@ func GetAnalyList(c *fiber.Ctx) error {
 }
 
 type MarketTickerAPI struct {
+	Unit            string `bson:"Unit"`
 	WholeDir        int    `bson:"WholeDir"`
 	TimeUnix        int64  `bson:"TimeUnix"`
 	Time            string `bson:"Time"`
