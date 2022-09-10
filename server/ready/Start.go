@@ -44,7 +44,7 @@ func Start() {
 	// 获取排行榜单
 	mCycle.New(mCycle.Opt{
 		Func:      GetTicker,
-		SleepTime: time.Minute * 3, // 每 3 分钟获取一次
+		SleepTime: time.Minute * 5, // 每 5 分钟获取一次
 	}).Start()
 
 	// 获取历史数据,并执行分析
@@ -68,6 +68,7 @@ func TimerClickStart() {
 }
 
 func SetKdata(lType string) {
+	GetTicker()
 	TickerKdata()       // 获取并设置榜单币种最近 75 小时的历史数据 mOKX.MarketKdata   数据
 	tickerAnaly.Start() // 开始对数据进行分析
 	global.KdataLog.Println("okxInfo.TickerList ", len(okxInfo.TickerList), len(okxInfo.MarketKdata))
