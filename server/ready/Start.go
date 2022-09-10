@@ -36,7 +36,7 @@ func Start() {
 	// 获取 OKX 交易产品信息
 	mCycle.New(mCycle.Opt{
 		Func:      inst.Start,
-		SleepTime: time.Hour * 16, // 每 16 时获取一次
+		SleepTime: time.Hour * 4, // 每 4 时获取一次
 	}).Start()
 
 	global.KdataLog.Println("okxInfo.SPOT_inst SWAP_inst", len(okxInfo.SPOT_inst), len(okxInfo.SWAP_inst))
