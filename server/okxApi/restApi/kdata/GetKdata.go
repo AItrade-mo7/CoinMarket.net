@@ -51,8 +51,8 @@ func GetKdata(InstID string) []mOKX.TypeKd {
 
 	FormatKdata(result.Data, InstInfo)
 
-	if len(KdataList) != 300 {
-		global.KdataLog.Println("kdata.GetKdata resData", mStr.ToStr(resData))
+	if len(KdataList) < 120 {
+		global.KdataLog.Println("kdata.GetKdata resData", InstID, mStr.ToStr(resData))
 	}
 
 	// 写入数据文件
