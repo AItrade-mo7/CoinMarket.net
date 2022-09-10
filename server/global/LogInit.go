@@ -28,7 +28,7 @@ func LogInit() {
 
 	isJsonDataPath := mPath.Exists(config.Dir.JsonData)
 	if !isJsonDataPath {
-		// 不存在则创建 logs 目录
+		// 不存在则创建 jsonData 目录
 		os.MkdirAll(config.Dir.JsonData, 0o777)
 	}
 
