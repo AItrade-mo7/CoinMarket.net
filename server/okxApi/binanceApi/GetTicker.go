@@ -58,7 +58,7 @@ func SetInstID(data []mOKX.TypeBinanceTicker) {
 	VolumeList := VolumeSort(list)
 
 	tLen := len(VolumeList)
-	if tLen > 15 {
+	if tLen > 18 {
 		VolumeList = VolumeList[tLen-15:] // 取出最后 15 个
 	}
 
