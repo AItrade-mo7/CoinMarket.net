@@ -72,7 +72,6 @@ func SetKdata(lType string) {
 	TickerKdata()       // 获取并设置榜单币种最近 75 小时的历史数据 mOKX.MarketKdata   数据
 	tickerAnaly.Start() // 开始对数据进行分析
 	global.KdataLog.Println("okxInfo.TickerList ", len(okxInfo.TickerList), len(okxInfo.MarketKdata))
-
 	if lType == "mClock" {
 		SetMarketTickerDB()
 	}

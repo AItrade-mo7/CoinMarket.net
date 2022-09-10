@@ -38,7 +38,7 @@ func TickerKdata() {
 			BinanceList: BinanceList,
 		})
 
-		if len(List) == 300 && len(SWAPList) == 300 {
+		if len(List) == 300 {
 			TickerList = append(TickerList, item)
 			okxInfo.MarketKdata[item.InstID] = List
 			okxInfo.MarketKdata[SwapInst.InstID] = SWAPList
