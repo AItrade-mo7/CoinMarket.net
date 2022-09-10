@@ -68,10 +68,16 @@ func TimerClickStart() {
 }
 
 func SetKdata(lType string) {
+	global.Run.Println("开始获取榜单数据")
 	GetTicker()
-	TickerKdata()       // 获取并设置榜单币种最近 75 小时的历史数据 mOKX.MarketKdata   数据
+
+	global.Run.Println("开始获取历史价格")
+	TickerKdata() // 获取并设置榜单币种最近 75 小时的历史数据 mOKX.MarketKdata   数据
+
+	global.Run.Println("开始进行分析", len(okxInfo.TickerList), len(okxInfo.MarketKdata))
 	tickerAnaly.Start() // 开始对数据进行分析
-	global.KdataLog.Println("okxInfo.TickerList ", len(okxInfo.TickerList), len(okxInfo.MarketKdata))
+	global.Run.Println("分析结束")
+
 	if lType == "mClock" {
 		SetMarketTickerDB()
 	}
@@ -86,11 +92,17 @@ func SetMarketTickerDB() {
 	}).Connect().Collection("MarketTicker")
 	defer db.Close()
 
+	global.Run.Println("获取拼接数据")
 	TickerDB := dbType.GetTickerDB()
+
+	global.Run.Println("进行数据存储", TickerDB.CreateTime, TickerDB.Time, TickerDB.WholeDir)
+
 	_, err := db.Table.InsertOne(db.Ctx, TickerDB)
 	if err != nil {
 		resErr := fmt.Errorf("注册,插入数据失败 %+v", err)
 		global.LogErr(resErr)
 		return
 	}
+
+	global.Run.Println("========= ready.SetMarketTickerDB 结束 ===========")
 }
