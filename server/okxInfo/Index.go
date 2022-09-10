@@ -1,6 +1,7 @@
 package okxInfo
 
 import (
+	"CoinMarket.net/server/utils/dbSearch"
 	"github.com/EasyGolang/goTools/mOKX"
 )
 
@@ -33,3 +34,7 @@ var TickerAnalyWhole []mOKX.TypeWholeTickerAnaly
 
 // 最终的分析结果 0 无结果，1 上涨 -1 下跌 ， 2  震荡上涨， -2 震荡下跌
 var WholeDir = 0
+
+// 首页的 300 条数据
+var AnalyList_Client dbSearch.PagingType
+var AnalyList_Serve dbSearch.PagingType

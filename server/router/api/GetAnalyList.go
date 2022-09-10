@@ -1,6 +1,7 @@
 package api
 
 import (
+	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/ready"
 	"CoinMarket.net/server/router/result"
 	"CoinMarket.net/server/utils/dbSearch"
@@ -11,6 +12,14 @@ import (
 func GetAnalyList(c *fiber.Ctx) error {
 	var json dbSearch.FindParam
 	mFiber.Parser(c, &json)
+
+	if json.Current < 1 {
+		if json.Type == "Serve" && json.Size == 300 {
+			return c.JSON(result.Succeed.WithData(okxInfo.AnalyList_Serve))
+		} else {
+			return c.JSON(result.Succeed.WithData(okxInfo.AnalyList_Client))
+		}
+	}
 
 	resData, err := ready.GetAnalyFirst300(json)
 	if err != nil {

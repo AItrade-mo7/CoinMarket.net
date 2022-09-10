@@ -13,6 +13,7 @@ import (
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
 	"CoinMarket.net/server/tmpl"
+	"CoinMarket.net/server/utils/dbSearch"
 	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mCycle"
 	"github.com/EasyGolang/goTools/mMongo"
@@ -81,6 +82,29 @@ func SetKdata(lType string) {
 	if lType == "mClock" {
 		SetMarketTickerDB()
 	}
+
+	// 填充第一页的数据
+	okxInfo.AnalyList_Client = dbSearch.PagingType{}
+	okxInfo.AnalyList_Serve = dbSearch.PagingType{}
+
+	AnalyList_Client, _ := GetAnalyFirst300(dbSearch.FindParam{
+		Size:    300,
+		Current: 0,
+		Sort: map[string]int{
+			"TimeUnix": -1,
+		},
+	})
+	AnalyList_Serve, _ := GetAnalyFirst300(dbSearch.FindParam{
+		Size:    300,
+		Current: 0,
+		Sort: map[string]int{
+			"TimeUnix": -1,
+		},
+		Type: "Serve",
+	})
+
+	okxInfo.AnalyList_Client = AnalyList_Client
+	okxInfo.AnalyList_Serve = AnalyList_Serve
 }
 
 func SetMarketTickerDB() {
