@@ -15,5 +15,6 @@ func Router(router fiber.Router) {
 	r.Post("/Tickers", api.Tickers)
 	r.Post("/Inst", api.Inst)
 	r.Post("/GetKdata", api.GetKdata)
-	r.Post("/GetAnalyHistory", api.GetAnalyHistory)
+	r.Post("/GetAnalyList", api.GetAnalyList)
+	r.Post("/GetAnalyDetail", api.GetAnalyDetail)
 }

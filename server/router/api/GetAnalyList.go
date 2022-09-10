@@ -15,7 +15,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-func GetAnalyHistory(c *fiber.Ctx) error {
+func GetAnalyList(c *fiber.Ctx) error {
 	var json dbSearch.FindParam
 	mFiber.Parser(c, &json)
 
@@ -47,11 +47,15 @@ func GetAnalyHistory(c *fiber.Ctx) error {
 	// 提取数据
 	var MarketTickerList []any
 	for resCur.Cursor.Next(db.Ctx) {
-		var result map[string]any
+		var result dbType.MarketTickerTable
 		resCur.Cursor.Decode(&result)
 
-		var MarketTicker dbType.MarketTickerTable
+		var MarketTicker MarketTickerAPI
 		jsoniter.Unmarshal(mJson.ToJson(result), &MarketTicker)
+		MarketTicker.MaxUP = result.AnalyWhole[0].MaxUP.CcyName
+		MarketTicker.MaxUP_RosePer = result.AnalyWhole[0].MaxUP.RosePer
+		MarketTicker.MaxDown = result.AnalyWhole[0].MaxDown.CcyName
+		MarketTicker.MaxDown_RosePer = result.AnalyWhole[0].MaxDown.RosePer
 
 		MarketTickerList = append(MarketTickerList, MarketTicker)
 	}
@@ -59,4 +63,16 @@ func GetAnalyHistory(c *fiber.Ctx) error {
 	returnData := resCur.GenerateData(MarketTickerList)
 
 	return c.JSON(result.Succeed.WithData(returnData))
+}
+
+type MarketTickerAPI struct {
+	WholeDir        int    `bson:"WholeDir"`
+	TimeUnix        int64  `bson:"TimeUnix"`
+	Time            string `bson:"Time"`
+	CreateTimeUnix  int64  `bson:"CreateTimeUnix"`
+	CreateTime      string `bson:"CreateTime"`
+	MaxUP           string `json:"MaxUP"` // 最大涨幅币种
+	MaxUP_RosePer   string `json:"MaxUP_RosePer"`
+	MaxDown         string `json:"MaxDown"` // 最大跌幅币种
+	MaxDown_RosePer string `json:"MaxDown_RosePer"`
 }
