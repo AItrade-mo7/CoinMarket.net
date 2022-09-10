@@ -69,7 +69,7 @@ func TimerClickStart() {
 }
 
 func SetKdata(lType string) {
-	global.Run.Println("开始获取榜单数据")
+	global.Run.Println("========= 开始获取榜单数据 ===========")
 	GetTicker()
 
 	global.Run.Println("开始获取历史价格")
@@ -84,6 +84,7 @@ func SetKdata(lType string) {
 	}
 
 	// 填充第一页的数据
+	global.Run.Println("开始进行第一页的数据填充")
 	okxInfo.AnalyList_Client = dbSearch.PagingType{}
 	okxInfo.AnalyList_Serve = dbSearch.PagingType{}
 
@@ -105,6 +106,8 @@ func SetKdata(lType string) {
 
 	okxInfo.AnalyList_Client = AnalyList_Client
 	okxInfo.AnalyList_Serve = AnalyList_Serve
+
+	global.Run.Println("第一页数据填充完毕")
 }
 
 func SetMarketTickerDB() {
@@ -127,6 +130,4 @@ func SetMarketTickerDB() {
 		global.LogErr(resErr)
 		return
 	}
-
-	global.Run.Println("========= ready.SetMarketTickerDB 结束 ===========")
 }
