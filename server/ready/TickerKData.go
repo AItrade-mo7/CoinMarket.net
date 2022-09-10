@@ -3,7 +3,6 @@ package ready
 import (
 	"time"
 
-	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"CoinMarket.net/server/okxInfo"
@@ -42,8 +41,6 @@ func TickerKdata() {
 			TickerList = append(TickerList, item)
 			okxInfo.MarketKdata[item.InstID] = List
 			okxInfo.MarketKdata[SwapInst.InstID] = SWAPList
-		} else {
-			global.LogErr("ready.TickerKdata", "长度不正确", item.InstID, len(List), len(OKXList), len(BinanceList), len(SWAPList))
 		}
 
 	}
