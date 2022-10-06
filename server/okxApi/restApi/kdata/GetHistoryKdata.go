@@ -24,7 +24,7 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 		return HistoryKdataKdataList
 	}
 
-	Kdata_file := mStr.Join(config.Dir.JsonData, "/", opt.InstID, "_History.json")
+	Kdata_file := mStr.Join(config.Dir.JsonData, "/", opt.InstID,"-", opt.Current, "_History.json")
 
 	now := mTime.GetUnix()
 	m100 := mCount.Mul(mStr.ToStr(mTime.UnixTimeInt64.Minute*15), "100")

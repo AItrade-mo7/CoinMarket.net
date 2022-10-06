@@ -9,7 +9,6 @@ import (
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
-	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"CoinMarket.net/server/okxApi/restApi/tickers"
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
@@ -40,10 +39,6 @@ func Start() {
 		Func:      inst.Start,
 		SleepTime: time.Hour * 4, // 每 4 时获取一次
 	}).Start()
-
-	TestApi()
-
-	return
 
 	global.KdataLog.Println("okxInfo.SPOT_inst SWAP_inst", len(okxInfo.SPOT_inst), len(okxInfo.SWAP_inst))
 
@@ -135,13 +130,4 @@ func SetMarketTickerDB() {
 		global.LogErr(resErr)
 		return
 	}
-}
-
-func TestApi() {
-	list1 := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
-		InstID:  "BTC-USDT",
-		Current: 0,
-	})
-
-	fmt.Println(list1[0].Time, list1[len(list1)-1].Time, len(list1))
 }
