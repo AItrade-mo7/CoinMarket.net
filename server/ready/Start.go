@@ -9,7 +9,6 @@ import (
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
-	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"CoinMarket.net/server/okxApi/restApi/tickers"
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
@@ -40,8 +39,6 @@ func Start() {
 		Func:      inst.Start,
 		SleepTime: time.Hour * 4, // 每 4 时获取一次
 	}).Start()
-
-	TestApi()
 
 	global.KdataLog.Println("okxInfo.SPOT_inst SWAP_inst", len(okxInfo.SPOT_inst), len(okxInfo.SWAP_inst))
 
@@ -77,6 +74,9 @@ func SetKdata(lType string) {
 
 	global.Run.Println("开始获取历史价格")
 	TickerKdata() // 获取并设置榜单币种最近 75 小时的历史数据 mOKX.MarketKdata   数据
+
+	TestApi()
+	return
 
 	global.Run.Println("开始进行分析", len(okxInfo.TickerList), len(okxInfo.MarketKdata))
 	tickerAnaly.Start() // 开始对数据进行分析
@@ -142,20 +142,24 @@ func TestApi() {
 }
 
 func GetPageKData() {
-	list := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
-		InstID:  "BTC-USDT",
-		Current: 0,
-		Size:    100,
-	})
-	db := mMongo.New(mMongo.Opt{
-		UserName: config.SysEnv.MongoUserName,
-		Password: config.SysEnv.MongoPassword,
-		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AITrade",
-	}).Connect().Collection("BTCUSDT")
-	defer db.Close()
+	list := okxInfo.MarketKdata["BTC-USDT"]
+
+	// db := mMongo.New(mMongo.Opt{
+	// 	UserName: config.SysEnv.MongoUserName,
+	// 	Password: config.SysEnv.MongoPassword,
+	// 	Address:  config.SysEnv.MongoAddress,
+	// 	DBName:   "AITrade",
+	// }).Connect().Collection("ETHUSDT")
+	// defer db.Close()
 
 	for _, val := range list {
-		fmt.Println(val.Time)
+		fmt.Println(val.Time, val.TimeUnix, val.TimeUnix > int64(1665096300000))
+		// if val.TimeUnix > int64(1665096300000) {
+		// 	fmt.Println("插入",val.Time)
+		// }
+		// _, err := db.Table.InsertOne(db.Ctx, val)
+		// if err != nil {
+		// 	fmt.Println("插入出错", err)
+		// }
 	}
 }

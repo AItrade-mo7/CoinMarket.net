@@ -13,7 +13,7 @@ import (
 
 type HistoryKdataParam struct {
 	InstID  string `bson:"InstID"`
-	Current int64  `bson:"Current"` // 当前页码 0 为
+	Current int  `bson:"Current"` // 当前页码 0 为
 	Size    int    `bson:"Size"`    // 数量
 }
 
