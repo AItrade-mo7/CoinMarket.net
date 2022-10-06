@@ -18,7 +18,6 @@ import (
 	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mCycle"
 	"github.com/EasyGolang/goTools/mMongo"
-	"github.com/EasyGolang/goTools/mOKX"
 )
 
 func Start() {
@@ -41,6 +40,8 @@ func Start() {
 		Func:      inst.Start,
 		SleepTime: time.Hour * 4, // 每 4 时获取一次
 	}).Start()
+
+	TestApi()
 
 	global.KdataLog.Println("okxInfo.SPOT_inst SWAP_inst", len(okxInfo.SPOT_inst), len(okxInfo.SWAP_inst))
 
@@ -82,7 +83,7 @@ func SetKdata(lType string) {
 	global.Run.Println("分析结束")
 
 	if lType == "mClock" {
-		SetMarketTickerDB()
+		// SetMarketTickerDB()
 	}
 
 	// 填充第一页的数据
@@ -134,26 +135,27 @@ func SetMarketTickerDB() {
 	}
 }
 
-// =========== 填充币种 ===========
-
-var KdataPage = []mOKX.TypeKd{}
-
-type GetKdataPageParam struct {
-	InstID  string `bson:"InstID"`
-	Current int64  `bson:"Current"` // 当前页码 0 为
-}
+// =========== 在这里存储BTC 和 ETH 的数据 ===========
 
 func TestApi() {
-	GetPageKData(GetKdataPageParam{
-		InstID:  "BTC-USDT",
-		Current: 0,
-	})
+	GetPageKData()
 }
 
-func GetPageKData(json GetKdataPageParam) {
+func GetPageKData() {
 	list := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
-		InstID:  json.InstID,
-		Current: json.Current,
+		InstID:  "BTC-USDT",
+		Current: 0,
+		Size:    100,
 	})
-	fmt.Println(list)
+	db := mMongo.New(mMongo.Opt{
+		UserName: config.SysEnv.MongoUserName,
+		Password: config.SysEnv.MongoPassword,
+		Address:  config.SysEnv.MongoAddress,
+		DBName:   "AITrade",
+	}).Connect().Collection("BTCUSDT")
+	defer db.Close()
+
+	for _, val := range list {
+		fmt.Println(val.Time)
+	}
 }

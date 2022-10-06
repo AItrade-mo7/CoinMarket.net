@@ -14,6 +14,7 @@ import (
 type HistoryKdataParam struct {
 	InstID  string `bson:"InstID"`
 	Current int64  `bson:"Current"` // 当前页码 0 为
+	Size    int    `bson:"Size"`    // 数量
 }
 
 func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
@@ -24,10 +25,10 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 		return HistoryKdataKdataList
 	}
 
-	Kdata_file := mStr.Join(config.Dir.JsonData, "/", opt.InstID,"-", opt.Current, "_History.json")
+	Kdata_file := mStr.Join(config.Dir.JsonData, "/", opt.InstID, "-", opt.Current, "_History.json")
 
 	now := mTime.GetUnix()
-	m100 := mCount.Mul(mStr.ToStr(mTime.UnixTimeInt64.Minute*15), "100")
+	m100 := mCount.Mul(mStr.ToStr(mTime.UnixTimeInt64.Minute*15), mStr.ToStr(opt.Size))
 	mAfter := mCount.Mul(m100, mStr.ToStr(opt.Current))
 	after := mCount.Sub(now, mAfter)
 
@@ -37,7 +38,7 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 			"instId": opt.InstID,
 			"bar":    "15m",
 			"after":  mStr.ToStr(after),
-			"limit":  100,
+			"limit":  opt.Size,
 		},
 		Method:        "get",
 		LocalJsonPath: Kdata_file,
