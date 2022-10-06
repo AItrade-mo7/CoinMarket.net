@@ -75,15 +75,14 @@ func SetKdata(lType string) {
 	global.Run.Println("开始获取历史价格")
 	TickerKdata() // 获取并设置榜单币种最近 75 小时的历史数据 mOKX.MarketKdata   数据
 
-	TestApi()
-	return
-
 	global.Run.Println("开始进行分析", len(okxInfo.TickerList), len(okxInfo.MarketKdata))
 	tickerAnaly.Start() // 开始对数据进行分析
 	global.Run.Println("分析结束")
 
 	if lType == "mClock" {
-		// SetMarketTickerDB()
+		SetMarketTickerDB()
+		SetEthDB()
+		SetBtcDB()
 	}
 
 	// 填充第一页的数据
@@ -135,31 +134,37 @@ func SetMarketTickerDB() {
 	}
 }
 
-// =========== 在这里存储BTC 和 ETH 的数据 ===========
+func SetEthDB() {
+	list := okxInfo.MarketKdata["ETH-USDT"]
+	db := mMongo.New(mMongo.Opt{
+		UserName: config.SysEnv.MongoUserName,
+		Password: config.SysEnv.MongoPassword,
+		Address:  config.SysEnv.MongoAddress,
+		DBName:   "AITrade",
+	}).Connect().Collection("ETHUSDT")
+	defer db.Close()
 
-func TestApi() {
-	GetPageKData()
+	_, err := db.Table.InsertOne(db.Ctx, list[len(list)-1])
+	if err != nil {
+		resErr := fmt.Errorf("注册,插入数据失败 %+v", err)
+		global.LogErr(resErr)
+	}
 }
 
-func GetPageKData() {
+func SetBtcDB() {
 	list := okxInfo.MarketKdata["BTC-USDT"]
 
-	// db := mMongo.New(mMongo.Opt{
-	// 	UserName: config.SysEnv.MongoUserName,
-	// 	Password: config.SysEnv.MongoPassword,
-	// 	Address:  config.SysEnv.MongoAddress,
-	// 	DBName:   "AITrade",
-	// }).Connect().Collection("ETHUSDT")
-	// defer db.Close()
+	db := mMongo.New(mMongo.Opt{
+		UserName: config.SysEnv.MongoUserName,
+		Password: config.SysEnv.MongoPassword,
+		Address:  config.SysEnv.MongoAddress,
+		DBName:   "AITrade",
+	}).Connect().Collection("BTCUSDT")
+	defer db.Close()
 
-	for _, val := range list {
-		fmt.Println(val.Time, val.TimeUnix, val.TimeUnix > int64(1665096300000))
-		// if val.TimeUnix > int64(1665096300000) {
-		// 	fmt.Println("插入",val.Time)
-		// }
-		// _, err := db.Table.InsertOne(db.Ctx, val)
-		// if err != nil {
-		// 	fmt.Println("插入出错", err)
-		// }
+	_, err := db.Table.InsertOne(db.Ctx, list[len(list)-1])
+	if err != nil {
+		resErr := fmt.Errorf("注册,插入数据失败 %+v", err)
+		global.LogErr(resErr)
 	}
 }

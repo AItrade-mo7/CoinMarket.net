@@ -50,9 +50,9 @@ func (_this *SingleType) SetTime() *SingleType {
 	list := _this.List
 	Len := len(_this.List)
 
-	_this.Info.StartTime = list[0].Time
+	_this.Info.StartTime = mTime.MsToTime(list[0].TimeUnix, "0")
 	_this.Info.StartTimeUnix = list[0].TimeUnix
-	_this.Info.EndTime = list[Len-1].Time
+	_this.Info.EndTime = mTime.MsToTime(list[Len-1].TimeUnix, "0")
 	_this.Info.EndTimeUnix = list[Len-1].TimeUnix
 	_this.Info.DiffHour = (_this.Info.EndTimeUnix - _this.Info.StartTimeUnix) / mTime.UnixTimeInt64.Hour
 
@@ -85,9 +85,9 @@ func (_this *SingleType) SliceKdata(hour int) (resData mOKX.AnalySliceType) {
 
 	cLen := len(cList)
 
-	resData.StartTime = cList[0].Time
+	resData.StartTime = mTime.MsToTime(cList[0].TimeUnix, "0")
 	resData.StartTimeUnix = cList[0].TimeUnix
-	resData.EndTime = cList[cLen-1].Time
+	resData.EndTime = mTime.MsToTime(cList[cLen-1].TimeUnix, "0")
 	resData.EndTimeUnix = cList[cLen-1].TimeUnix
 	DiffHour := (resData.EndTimeUnix - resData.StartTimeUnix) / mTime.UnixTimeInt64.Hour
 	resData.DiffHour = int(DiffHour)
@@ -138,7 +138,7 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 		D_shade = append(D_shade, item.D_shade)
 		HLPer = append(HLPer, item.HLPer)
 
-		TimeKey := item.Time.Format("2006-01-02_15")
+		TimeKey := mTime.MsToTime(item.TimeUnix, "0").Format("2006-01-02_15")
 		VolumeHour[TimeKey] = append(VolumeHour[TimeKey], item.VolCcy)
 	}
 

@@ -6,6 +6,7 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/ready"
+	"CoinMarket.net/server/router"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -20,5 +21,5 @@ func main() {
 
 	ready.Start()
 
-	// router.Start()
+	router.Start()
 }

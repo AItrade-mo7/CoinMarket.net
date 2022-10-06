@@ -64,8 +64,8 @@ func FormatKdata(data []byte, Symbol string) {
 
 		kdata := mOKX.TypeKd{
 			InstID:   InstID,
-			Time:     mTime.MsToTime(TimeStr, "0"),
 			TimeUnix: mTime.ToUnixMsec(mTime.MsToTime(TimeStr, "0")),
+			TimeStr:  mTime.UnixFormat(TimeStr),
 			O:        mStr.ToStr(item[1]),
 			H:        mStr.ToStr(item[2]),
 			L:        mStr.ToStr(item[3]),
