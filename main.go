@@ -5,8 +5,8 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"CoinMarket.net/server/ready"
-	"CoinMarket.net/server/router"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -21,5 +21,10 @@ func main() {
 
 	ready.Start()
 
-	router.Start()
+	kdata.GetHistoryKdata(kdata.HistoryKdataParam{
+		InstID:  "BTC-USDT",
+		Current: 0,
+	})
+
+	// router.Start()
 }

@@ -9,7 +9,7 @@ import (
 )
 
 type GetKdataPageParam struct {
-	InstID  string `json:"InstID"`  // 列表
+	InstID  string `bson:"InstID"`
 	Current int64  `bson:"Current"` // 当前页码 0 为
 }
 
