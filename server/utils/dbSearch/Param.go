@@ -143,6 +143,7 @@ func FindOpt(json FindParam) *options.FindOptions {
 	findOpt.SetSort(json.Sort)
 	findOpt.SetSkip(json.Current * json.Size)
 	findOpt.SetLimit(json.Size)
+	findOpt.SetAllowDiskUse(true)
 
 	return findOpt
 }

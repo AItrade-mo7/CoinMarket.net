@@ -35,6 +35,7 @@ func GetAnalyFirst300(json dbSearch.FindParam) (resData dbSearch.PagingType, res
 	})
 	if err != nil {
 		resErr = err
+		global.LogErr(resErr)
 		return
 	}
 

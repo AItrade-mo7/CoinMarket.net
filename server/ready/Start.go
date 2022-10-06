@@ -9,6 +9,7 @@ import (
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
+	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"CoinMarket.net/server/okxApi/restApi/tickers"
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
@@ -17,6 +18,7 @@ import (
 	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mCycle"
 	"github.com/EasyGolang/goTools/mMongo"
+	"github.com/EasyGolang/goTools/mOKX"
 )
 
 func Start() {
@@ -130,4 +132,28 @@ func SetMarketTickerDB() {
 		global.LogErr(resErr)
 		return
 	}
+}
+
+// =========== 填充币种 ===========
+
+var KdataPage = []mOKX.TypeKd{}
+
+type GetKdataPageParam struct {
+	InstID  string `bson:"InstID"`
+	Current int64  `bson:"Current"` // 当前页码 0 为
+}
+
+func TestApi() {
+	GetPageKData(GetKdataPageParam{
+		InstID:  "BTC-USDT",
+		Current: 0,
+	})
+}
+
+func GetPageKData(json GetKdataPageParam) {
+	list := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
+		InstID:  json.InstID,
+		Current: json.Current,
+	})
+	fmt.Println(list)
 }
