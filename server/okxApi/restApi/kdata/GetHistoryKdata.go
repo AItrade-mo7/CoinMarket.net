@@ -1,8 +1,6 @@
 package kdata
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"github.com/EasyGolang/goTools/mCount"
@@ -13,8 +11,6 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-var HistoryKdataKdataList []mOKX.TypeKd
-
 type HistoryKdataParam struct {
 	InstID  string `bson:"InstID"`
 	Current int64  `bson:"Current"` // 当前页码 0 为
@@ -22,7 +18,7 @@ type HistoryKdataParam struct {
 
 func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 	InstInfo := GetInstInfo(opt.InstID)
-	HistoryKdataKdataList = []mOKX.TypeKd{}
+	HistoryKdataKdataList := []mOKX.TypeKd{}
 
 	if InstInfo.InstID != opt.InstID {
 		return HistoryKdataKdataList
@@ -47,8 +43,6 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 		LocalJsonPath: Kdata_file,
 		IsLocalJson:   false,
 	})
-
-	fmt.Println(mStr.ToStr(resData))
 	if err != nil {
 		global.LogErr("kdata.GetHistoryKdata", opt.InstID, err)
 		return nil
@@ -60,13 +54,17 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 		return nil
 	}
 
-	FormatKdata(result.Data, InstInfo)
+	HistoryKdataKdataList = mOKX.FormatKdata(mOKX.FormatKdataParam{
+		Data:     result.Data,
+		Inst:     InstInfo,
+		DataType: "HistoryKdata",
+	})
 
-	if len(KdataList) < 120 {
+	if len(HistoryKdataKdataList) < 120 {
 		global.KdataLog.Println("kdata.GetHistoryKdata resData", opt.InstID, mStr.ToStr(resData))
 	}
 
 	// 写入数据文件
 	mFile.Write(Kdata_file, mStr.ToStr(resData))
-	return KdataList
+	return HistoryKdataKdataList
 }
