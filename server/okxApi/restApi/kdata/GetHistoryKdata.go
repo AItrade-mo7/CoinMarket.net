@@ -13,7 +13,7 @@ import (
 
 type HistoryKdataParam struct {
 	InstID  string `bson:"InstID"`
-	Current int  `bson:"Current"` // 当前页码 0 为
+	Current int    `bson:"Current"` // 当前页码 0 为
 	Size    int    `bson:"Size"`    // 数量
 }
 
@@ -61,9 +61,7 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 		DataType: "HistoryKdata",
 	})
 
-	if len(HistoryKdataKdataList) < 120 {
-		global.KdataLog.Println("kdata.GetHistoryKdata resData", opt.InstID, mStr.ToStr(resData))
-	}
+	global.KdataLog.Println("kdata.GetHistoryKdata resData", opt.InstID, mStr.ToStr(resData))
 
 	// 写入数据文件
 	mFile.Write(Kdata_file, mStr.ToStr(resData))
