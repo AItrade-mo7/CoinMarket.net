@@ -45,13 +45,13 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 		IsLocalJson:   false,
 	})
 	if err != nil {
-		global.LogErr("kdata.GetHistoryKdata", opt.InstID, err)
+		global.LogErr("kdata.GetHistoryKdata Err", opt.InstID, err)
 		return nil
 	}
 	var result mOKX.TypeReq
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {
-		global.LogErr("kdata.GetHistoryKdata", opt.InstID, "Err", result)
+		global.LogErr("kdata.GetHistoryKdata Err", opt.InstID, result)
 		return nil
 	}
 
@@ -61,7 +61,7 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 		DataType: "HistoryKdata",
 	})
 
-	global.KdataLog.Println("kdata.GetHistoryKdata resData", len(HistoryKdataKdataList), opt.InstID)
+	global.KdataLog.Println("kdata.GetHistoryKdata", len(HistoryKdataKdataList), opt.InstID)
 
 	// 写入数据文件
 	mFile.Write(Kdata_file, mStr.ToStr(resData))

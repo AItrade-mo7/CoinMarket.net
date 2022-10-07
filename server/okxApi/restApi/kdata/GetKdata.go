@@ -34,13 +34,13 @@ func GetKdata(InstID string) []mOKX.TypeKd {
 		IsLocalJson:   config.AppEnv.RunMod == 1,
 	})
 	if err != nil {
-		global.LogErr("kdata.GetKdata", InstID, err)
+		global.LogErr("kdata.GetKdata Err", InstID, err)
 		return nil
 	}
 	var result mOKX.TypeReq
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {
-		global.LogErr("kdata.GetKdata", InstID, "Err", result)
+		global.LogErr("kdata.GetKdata Err", InstID, result)
 		return nil
 	}
 
@@ -50,7 +50,7 @@ func GetKdata(InstID string) []mOKX.TypeKd {
 		DataType: "GetKdata",
 	})
 
-	global.KdataLog.Println("kdata.GetKdata resData", InstID, mStr.ToStr(resData))
+	global.KdataLog.Println("kdata.GetKdata", len(KdataList), InstID)
 
 	// 写入数据文件
 	mFile.Write(Kdata_file, mStr.ToStr(resData))
