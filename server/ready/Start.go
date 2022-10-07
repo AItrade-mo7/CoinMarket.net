@@ -80,9 +80,11 @@ func SetKdata(lType string) {
 	global.Run.Println("分析结束")
 
 	if lType == "mClock" {
-		SetMarketTickerDB()
-		SetEthDB()
-		SetBtcDB()
+		if config.AppEnv.RunMod == 0 {
+			SetMarketTickerDB()
+			SetEthDB()
+			SetBtcDB()
+		}
 	}
 
 	// 填充第一页的数据
