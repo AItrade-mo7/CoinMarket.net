@@ -5,8 +5,8 @@ import (
 )
 
 type OutPut struct {
-	SysTime    int64  `json:"SysTime"`    // 系统时间
-	DataSource string `json:"DataSource"` // 数据来源
+	SysTime    int64  `bson:"SysTime"`    // 系统时间
+	DataSource string `bson:"DataSource"` // 数据来源
 }
 
 func GetOutPut() (resData OutPut) {

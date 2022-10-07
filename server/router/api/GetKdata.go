@@ -9,7 +9,7 @@ import (
 )
 
 type GetAnalyKdataParam struct {
-	InstID string `json:"InstID"` // 列表
+	InstID string `bson:"InstID"` // 列表
 }
 
 func GetKdata(c *fiber.Ctx) error {

@@ -8,7 +8,7 @@ import (
 )
 
 type InstParam struct {
-	TypeInst string `json:"TypeInst"`
+	TypeInst string `bson:"TypeInst"`
 }
 
 func Inst(c *fiber.Ctx) error {

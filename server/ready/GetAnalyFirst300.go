@@ -70,8 +70,8 @@ type MarketTickerAPI struct {
 	Time            string `bson:"Time"`
 	CreateTimeUnix  int64  `bson:"CreateTimeUnix"`
 	CreateTime      string `bson:"CreateTime"`
-	MaxUP           string `json:"MaxUP"` // 最大涨幅币种
-	MaxUP_RosePer   string `json:"MaxUP_RosePer"`
-	MaxDown         string `json:"MaxDown"` // 最大跌幅币种
-	MaxDown_RosePer string `json:"MaxDown_RosePer"`
+	MaxUP           string `bson:"MaxUP"` // 最大涨幅币种
+	MaxUP_RosePer   string `bson:"MaxUP_RosePer"`
+	MaxDown         string `bson:"MaxDown"` // 最大跌幅币种
+	MaxDown_RosePer string `bson:"MaxDown_RosePer"`
 }
