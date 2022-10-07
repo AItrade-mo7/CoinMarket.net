@@ -171,8 +171,9 @@ func SetBtcDB() {
 
 // ========== 测试 ============
 /*
+
 func TestApi() {
-	Coin := "BTC"
+	Coin := "ETH"
 	list := okxInfo.MarketKdata[Coin+"-USDT"]
 
 	db := mMongo.New(mMongo.Opt{
