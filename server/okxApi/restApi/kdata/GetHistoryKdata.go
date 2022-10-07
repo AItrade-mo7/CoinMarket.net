@@ -61,7 +61,7 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 		DataType: "HistoryKdata",
 	})
 
-	global.KdataLog.Println("kdata.GetHistoryKdata resData", opt.InstID, mStr.ToStr(resData))
+	global.KdataLog.Println("kdata.GetHistoryKdata resData", len(HistoryKdataKdataList), opt.InstID)
 
 	// 写入数据文件
 	mFile.Write(Kdata_file, mStr.ToStr(resData))
