@@ -52,7 +52,7 @@ func Start() {
 	SetKdata("Start")
 	go mClock.New(mClock.OptType{
 		Func: TimerClickStart,
-		Spec: "1 0,15,30,45 * * * ? ",
+		Spec: "0 0,15,30,45 * * * ? ",
 	})
 }
 
