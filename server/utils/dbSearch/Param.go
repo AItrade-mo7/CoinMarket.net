@@ -39,7 +39,7 @@ type FindParam struct {
 	Query          QueryType `bson:"Query"`          // 查询
 	CreateTimeUnix TimeType  `bson:"CreateTimeUnix"` // 创建时间查询
 	TimeUnix       TimeType  `bson:"TimeUnix"`       // 更新时间查询
-	Type           string    `bson:"Type"`           // Serve  && Client
+	Type           string    `bson:"Type"`           // Serve  && Client  全面数据和简陋数据
 }
 
 type CurOpt struct {

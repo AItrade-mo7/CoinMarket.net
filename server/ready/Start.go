@@ -52,7 +52,7 @@ func Start() {
 	SetKdata("Start")
 	go mClock.New(mClock.OptType{
 		Func: TimerClickStart,
-		Spec: "10 0,15,30,45 * * * ? ",
+		Spec: "0 0,15,30,45 * * * ? ",
 	})
 }
 
@@ -105,7 +105,7 @@ func SetKdata(lType string) {
 		Sort: map[string]int{
 			"TimeUnix": -1,
 		},
-		Type: "Serve",
+		Type: "Serve", // Serve 给的是全面的数据 Client 给简陋版本的
 	})
 
 	okxInfo.AnalyList_Client = AnalyList_Client
@@ -146,7 +146,7 @@ func SetEthDB() {
 	}).Connect().Collection("ETHUSDT")
 	defer db.Close()
 
-	_, err := db.Table.InsertOne(db.Ctx, list[len(list)-1])
+	_, err := db.Table.InsertOne(db.Ctx, list[len(list)-2])
 	if err != nil {
 		resErr := fmt.Errorf("注册,插入数据失败 %+v", err)
 		global.LogErr(resErr)
@@ -164,7 +164,7 @@ func SetBtcDB() {
 	}).Connect().Collection("BTCUSDT")
 	defer db.Close()
 
-	_, err := db.Table.InsertOne(db.Ctx, list[len(list)-1])
+	_, err := db.Table.InsertOne(db.Ctx, list[len(list)-2])
 	if err != nil {
 		resErr := fmt.Errorf("注册,插入数据失败 %+v", err)
 		global.LogErr(resErr)
