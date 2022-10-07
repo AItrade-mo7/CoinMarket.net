@@ -6,6 +6,8 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/ready"
+	"CoinMarket.net/server/router"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
 	jsoniter "github.com/json-iterator/go"
@@ -21,11 +23,11 @@ func main() {
 	// 初始化系统参数
 	global.Start()
 
-	// ready.Start()
+	ready.Start()
 
-	// router.Start()
+	router.Start()
 
-	OrganizeDatabase()
+	// OrganizeDatabase()
 }
 
 func OrganizeDatabase() {
