@@ -80,8 +80,12 @@ func GetETHKdata(json dbSearch.FindParam) (resData dbSearch.PagingType, resErr e
 	// 提取数据
 	var Kdata []any
 	for resCur.Cursor.Next(db.Ctx) {
+
+		var curData map[string]any
+		resCur.Cursor.Decode(&curData)
+
 		var result mOKX.TypeKd
-		resCur.Cursor.Decode(&result)
+		jsoniter.Unmarshal(mJson.ToJson(curData), &result)
 
 		Kdata = append(Kdata, result)
 	}
@@ -122,8 +126,12 @@ func GetBTCKdata(json dbSearch.FindParam) (resData dbSearch.PagingType, resErr e
 	// 提取数据
 	var Kdata []any
 	for resCur.Cursor.Next(db.Ctx) {
+		var curData map[string]any
+		resCur.Cursor.Decode(&curData)
+
 		var result mOKX.TypeKd
-		resCur.Cursor.Decode(&result)
+		jsoniter.Unmarshal(mJson.ToJson(curData), &result)
+
 		Kdata = append(Kdata, result)
 	}
 

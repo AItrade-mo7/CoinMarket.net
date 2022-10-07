@@ -79,8 +79,8 @@ func SetKdata(lType string) {
 	tickerAnaly.Start() // 开始对数据进行分析
 	global.Run.Println("分析结束")
 
-	if lType == "mClock" {
-		if config.AppEnv.RunMod == 0 {
+	if config.AppEnv.RunMod == 0 {
+		if lType == "mClock" {
 			SetMarketTickerDB()
 			SetEthDB()
 			SetBtcDB()

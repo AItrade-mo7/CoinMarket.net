@@ -42,8 +42,11 @@ func GetAnalyFirst300(json dbSearch.FindParam) (resData dbSearch.PagingType, res
 	// 提取数据
 	var MarketTickerList []any
 	for resCur.Cursor.Next(db.Ctx) {
+		var curData map[string]any
+		resCur.Cursor.Decode(&curData)
+
 		var result dbType.MarketTickerTable
-		resCur.Cursor.Decode(&result)
+		jsoniter.Unmarshal(mJson.ToJson(curData), &result)
 
 		if json.Type == "Serve" {
 			MarketTickerList = append(MarketTickerList, result)
