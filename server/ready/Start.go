@@ -1,12 +1,10 @@
 package ready
 
 import (
-	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/tickers"
@@ -16,7 +14,6 @@ import (
 	"CoinMarket.net/server/utils/dbSearch"
 	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mCycle"
-	"github.com/EasyGolang/goTools/mMongo"
 )
 
 func Start() {
@@ -79,12 +76,10 @@ func SetKdata(lType string) {
 	tickerAnaly.Start() // 开始对数据进行分析
 	global.Run.Println("分析结束")
 
-	if config.AppEnv.RunMod == 0 {
-		if lType == "mClock" {
-			SetMarketTickerDB()
-			SetEthDB()
-			SetBtcDB()
-		}
+	if lType == "mClock" {
+		SetMarketTickerDB()
+		SetEthDB()
+		SetBtcDB()
 	}
 
 	// 填充第一页的数据
@@ -112,63 +107,6 @@ func SetKdata(lType string) {
 	okxInfo.AnalyList_Serve = AnalyList_Serve
 
 	global.Run.Println("第一页数据填充完毕")
-}
-
-func SetMarketTickerDB() {
-	db := mMongo.New(mMongo.Opt{
-		UserName: config.SysEnv.MongoUserName,
-		Password: config.SysEnv.MongoPassword,
-		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AITrade",
-	}).Connect().Collection("MarketTicker")
-	defer db.Close()
-
-	global.Run.Println("获取拼接数据")
-	TickerDB := dbType.GetTickerDB()
-
-	global.Run.Println("进行数据存储", TickerDB.CreateTime, TickerDB.Time, TickerDB.WholeDir)
-
-	_, err := db.Table.InsertOne(db.Ctx, TickerDB)
-	if err != nil {
-		resErr := fmt.Errorf("注册,插入数据失败 %+v", err)
-		global.LogErr(resErr)
-		return
-	}
-}
-
-func SetEthDB() {
-	list := okxInfo.MarketKdata["ETH-USDT"]
-	db := mMongo.New(mMongo.Opt{
-		UserName: config.SysEnv.MongoUserName,
-		Password: config.SysEnv.MongoPassword,
-		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AITrade",
-	}).Connect().Collection("ETHUSDT")
-	defer db.Close()
-
-	_, err := db.Table.InsertOne(db.Ctx, list[len(list)-2])
-	if err != nil {
-		resErr := fmt.Errorf("注册,插入数据失败 %+v", err)
-		global.LogErr(resErr)
-	}
-}
-
-func SetBtcDB() {
-	list := okxInfo.MarketKdata["BTC-USDT"]
-
-	db := mMongo.New(mMongo.Opt{
-		UserName: config.SysEnv.MongoUserName,
-		Password: config.SysEnv.MongoPassword,
-		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AITrade",
-	}).Connect().Collection("BTCUSDT")
-	defer db.Close()
-
-	_, err := db.Table.InsertOne(db.Ctx, list[len(list)-2])
-	if err != nil {
-		resErr := fmt.Errorf("注册,插入数据失败 %+v", err)
-		global.LogErr(resErr)
-	}
 }
 
 // ========== 测试 ============
