@@ -11,6 +11,9 @@ func ServerEnvInit() {
 	isLocalSysEnvFile := mPath.Exists(config.File.LocalSysEnv)
 	isSysEnvFile := mPath.Exists(config.File.SysEnv)
 
+	fmt.Println(config.File.LocalSysEnv, isLocalSysEnvFile)
+	fmt.Println(config.File.SysEnv, isLocalSysEnvFile)
+
 	if isLocalSysEnvFile || isSysEnvFile {
 		//
 	} else {

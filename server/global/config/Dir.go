@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 
+	"github.com/EasyGolang/goTools/mPath"
 	"github.com/EasyGolang/goTools/mStr"
 )
 
@@ -18,12 +19,13 @@ var Dir DirType
 type FileType struct {
 	SysEnv      string // /root/sys_env.yaml
 	LocalSysEnv string // ./sys_env.yaml
-	AppEnv      string // ./app_env.yaml
 }
 
 var File FileType
 
 func DirInit() {
+	Dir.Home = mPath.HomePath()
+
 	Dir.App, _ = os.Getwd()
 
 	Dir.Log = mStr.Join(
@@ -47,10 +49,5 @@ func DirInit() {
 		Dir.App,
 		mStr.ToStr(os.PathSeparator),
 		"sys_env.yaml",
-	)
-	File.AppEnv = mStr.Join(
-		Dir.App,
-		mStr.ToStr(os.PathSeparator),
-		"app_env.yaml",
 	)
 }
