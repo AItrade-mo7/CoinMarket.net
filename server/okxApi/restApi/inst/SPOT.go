@@ -23,7 +23,7 @@ func SPOT() {
 		},
 		Method:        "get",
 		LocalJsonPath: SPOT_file,
-		IsLocalJson:   config.AppEnv.RunMod == 1,
+		IsLocalJson:   config.SysEnv.RunMod == 1,
 	})
 	if err != nil {
 		global.LogErr("SPOT", err)

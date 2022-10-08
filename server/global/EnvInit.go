@@ -1,21 +1,27 @@
 package global
 
 import (
+	"fmt"
+
 	"CoinMarket.net/server/global/config"
-	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mPath"
 )
 
-func AppEnvInit() {
-	config.LoadSysEnv()
+func ServerEnvInit() {
+	isLocalSysEnvFile := mPath.Exists(config.File.LocalSysEnv)
+	isSysEnvFile := mPath.Exists(config.File.SysEnv)
 
-	// 检查配置文件在不在
-	isUserEnvPath := mPath.Exists(config.File.AppEnv)
-	if !isUserEnvPath {
-		return
+	if isLocalSysEnvFile || isSysEnvFile {
+		//
+	} else {
+		errStr := fmt.Errorf("没找到 sys_env.yaml 配置文件")
+		LogErr(errStr)
+		panic(errStr)
 	}
 
-	config.LoadAppEnv()
-
-	Log.Println("加载 AppEnv : ", mJson.JsonFormat(mJson.ToJson(config.AppEnv)))
+	if isLocalSysEnvFile {
+		config.LoadSysEnv(config.File.LocalSysEnv)
+	} else {
+		config.LoadSysEnv(config.File.SysEnv)
+	}
 }

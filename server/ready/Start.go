@@ -18,7 +18,7 @@ import (
 
 func Start() {
 	// 发送启动邮件
-	if config.AppEnv.RunMod == 0 {
+	if config.SysEnv.RunMod == 0 {
 		go global.Email(global.EmailOpt{
 			To: []string{
 				"meichangliang@mo7.cc",

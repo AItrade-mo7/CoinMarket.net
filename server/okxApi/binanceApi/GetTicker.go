@@ -20,7 +20,7 @@ func GetTicker() {
 		Path:          "/api/v3/ticker/24hr",
 		Method:        "get",
 		LocalJsonPath: Ticker_file,
-		IsLocalJson:   config.AppEnv.RunMod == 1,
+		IsLocalJson:   config.SysEnv.RunMod == 1,
 	})
 	if err != nil {
 		global.LogErr("binanceApi.GetTicker BinanceTicker", err)

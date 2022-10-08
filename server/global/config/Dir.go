@@ -7,6 +7,7 @@ import (
 )
 
 type DirType struct {
+	Home     string // Home 根目录
 	App      string // APP 根目录
 	Log      string // 日志文件目录
 	JsonData string // json 数据存放目录
@@ -15,7 +16,9 @@ type DirType struct {
 var Dir DirType
 
 type FileType struct {
-	AppEnv string // ./app_env.yaml
+	SysEnv      string // /root/sys_env.yaml
+	LocalSysEnv string // ./sys_env.yaml
+	AppEnv      string // ./app_env.yaml
 }
 
 var File FileType
@@ -35,6 +38,16 @@ func DirInit() {
 		"jsonData",
 	)
 
+	File.SysEnv = mStr.Join(
+		Dir.Home,
+		mStr.ToStr(os.PathSeparator),
+		"sys_env.yaml",
+	)
+	File.LocalSysEnv = mStr.Join(
+		Dir.App,
+		mStr.ToStr(os.PathSeparator),
+		"sys_env.yaml",
+	)
 	File.AppEnv = mStr.Join(
 		Dir.App,
 		mStr.ToStr(os.PathSeparator),

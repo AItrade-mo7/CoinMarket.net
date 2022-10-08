@@ -27,7 +27,7 @@ func GetKdata(Symbol string) []mOKX.TypeKd {
 			"limit":    300,
 		},
 		LocalJsonPath: Kdata_file,
-		IsLocalJson:   config.AppEnv.RunMod == 1,
+		IsLocalJson:   config.SysEnv.RunMod == 1,
 	})
 	if err != nil {
 		global.LogErr("BinanceTicker Err", err)

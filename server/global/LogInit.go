@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mLog"
 	"github.com/EasyGolang/goTools/mPath"
 	"github.com/EasyGolang/goTools/mTime"
@@ -35,7 +37,7 @@ func LogInit() {
 	// 创建一个log
 	Log = mLog.NewLog(mLog.NewLogParam{
 		Path: config.Dir.Log,
-		Name: "SysErr",
+		Name: "Sys",
 	})
 
 	KdataLog = mLog.NewLog(mLog.NewLogParam{
@@ -61,9 +63,20 @@ func LogInit() {
 
 	// 将方法重载到 config 内部,便于执行
 	config.LogErr = LogErr
+	config.Log = Log
 }
 
 func LogErr(sum ...any) {
 	str := fmt.Sprintf("系统错误 : %+v", sum)
+	Email := Email(EmailOpt{
+		To:       config.Email.To,
+		Subject:  "LogErr",
+		Template: tmpl.SysEmail,
+		SendData: tmpl.SysParam{
+			Message: str,
+			SysTime: time.Now(),
+		},
+	})
 	Log.Println(str)
+	go Email.Send()
 }
