@@ -5,8 +5,10 @@ import (
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/router/result"
 	"github.com/EasyGolang/goTools/mFiber"
+	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/gofiber/fiber/v2"
+	jsoniter "github.com/json-iterator/go"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -33,8 +35,11 @@ func GetAnalyDetail(c *fiber.Ctx) error {
 		},
 	}
 
+	var curData map[string]any
+	db.Table.FindOne(db.Ctx, FK).Decode(&curData)
+
 	var returnData dbType.MarketTickerTable
-	db.Table.FindOne(db.Ctx, FK).Decode(&returnData)
+	jsoniter.Unmarshal(mJson.ToJson(curData), &returnData)
 
 	return c.JSON(result.Succeed.WithData(returnData))
 }
