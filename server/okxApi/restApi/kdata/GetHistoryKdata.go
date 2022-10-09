@@ -1,8 +1,6 @@
 package kdata
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"github.com/EasyGolang/goTools/mCount"
@@ -61,20 +59,12 @@ func GetHistory300List(opt History300Param) []mOKX.TypeKd {
 	})
 	kdata_list = append(kdata_list, kdata_1...)
 
-	CheckTicker(kdata_list)
+	for _, val := range kdata_list {
+		new_Kdata := mOKX.NewKD(val, History300List)
+		History300List = append(History300List, new_Kdata)
+	}
 
 	return History300List
-}
-
-func CheckTicker(KdataList []mOKX.TypeKd) {
-	for key, val := range KdataList {
-		pre := key - 1
-		if pre < 0 {
-			pre = 0
-		}
-		fmt.Println(key, val.InstID, val.TimeStr, val.TimeUnix-KdataList[pre].TimeUnix)
-	}
-	fmt.Println("结束")
 }
 
 type HistoryKdataParam struct {

@@ -2,6 +2,7 @@ package dbTidy
 
 import (
 	"fmt"
+	"time"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
@@ -134,7 +135,7 @@ func FetchKdata(newTicker dbType.CoinTickerTable, dbTicker dbType.CoinTickerTabl
 		if len(dbTicker.Kdata[val.InstID]) > 290 {
 			continue
 		}
-
+		time.Sleep(time.Second / 3)
 		kdata_list := kdata.GetHistory300List(kdata.History300Param{
 			InstID: val.InstID,
 			After:  val.Ts,
