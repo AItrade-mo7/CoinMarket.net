@@ -2,7 +2,6 @@ package dbTidy
 
 import (
 	"fmt"
-	"time"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
@@ -136,36 +135,10 @@ func FetchKdata(newTicker dbType.CoinTickerTable, dbTicker dbType.CoinTickerTabl
 			continue
 		}
 
-		time.Sleep(time.Second / 8)
-		kdata_list := []mOKX.TypeKd{}
-		kdata_1 := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
-			InstID:  val.InstID,
-			Current: 0,
-			After:   val.Ts,
-			Size:    100,
+		kdata_list := kdata.GetHistory300List(kdata.History300Param{
+			InstID: val.InstID,
+			After:  val.Ts,
 		})
-
-		CheckTicker(kdata_1)
-
-		time.Sleep(time.Second / 8)
-		kdata_2 := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
-			InstID:  val.InstID,
-			Current: 1,
-			After:   val.Ts,
-			Size:    100,
-		})
-		CheckTicker(kdata_2)
-
-		time.Sleep(time.Second / 8)
-		kdata_3 := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
-			InstID:  val.InstID,
-			Current: 2,
-			After:   val.Ts,
-			Size:    100,
-		})
-		CheckTicker(kdata_3)
-
-		CheckTicker(kdata_list)
 
 		KdataList[val.InstID] = kdata_list
 		global.Run.Println("请求结束", val.InstID, len(kdata_list))
@@ -173,11 +146,4 @@ func FetchKdata(newTicker dbType.CoinTickerTable, dbTicker dbType.CoinTickerTabl
 	}
 
 	return KdataList
-}
-
-func CheckTicker(KdataList []mOKX.TypeKd) {
-	for key, val := range KdataList {
-		fmt.Println(key,val.InstID, val.TimeStr)
-	}
-	fmt.Println("结束")
 }
