@@ -46,7 +46,7 @@ func Start() {
 	SetKdata("Start")
 	go mClock.New(mClock.OptType{
 		Func: TimerClickStart,
-		Spec: "1 0,15,30,45 * * * ? ",
+		Spec: "0 0,15,30,45 * * * ? ",
 	})
 }
 
@@ -59,6 +59,7 @@ func GetTicker() {
 // 获取历史数据
 
 func TimerClickStart() {
+	time.Sleep(time.Second)
 	SetKdata("mClock")
 }
 
@@ -67,8 +68,7 @@ func SetKdata(lType string) {
 	GetTicker() //  产出 okxInfo.TickerList 数据
 	global.Run.Println("榜单数据获取完成", len(okxInfo.TickerList))
 
-	global.Run.Println("开始获取历史价格")
-	TickerKdata() // 获取并设置榜单币种最近 75 小时的历史数据 mOKX.MarketKdata   数据
+	TickerKdata() // 获取并设置榜单币种最近 75 小时的历史数据 产出 okxInfo.TickerList 数据
 	global.Run.Println("历史价格获取完成", len(okxInfo.MarketKdata), okxInfo.MarketKdata)
 
 	if lType == "mClock" {
