@@ -24,7 +24,7 @@ func main() {
 
 	// router.Start()
 
-	go global.Email(global.EmailOpt{
+	global.Email(global.EmailOpt{
 		To: []string{
 			"meichangliang@mo7.cc",
 		},
@@ -38,7 +38,7 @@ func main() {
 
 	dbTidy.FormatMarket()
 
-	go global.Email(global.EmailOpt{
+	global.Email(global.EmailOpt{
 		To: []string{
 			"meichangliang@mo7.cc",
 		},

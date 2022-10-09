@@ -111,7 +111,6 @@ func InsertCoinTicker(db *mMongo.DB, oldTicker dbType.MarketTickerTable) {
 		lType = "插入"
 		_, err = db.Table.InsertOne(db.Ctx, CoinTickerData)
 	}
-	global.Run.Println(lType, CoinTickerData.TimeStr)
 	if err != nil {
 		resErr := fmt.Errorf(lType+"数据失败 %+v", err, CoinTickerData.TimeUnix)
 		global.LogErr(resErr)
@@ -122,9 +121,9 @@ func InsertCoinTicker(db *mMongo.DB, oldTicker dbType.MarketTickerTable) {
 	db.Table.FindOne(db.Ctx, FK).Decode(&newTicker)
 
 	if len(newTicker.Kdata) != len(newTicker.TickerVol) || len(newTicker.Kdata["BTC-USDT"]) < 280 {
-		global.LogErr("====错误结束======", newTicker.TimeStr, len(newTicker.Kdata), len(newTicker.Kdata["BTC-USDT"]))
+		global.LogErr("==错误==", lType, newTicker.TimeStr, len(newTicker.Kdata), len(newTicker.Kdata["BTC-USDT"]))
 	} else {
-		global.Run.Println("====结束======", newTicker.TimeStr, len(newTicker.Kdata), len(newTicker.Kdata["BTC-USDT"]))
+		global.Run.Println("==结束==", newTicker.TimeStr, len(newTicker.Kdata), len(newTicker.Kdata["BTC-USDT"]))
 	}
 }
 
@@ -143,7 +142,6 @@ func FetchKdata(newTicker dbType.CoinTickerTable, dbTicker dbType.CoinTickerTabl
 
 		KdataList[val.InstID] = kdata_list
 		global.Run.Println("请求结束", val.InstID, len(kdata_list))
-
 	}
 
 	return KdataList
