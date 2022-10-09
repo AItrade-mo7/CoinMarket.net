@@ -5,6 +5,7 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -110,6 +111,48 @@ func SetMarketTickerDB() {
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "AITrade",
-	}).Connect().Collection("MarketTicker")
+	}).Connect().Collection("CoinTicker")
 	defer db.Close()
+
+	CoinTickerData := dbType.JoinCoinTicker()
+
+	FK := bson.D{{
+		Key:   "TimeUnix",
+		Value: CoinTickerData.TimeUnix,
+	}}
+	UK := bson.D{}
+	mStruct.Traverse(CoinTickerData, func(key string, val any) {
+		UK = append(UK, bson.E{
+			Key: "$set",
+			Value: bson.D{
+				{
+					Key:   key,
+					Value: val,
+				},
+			},
+		})
+	})
+
+	var result dbType.CoinTickerTable
+	db.Table.FindOne(db.Ctx, FK).Decode(&result)
+
+	var err error
+	lType := ""
+	if result.TimeUnix > 0 {
+		lType = "更新"
+		_, err = db.Table.UpdateOne(db.Ctx, FK, UK)
+	} else {
+		lType = "插入"
+		_, err = db.Table.InsertOne(db.Ctx, CoinTickerData)
+	}
+
+	if err != nil {
+		resErr := fmt.Errorf(lType+"数据失败 ETH %+v", err)
+		global.LogErr(resErr)
+	}
+
+	var newTicker dbType.CoinTickerTable
+	db.Table.FindOne(db.Ctx, FK).Decode(&newTicker)
+
+	global.Run.Println("CoinTicker", lType, "完毕", newTicker.TimeStr, len(newTicker.TickerVol), len(newTicker.Kdata))
 }
