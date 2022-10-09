@@ -88,7 +88,7 @@ func InsertCoinTicker(db *mMongo.DB, Ticker dbType.MarketTickerTable) {
 		_, err = db.Table.InsertOne(db.Ctx, CoinTickerData)
 	}
 	if err != nil {
-		resErr := fmt.Errorf(lType+"数据失败 %+v", err)
+		resErr := fmt.Errorf(lType+"数据失败 %+v", err, CoinTickerData.TimeUnix)
 		global.LogErr(resErr)
 		return
 	}
