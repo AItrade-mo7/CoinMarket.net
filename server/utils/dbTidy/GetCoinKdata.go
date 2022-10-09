@@ -37,7 +37,19 @@ func GetCoinKdata() {
 		jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
 
 		// 当Kdata 数据不足时 请求 Kdata
-		Ticker.Kdata = FetchKdata(Ticker)
+		Ticker_Kdata := FetchKdata(Ticker)
+
+		if len(Ticker_Kdata) == 0 {
+			global.Run.Println("跳过", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.TickerVol))
+			continue
+		}
+
+		if len(Ticker_Kdata) != len(Ticker.TickerVol) {
+			global.Run.Println("数据有问题", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.TickerVol))
+			continue
+		} else {
+			Ticker.Kdata = Ticker_Kdata
+		}
 
 		// 查询Unix
 		FK := bson.D{{
@@ -60,22 +72,16 @@ func GetCoinKdata() {
 		var result dbType.CoinTickerTable
 		db.Table.FindOne(db.Ctx, FK).Decode(&result)
 
-		global.Run.Println("查询数据", len(result.Kdata), len(Ticker.Kdata))
+		global.Run.Println("查询数据", Ticker.TimeStr, len(result.Kdata), len(Ticker.Kdata))
 
 		var err error
 		lType := ""
 		if result.TimeUnix > 0 {
 			lType = "更新"
-			if len(Ticker.Kdata) != len(Ticker.TickerVol) {
-				global.Run.Println("跳过", len(result.Kdata), len(Ticker.Kdata))
-				continue
-			}
 			_, err = db.Table.UpdateOne(db.Ctx, FK, UK)
-			global.Run.Println("更新完毕", len(result.Kdata), len(Ticker.Kdata))
 		} else {
 			lType = "插入"
 			_, err = db.Table.InsertOne(db.Ctx, Ticker)
-
 		}
 
 		if err != nil {
@@ -98,16 +104,18 @@ func FetchKdata(Ticker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 	KdataList := make(map[string][]mOKX.TypeKd)
 
 	for _, val := range Ticker.TickerVol {
-		if len(Ticker.Kdata[val.InstID]) < 90 {
+		// 只有 Ticker Kdata 长度不足的 才需要请求
+		kdata_list := Ticker.Kdata[val.InstID]
+		if len(kdata_list) < 90 {
 			time.Sleep(time.Second / 7)
-			kdata := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
+			kdata_list = kdata.GetHistoryKdata(kdata.HistoryKdataParam{
 				InstID: val.InstID,
 				After:  val.Ts,
 			})
-
-			KdataList[val.InstID] = kdata
-			global.Run.Println("请求结束", val.InstID, len(kdata))
+			KdataList[val.InstID] = kdata_list
+			global.Run.Println("请求结束", val.InstID, len(kdata_list))
 		}
 	}
+
 	return KdataList
 }
