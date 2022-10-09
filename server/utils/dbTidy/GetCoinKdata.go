@@ -90,7 +90,7 @@ func FetchKdata(Ticker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 	KdataList := make(map[string][]mOKX.TypeKd)
 
 	for _, val := range Ticker.TickerVol {
-		if len(Ticker.Kdata[val.InstID]) != 100 {
+		if len(Ticker.Kdata[val.InstID]) < 90 {
 			time.Sleep(time.Second / 7)
 			kdata := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
 				InstID: val.InstID,
@@ -99,6 +99,8 @@ func FetchKdata(Ticker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 
 			KdataList[val.InstID] = kdata
 			global.Run.Println("请求结束", val.InstID, len(kdata))
+		} else {
+			fmt.Println("跳过", Ticker.TimeStr, val.InstID, len(Ticker.Kdata[val.InstID]))
 		}
 	}
 	return KdataList
