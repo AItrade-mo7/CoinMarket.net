@@ -14,6 +14,7 @@ import (
 type HistoryKdataParam struct {
 	InstID  string `bson:"InstID"`
 	Current int    `bson:"Current"` // 当前页码 0 为
+	After   int64  `bson:"After"`   // 时间
 	Size    int    `bson:"Size"`    // 数量
 }
 
@@ -32,13 +33,23 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 	mAfter := mCount.Mul(m100, mStr.ToStr(opt.Current))
 	after := mCount.Sub(now, mAfter)
 
+	if opt.After > 0 {
+		after = mStr.ToStr(opt.After)
+	}
+
+	size := 100
+
+	if opt.Size > 0 {
+		size = opt.Size
+	}
+
 	resData, err := mOKX.FetchOKX(mOKX.OptFetchOKX{
 		Path: "/api/v5/market/history-candles",
 		Data: map[string]any{
 			"instId": opt.InstID,
 			"bar":    "15m",
-			"after":  mStr.ToStr(after),
-			"limit":  opt.Size,
+			"after":  after,
+			"limit":  size,
 		},
 		Method:        "get",
 		LocalJsonPath: Kdata_file,
