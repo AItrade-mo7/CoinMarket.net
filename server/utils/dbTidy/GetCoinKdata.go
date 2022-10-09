@@ -22,6 +22,7 @@ func GetCoinKdata() {
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "AITrade",
+		Timeout: 3189*10*10,
 	}).Connect().Collection("CoinTicker")
 	defer db.Close()
 
