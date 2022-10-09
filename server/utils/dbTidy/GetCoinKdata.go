@@ -75,6 +75,8 @@ func GetCoinKdata() {
 			global.LogErr(resErr)
 		}
 
+		global.Run.Println("====结束======", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.Kdata["BTC-USDT"]))
+
 	}
 
 	if err != nil {
@@ -99,6 +101,5 @@ func FetchKdata(Ticker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 			global.Run.Println("请求结束", val.InstID, len(kdata))
 		}
 	}
-	global.Run.Println("====结束======", Ticker.TimeStr, len(KdataList))
 	return KdataList
 }
