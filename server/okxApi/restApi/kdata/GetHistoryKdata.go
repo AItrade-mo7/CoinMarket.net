@@ -1,8 +1,6 @@
 package kdata
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"github.com/EasyGolang/goTools/mCount"
@@ -16,8 +14,8 @@ import (
 type HistoryKdataParam struct {
 	InstID  string `bson:"InstID"`
 	Current int    `bson:"Current"` // 当前页码 0 为
-	After   int64  `bson:"After"`   // 时间
-	Size    int    `bson:"Size"`    // 数量
+	After   int64  `bson:"After"`   // 时间 默认为当前时间
+	Size    int    `bson:"Size"`    // 数量 默认为100
 }
 
 func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
@@ -27,25 +25,20 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 	if InstInfo.InstID != opt.InstID {
 		return HistoryKdataKdataList
 	}
-
 	Kdata_file := mStr.Join(config.Dir.JsonData, "/", opt.InstID, "-", opt.Current, "_History.json")
 
 	now := mTime.GetUnix()
+	if opt.After > 0 {
+		now = mStr.ToStr(opt.After)
+	}
 	m100 := mCount.Mul(mStr.ToStr(mTime.UnixTimeInt64.Minute*15), mStr.ToStr(opt.Size))
 	mAfter := mCount.Mul(m100, mStr.ToStr(opt.Current))
 	after := mCount.Sub(now, mAfter)
 
-	if opt.After > 0 {
-		after = mStr.ToStr(opt.After)
-	}
-
 	size := 100
-
 	if opt.Size > 0 {
 		size = opt.Size
 	}
-
-	fmt.Println(opt.InstID, mTime.UnixFormat(after), size)
 
 	resData, err := mOKX.FetchOKX(mOKX.OptFetchOKX{
 		Path: "/api/v5/market/history-candles",
