@@ -29,6 +29,7 @@ hunter_release
 *.zip
 *_aarch64
 *_x86_64
+/TestRun
 
 # Test binary, built with `go test -c`
 *.test
