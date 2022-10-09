@@ -34,6 +34,8 @@ func GetCoinKdata() {
 		var Ticker dbType.CoinTickerTable
 		jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
 
+		fmt.Println("正在进行", Ticker.TimeStr)
+
 		// 当Kdata 数据不足时 请求 Kdata
 		Ticker.Kdata = FetchKdata(Ticker)
 
