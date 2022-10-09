@@ -8,6 +8,7 @@ import (
 	"CoinMarket.net/server/global/dbType"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
+	"github.com/EasyGolang/goTools/mOKX"
 	jsoniter "github.com/json-iterator/go"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -29,7 +30,7 @@ func GetCoinKdata() {
 		var Ticker dbType.CoinTickerTable
 		jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
 
-		mJson.Println(Ticker)
+		FetchKdata(Ticker.TickerVol)
 
 	}
 
@@ -37,5 +38,11 @@ func GetCoinKdata() {
 		resErr := fmt.Errorf("GetCoinKdata 失败 %+v", err)
 		global.LogErr(resErr)
 		return
+	}
+}
+
+func FetchKdata(List []mOKX.TypeTicker) {
+	for _, val := range List {
+		fmt.Println(val.InstID)
 	}
 }

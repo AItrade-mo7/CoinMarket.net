@@ -22,6 +22,5 @@ func main() {
 
 	// router.Start()
 
-	dbTidy.GetMarketTickerData()
 	dbTidy.GetCoinKdata()
 }
