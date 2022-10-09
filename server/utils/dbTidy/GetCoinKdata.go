@@ -60,14 +60,22 @@ func GetCoinKdata() {
 		var result dbType.CoinTickerTable
 		db.Table.FindOne(db.Ctx, FK).Decode(&result)
 
+		global.Run.Println("查询数据", len(result.Kdata), len(Ticker.Kdata))
+
 		var err error
 		lType := ""
 		if result.TimeUnix > 0 {
 			lType = "更新"
+			if len(Ticker.Kdata) != len(Ticker.TickerVol) {
+				global.Run.Println("跳过", len(result.Kdata), len(Ticker.Kdata))
+				continue
+			}
 			_, err = db.Table.UpdateOne(db.Ctx, FK, UK)
+			global.Run.Println("更新完毕", len(result.Kdata), len(Ticker.Kdata))
 		} else {
 			lType = "插入"
 			_, err = db.Table.InsertOne(db.Ctx, Ticker)
+
 		}
 
 		if err != nil {
@@ -99,8 +107,6 @@ func FetchKdata(Ticker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 
 			KdataList[val.InstID] = kdata
 			global.Run.Println("请求结束", val.InstID, len(kdata))
-		} else {
-			fmt.Println("跳过", Ticker.TimeStr, val.InstID, len(Ticker.Kdata[val.InstID]))
 		}
 	}
 	return KdataList
