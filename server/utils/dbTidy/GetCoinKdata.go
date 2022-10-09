@@ -86,17 +86,18 @@ func GetCoinKdata() {
 func FetchKdata(Ticker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 	KdataList := make(map[string][]mOKX.TypeKd)
 
-	global.Run.Println("====开始======", Ticker.TimeStr)
 	for _, val := range Ticker.TickerVol {
 		if len(Ticker.Kdata[val.InstID]) != 100 {
 			time.Sleep(time.Second / 2)
-			KdataList[val.InstID] = kdata.GetHistoryKdata(kdata.HistoryKdataParam{
+			kdata := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
 				InstID: val.InstID,
 				After:  val.Ts,
 			})
-			global.Run.Println("请求结束", len(KdataList[val.InstID]))
+
+			KdataList[val.InstID] = kdata
+			global.Run.Println("请求结束", val.InstID, len(kdata))
 		}
 	}
-	global.Run.Println("====结束======", Ticker.TimeStr)
+	global.Run.Println("====结束======", len(KdataList))
 	return KdataList
 }
