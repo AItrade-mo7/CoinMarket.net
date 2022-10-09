@@ -45,7 +45,7 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 	if opt.Size > 0 {
 		size = opt.Size
 	}
-	fmt.Println(mJson.Format(opt) )
+	fmt.Println(mJson.Format(opt))
 
 	resData, err := mOKX.FetchOKX(mOKX.OptFetchOKX{
 		Path: "/api/v5/market/history-candles",

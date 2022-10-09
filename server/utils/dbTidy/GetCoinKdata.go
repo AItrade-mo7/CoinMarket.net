@@ -34,8 +34,6 @@ func GetCoinKdata() {
 		var Ticker dbType.CoinTickerTable
 		jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
 
-		fmt.Println("正在进行", Ticker.TimeStr)
-
 		// 当Kdata 数据不足时 请求 Kdata
 		Ticker.Kdata = FetchKdata(Ticker)
 
@@ -90,12 +88,11 @@ func FetchKdata(Ticker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 	global.Run.Println("====开始======", Ticker.TimeStr)
 	for _, val := range Ticker.TickerVol {
 		if len(Ticker.Kdata[val.InstID]) != 100 {
-			global.Run.Println("开始请求", val.InstID)
 			KdataList[val.InstID] = kdata.GetHistoryKdata(kdata.HistoryKdataParam{
 				InstID: val.InstID,
 				After:  val.Ts,
 			})
-			global.Run.Println("请求结束", val.InstID)
+			global.Run.Println("请求结束", len(KdataList[val.InstID]))
 		}
 	}
 	global.Run.Println("====结束======", Ticker.TimeStr)
