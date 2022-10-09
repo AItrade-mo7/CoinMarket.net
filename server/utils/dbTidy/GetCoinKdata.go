@@ -2,6 +2,7 @@ package dbTidy
 
 import (
 	"fmt"
+	"time"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
@@ -88,6 +89,7 @@ func FetchKdata(Ticker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 	global.Run.Println("====开始======", Ticker.TimeStr)
 	for _, val := range Ticker.TickerVol {
 		if len(Ticker.Kdata[val.InstID]) != 100 {
+			time.Sleep(time.Second / 2)
 			KdataList[val.InstID] = kdata.GetHistoryKdata(kdata.HistoryKdataParam{
 				InstID: val.InstID,
 				After:  val.Ts,
