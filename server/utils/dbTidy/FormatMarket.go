@@ -144,7 +144,8 @@ func FetchKdata(newTicker dbType.CoinTickerTable, dbTicker dbType.CoinTickerTabl
 			After:   val.Ts,
 			Size:    100,
 		})
-		kdata_list = append(kdata_list, kdata_1...)
+
+		CheckTicker(kdata_1)
 
 		time.Sleep(time.Second / 8)
 		kdata_2 := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
@@ -153,7 +154,7 @@ func FetchKdata(newTicker dbType.CoinTickerTable, dbTicker dbType.CoinTickerTabl
 			After:   val.Ts,
 			Size:    100,
 		})
-		kdata_list = append(kdata_list, kdata_2...)
+		CheckTicker(kdata_2)
 
 		time.Sleep(time.Second / 8)
 		kdata_3 := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
@@ -162,7 +163,7 @@ func FetchKdata(newTicker dbType.CoinTickerTable, dbTicker dbType.CoinTickerTabl
 			After:   val.Ts,
 			Size:    100,
 		})
-		kdata_list = append(kdata_list, kdata_3...)
+		CheckTicker(kdata_3)
 
 		CheckTicker(kdata_list)
 
@@ -175,8 +176,8 @@ func FetchKdata(newTicker dbType.CoinTickerTable, dbTicker dbType.CoinTickerTabl
 }
 
 func CheckTicker(KdataList []mOKX.TypeKd) {
-	for _, val := range KdataList {
-		fmt.Println(val.TimeStr)
+	for key, val := range KdataList {
+		fmt.Println(key,val.InstID, val.TimeStr)
 	}
 	fmt.Println("结束")
 }
