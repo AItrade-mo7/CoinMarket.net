@@ -34,16 +34,8 @@ func GetCoinKdata() {
 		var Ticker dbType.CoinTickerTable
 		jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
 
-		fmt.Println("开始请求", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.TickerVol))
-
 		// 当Kdata 数据不足时 请求 Kdata
-		if len(Ticker.Kdata) < len(Ticker.TickerVol) {
-			Ticker.Kdata = FetchKdata(Ticker.TickerVol)
-		} else {
-			// 数据充足则跳过
-			return
-		}
-		fmt.Println("请求结束", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.TickerVol))
+		Ticker.Kdata = FetchKdata(Ticker)
 
 		// 查询Unix
 		FK := bson.D{{
@@ -90,13 +82,20 @@ func GetCoinKdata() {
 	}
 }
 
-func FetchKdata(List []mOKX.TypeTicker) map[string][]mOKX.TypeKd {
+func FetchKdata(Ticker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 	KdataList := make(map[string][]mOKX.TypeKd)
-	for _, val := range List {
-		KdataList[val.InstID] = kdata.GetHistoryKdata(kdata.HistoryKdataParam{
-			InstID: val.InstID,
-			After:  val.Ts,
-		})
+
+	global.Run.Println("====开始======", Ticker.TimeStr)
+	for _, val := range Ticker.TickerVol {
+		if len(Ticker.Kdata[val.InstID]) != 100 {
+			global.Run.Println("开始请求", val.InstID)
+			KdataList[val.InstID] = kdata.GetHistoryKdata(kdata.HistoryKdataParam{
+				InstID: val.InstID,
+				After:  val.Ts,
+			})
+			global.Run.Println("请求结束", val.InstID)
+		}
 	}
+	global.Run.Println("====结束======", Ticker.TimeStr)
 	return KdataList
 }
