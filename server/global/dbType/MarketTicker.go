@@ -1,11 +1,7 @@
 package dbType
 
 import (
-	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mOKX"
-	"github.com/EasyGolang/goTools/mStr"
-	"github.com/EasyGolang/goTools/mTime"
 )
 
 type MarketTickerTable struct {
@@ -19,22 +15,4 @@ type MarketTickerTable struct {
 	Time           string                           `bson:"Time"`
 	CreateTimeUnix int64                            `bson:"CreateTimeUnix"`
 	CreateTime     string                           `bson:"CreateTime"`
-}
-
-// 拼接数据
-func GetTickerDB() MarketTickerTable {
-	TickerRes := MarketTickerTable{}
-	TickerRes.List = okxInfo.TickerList
-	TickerRes.ListU_R24 = okxInfo.TickerList
-	TickerRes.AnalyWhole = okxInfo.TickerAnalyWhole
-	TickerRes.AnalySingle = okxInfo.TickerAnalySingle
-	TickerRes.Unit = config.Unit
-	TickerRes.WholeDir = okxInfo.WholeDir
-	TickerRes.TimeUnix = okxInfo.TickerList[0].Ts
-	TickerRes.Time = mTime.UnixFormat(mStr.ToStr(TickerRes.TimeUnix))
-
-	TickerRes.CreateTimeUnix = mTime.GetUnixInt64()
-	TickerRes.CreateTime = mTime.UnixFormat(mStr.ToStr(TickerRes.CreateTime))
-
-	return TickerRes
 }

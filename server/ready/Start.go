@@ -9,9 +9,7 @@ import (
 	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/tickers"
 	"CoinMarket.net/server/okxInfo"
-	"CoinMarket.net/server/tickerAnaly"
 	"CoinMarket.net/server/tmpl"
-	"CoinMarket.net/server/utils/dbSearch"
 	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mCycle"
 )
@@ -36,8 +34,7 @@ func Start() {
 		Func:      inst.Start,
 		SleepTime: time.Hour * 4, // 每 4 时获取一次
 	}).Start()
-
-	global.KdataLog.Println("okxInfo.SPOT_inst SWAP_inst", len(okxInfo.SPOT_inst), len(okxInfo.SWAP_inst))
+	global.KdataLog.Println("ready.Start inst.Start", len(okxInfo.SPOT_inst), len(okxInfo.SWAP_inst))
 
 	// 获取排行榜单
 	mCycle.New(mCycle.Opt{
@@ -49,7 +46,7 @@ func Start() {
 	SetKdata("Start")
 	go mClock.New(mClock.OptType{
 		Func: TimerClickStart,
-		Spec: "5 0,15,30,45 * * * ? ",
+		Spec: "1 0,15,30,45 * * * ? ",
 	})
 }
 
@@ -72,39 +69,9 @@ func SetKdata(lType string) {
 	global.Run.Println("开始获取历史价格")
 	TickerKdata() // 获取并设置榜单币种最近 75 小时的历史数据 mOKX.MarketKdata   数据
 
-	global.Run.Println("开始进行分析", len(okxInfo.TickerList), len(okxInfo.MarketKdata))
-	tickerAnaly.Start() // 开始对数据进行分析
-	global.Run.Println("分析结束")
-
 	if lType == "mClock" {
 		SetMarketTickerDB()
 		SetEthDB()
 		SetBtcDB()
 	}
-
-	// 填充第一页的数据
-	global.Run.Println("开始进行第一页的数据填充")
-	okxInfo.AnalyList_Client = dbSearch.PagingType{}
-	okxInfo.AnalyList_Serve = dbSearch.PagingType{}
-
-	AnalyList_Client, _ := GetAnalyFirst300(dbSearch.FindParam{
-		Size:    300,
-		Current: 0,
-		Sort: map[string]int{
-			"TimeUnix": -1,
-		},
-	})
-	AnalyList_Serve, _ := GetAnalyFirst300(dbSearch.FindParam{
-		Size:    300,
-		Current: 0,
-		Sort: map[string]int{
-			"TimeUnix": -1,
-		},
-		Type: "Serve", // Serve 给的是全面的数据 Client 给简陋版本的
-	})
-
-	okxInfo.AnalyList_Client = AnalyList_Client
-	okxInfo.AnalyList_Serve = AnalyList_Serve
-
-	global.Run.Println("第一页数据填充完毕")
 }

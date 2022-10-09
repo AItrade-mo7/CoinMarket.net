@@ -30,7 +30,6 @@ func SetTicker() {
 
 	VolumeSortList := mOKX.SortVolume(tickerList)
 	okxInfo.TickerList = VolumeSortList
-	okxInfo.TickerU_R24 = mOKX.SortU_R24(VolumeSortList)
 }
 
 func TickerCount(OKXTicker mOKX.TypeOKXTicker, BinanceTicker mOKX.TypeBinanceTicker) (Ticker mOKX.TypeTicker) {
@@ -46,9 +45,6 @@ func TickerCount(OKXTicker mOKX.TypeOKXTicker, BinanceTicker mOKX.TypeBinanceTic
 	Ticker.BinanceVol24H = BinanceTicker.QuoteVolume
 	Ticker.U_R24 = mCount.RoseCent(OKXTicker.Last, OKXTicker.Open24H)
 	Ticker.Volume = mCount.Add(OKXTicker.VolCcy24H, BinanceTicker.QuoteVolume)
-	// Ticker.OkxVolRose = mCount.PerCent(Ticker.OKXVol24H, Ticker.Volume)
-	// Ticker.BinanceVolRose = mCount.PerCent(Ticker.BinanceVol24H, Ticker.Volume)
 	Ticker.Ts = mTime.ToUnixMsec(mTime.MsToTime(OKXTicker.Ts, "0"))
-
 	return Ticker
 }

@@ -1,17 +1,23 @@
 package tickerAnaly
 
 import (
+	"fmt"
+
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mOKX"
 )
 
-func Start() {
+type TickerAnalyParam struct {
+	TickerList  []mOKX.TypeTicker
+	MarketKdata map[string][]mOKX.TypeKd
+}
+
+func Start(opt TickerAnalyParam) {
 	// 基于  mOKX.MarketKdata  进行数据分析
 	TickerAnalySingle := make(map[string][]mOKX.AnalySliceType)
-	for _, item := range okxInfo.TickerList {
-		list := okxInfo.MarketKdata[item.InstID]
+	for _, item := range opt.TickerList {
+		list := opt.MarketKdata[item.InstID]
 
 		Single := NewSingle(list)
 		if len(Single.ResData) == len(config.SliceHour) {
@@ -21,9 +27,8 @@ func Start() {
 		}
 	}
 
-	okxInfo.TickerAnalySingle = TickerAnalySingle
+	TickerAnalyWhole := WholeAnaly(TickerAnalySingle)
 
-	WholeAnaly()
-
-	AnalyDir()
+	WholeDir := AnalyDir(TickerAnalyWhole)
+	fmt.Println("市场分析结果", TickerAnalyWhole, WholeDir)
 }

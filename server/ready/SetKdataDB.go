@@ -5,7 +5,6 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -113,43 +112,4 @@ func SetMarketTickerDB() {
 		DBName:   "AITrade",
 	}).Connect().Collection("MarketTicker")
 	defer db.Close()
-
-	TickerDB := dbType.GetTickerDB()
-
-	FK := bson.D{{
-		Key:   "TimeUnix",
-		Value: TickerDB.TimeUnix,
-	}}
-	UK := bson.D{}
-	mStruct.Traverse(TickerDB, func(key string, val any) {
-		UK = append(UK, bson.E{
-			Key: "$set",
-			Value: bson.D{
-				{
-					Key:   key,
-					Value: val,
-				},
-			},
-		})
-	})
-	var result dbType.MarketTickerTable
-	db.Table.FindOne(db.Ctx, FK).Decode(&result)
-
-	var err error
-	lType := ""
-	if result.TimeUnix > 0 {
-		lType = "更新"
-		global.Run.Println("进行数据更新", TickerDB.CreateTime, TickerDB.Time, TickerDB.WholeDir)
-		_, err = db.Table.UpdateOne(db.Ctx, FK, UK)
-	} else {
-		lType = "插入"
-		global.Run.Println("进行数据插入", TickerDB.CreateTime, TickerDB.Time, TickerDB.WholeDir)
-		_, err = db.Table.InsertOne(db.Ctx, TickerDB)
-	}
-
-	if err != nil {
-		resErr := fmt.Errorf(lType+"数据失败 %+v", err)
-		global.LogErr(resErr)
-		return
-	}
 }

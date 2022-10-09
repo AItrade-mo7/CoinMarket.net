@@ -3,7 +3,6 @@ package tickerAnaly
 import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
@@ -15,7 +14,7 @@ import (
 
 */
 
-func WholeAnaly() {
+func WholeAnaly(TickerAnalySingle map[string][]mOKX.AnalySliceType) []mOKX.TypeWholeTickerAnaly {
 	TickerAnalyWhole := []mOKX.TypeWholeTickerAnaly{}
 
 	TickerSingle := make(map[int][]mOKX.AnalySliceType)
@@ -24,12 +23,7 @@ func WholeAnaly() {
 
 	TickerURList := make(map[int][]mOKX.AnalySliceType)
 
-	/*
-		币种时间切片
-		okxInfo.TickerAnalySingle
-	*/
-
-	for _, Slice := range okxInfo.TickerAnalySingle {
+	for _, Slice := range TickerAnalySingle {
 		for _, Single := range Slice {
 			TickerSingle[Single.DiffHour] = append(TickerSingle[Single.DiffHour], Single)
 		}
@@ -37,7 +31,7 @@ func WholeAnaly() {
 
 	if len(TickerSingle) != len(config.SliceHour) {
 		global.LogErr("tickerAnaly.WholeAnaly  config.SliceHour 长度不正确", len(TickerSingle), len(config.SliceHour))
-		return
+		return nil
 	}
 
 	for key, list := range TickerSingle {
@@ -51,17 +45,11 @@ func WholeAnaly() {
 		TickerAnalyWhole = append(TickerAnalyWhole, Analy)
 	}
 
-	okxInfo.TickerAnalyWhole = make([]mOKX.TypeWholeTickerAnaly, len(TickerAnalyWhole))
-	okxInfo.TickerAnalyWhole = mOKX.Sort_DiffHour(TickerAnalyWhole)
+	return mOKX.Sort_DiffHour(TickerAnalyWhole)
 }
 
 func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWholeTickerAnaly) {
 	resData = mOKX.TypeWholeTickerAnaly{}
-
-	if len(list) != len(okxInfo.TickerList) {
-		global.LogErr("tickerAnaly.TickerWholeAnaly", len(list), len(okxInfo.TickerList))
-		return
-	}
 
 	// 开始
 	var (

@@ -1,22 +1,22 @@
 package tickerAnaly
 
 import (
-	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
+	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
 )
 
-func AnalyDir() {
+func AnalyDir(TickerAnalyWhole []mOKX.TypeWholeTickerAnaly) int {
 	// 初始化为空值
-	okxInfo.WholeDir = 0
+	WholeDir := 0
 
 	upDir := []string{}
 	downDir := []string{}
 	zeroDir := []string{}
 	allDir := []string{}
 
-	for key, item := range okxInfo.TickerAnalyWhole {
-		fade := len(okxInfo.TickerAnalyWhole) - key
+	for key, item := range TickerAnalyWhole {
+		fade := len(TickerAnalyWhole) - key
 		fadeStr := mStr.ToStr(fade)
 		if item.DirIndex > 0 {
 			upDir = append(upDir, fadeStr)
@@ -39,9 +39,11 @@ func AnalyDir() {
 
 	zeroPer := mCount.PerCent(zeroFade, allFade)
 
-	okxInfo.WholeDir = mCount.Le(upFade, downFade)
+	WholeDir = mCount.Le(upFade, downFade)
 
 	if mCount.Le(zeroPer, "50") > 0 {
-		okxInfo.WholeDir = okxInfo.WholeDir * 2
+		WholeDir = WholeDir * 2
 	}
+
+	return WholeDir
 }
