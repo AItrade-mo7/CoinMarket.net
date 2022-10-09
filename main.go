@@ -2,10 +2,12 @@ package main
 
 import (
 	_ "embed"
+	"time"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/restApi/inst"
+	"CoinMarket.net/server/tmpl"
 	"CoinMarket.net/server/utils/dbTidy"
 	jsoniter "github.com/json-iterator/go"
 )
@@ -24,6 +26,19 @@ func main() {
 	// router.Start()
 
 	inst.Start()
+	dbTidy.FormatMarket()
 
 	dbTidy.GetCoinKdata()
+
+	go global.Email(global.EmailOpt{
+		To: []string{
+			"meichangliang@mo7.cc",
+		},
+		Subject:  "ServeStart",
+		Template: tmpl.SysEmail,
+		SendData: tmpl.SysParam{
+			Message: "程序执行完毕",
+			SysTime: time.Now(),
+		},
+	}).Send()
 }

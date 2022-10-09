@@ -107,7 +107,7 @@ func FetchKdata(Ticker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 		// 只有 Ticker Kdata 长度不足的 才需要请求
 		kdata_list := Ticker.Kdata[val.InstID]
 		if len(kdata_list) < 90 {
-			time.Sleep(time.Second / 7)
+			time.Sleep(time.Second / 8)
 			kdata_list = kdata.GetHistoryKdata(kdata.HistoryKdataParam{
 				InstID: val.InstID,
 				After:  val.Ts,

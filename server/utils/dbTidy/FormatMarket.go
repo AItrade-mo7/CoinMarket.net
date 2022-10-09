@@ -15,7 +15,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func GetMarketTickerData() {
+func FormatMarket() {
 	db := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
@@ -80,6 +80,9 @@ func InsertCoinTicker(db *mMongo.DB, Ticker dbType.MarketTickerTable) {
 	lType := ""
 	if result.TimeUnix > 0 {
 		lType = "更新"
+		if len(result.Kdata) == len(result.TickerVol) {
+			return
+		}
 		global.Run.Println("进行数据更新", CoinTickerData.TimeStr)
 		_, err = db.Table.UpdateOne(db.Ctx, FK, UK)
 	} else {
