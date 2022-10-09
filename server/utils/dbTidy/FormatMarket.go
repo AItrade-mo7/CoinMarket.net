@@ -7,6 +7,7 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
+	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
@@ -19,6 +20,8 @@ import (
 )
 
 func FormatMarket() {
+	inst.Start()
+
 	db := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
@@ -175,4 +178,5 @@ func CheckTicker(KdataList []mOKX.TypeKd) {
 	for _, val := range KdataList {
 		fmt.Println(val.TimeStr)
 	}
+	fmt.Println("结束")
 }
