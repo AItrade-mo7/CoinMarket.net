@@ -34,6 +34,8 @@ func GetCoinKdata() {
 		var Ticker dbType.CoinTickerTable
 		jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
 
+		fmt.Println("开始请求", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.TickerVol))
+
 		// 当Kdata 数据不足时 请求 Kdata
 		if len(Ticker.Kdata) < len(Ticker.TickerVol) {
 			Ticker.Kdata = FetchKdata(Ticker.TickerVol)
@@ -41,6 +43,7 @@ func GetCoinKdata() {
 			// 数据充足则跳过
 			return
 		}
+		fmt.Println("请求结束", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.TickerVol))
 
 		// 查询Unix
 		FK := bson.D{{

@@ -1,10 +1,13 @@
 package kdata
 
 import (
+	"fmt"
+
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mFile"
+	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
@@ -42,6 +45,7 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 	if opt.Size > 0 {
 		size = opt.Size
 	}
+	fmt.Println(mJson.Format(opt) )
 
 	resData, err := mOKX.FetchOKX(mOKX.OptFetchOKX{
 		Path: "/api/v5/market/history-candles",
