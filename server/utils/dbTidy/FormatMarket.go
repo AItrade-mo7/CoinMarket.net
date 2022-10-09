@@ -61,36 +61,25 @@ func InsertCoinTicker(db *mMongo.DB, oldTicker dbType.MarketTickerTable) {
 	CoinTickerData.TickerVol = oldTicker.List
 	CoinTickerData.TimeUnix = oldTicker.List[0].Ts
 	CoinTickerData.TimeStr = mTime.UnixFormat(mStr.ToStr(oldTicker.List[0].Ts))
-	// 用榜单去请求 Kdata
-	Ticker_Kdata := FetchKdata(CoinTickerData)
 
 	FK := bson.D{{
 		Key:   "TimeUnix",
 		Value: CoinTickerData.TimeUnix,
 	}}
-	UK := bson.D{}
-	mStruct.Traverse(CoinTickerData, func(key string, val any) {
-		UK = append(UK, bson.E{
-			Key: "$set",
-			Value: bson.D{
-				{
-					Key:   key,
-					Value: val,
-				},
-			},
-		})
-	})
 
-	var Ticker dbType.CoinTickerTable
-	db.Table.FindOne(db.Ctx, FK).Decode(&Ticker)
+	var dbTicker dbType.CoinTickerTable
+	db.Table.FindOne(db.Ctx, FK).Decode(&dbTicker)
+
+	// 用榜单去请求 Kdata
+	Ticker_Kdata := FetchKdata(CoinTickerData, dbTicker)
 
 	if len(Ticker_Kdata) == 0 {
-		global.Run.Println("跳过", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.TickerVol))
+		global.Run.Println("跳过", dbTicker.TimeStr, len(dbTicker.Kdata), len(dbTicker.TickerVol))
 		return
 	}
 
 	if len(Ticker_Kdata) != len(CoinTickerData.TickerVol) {
-		global.Run.Println("数据有问题", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.TickerVol))
+		global.LogErr("数据有问题", CoinTickerData.TimeStr, len(CoinTickerData.Kdata), len(CoinTickerData.TickerVol))
 		return
 	} else {
 		CoinTickerData.Kdata = Ticker_Kdata
@@ -98,64 +87,92 @@ func InsertCoinTicker(db *mMongo.DB, oldTicker dbType.MarketTickerTable) {
 
 	var err error
 	lType := ""
-	if Ticker.TimeUnix > 0 {
+	if dbTicker.TimeUnix > 0 {
 		// 表示已经存在，则更新即可
 		lType = "更新"
-		global.Run.Println("进行数据更新", CoinTickerData.TimeStr)
+		UK := bson.D{}
+		mStruct.Traverse(CoinTickerData, func(key string, val any) {
+			UK = append(UK, bson.E{
+				Key: "$set",
+				Value: bson.D{
+					{
+						Key:   key,
+						Value: val,
+					},
+				},
+			})
+		})
 		_, err = db.Table.UpdateOne(db.Ctx, FK, UK)
 	} else {
 		// 表示还未存在，则插入
 		lType = "插入"
-		global.Run.Println("进行数据插入", CoinTickerData.TimeStr)
 		_, err = db.Table.InsertOne(db.Ctx, CoinTickerData)
 	}
+	global.Run.Println(lType, CoinTickerData.TimeStr)
 	if err != nil {
 		resErr := fmt.Errorf(lType+"数据失败 %+v", err, CoinTickerData.TimeUnix)
 		global.LogErr(resErr)
 		return
 	}
 
-	global.Run.Println("====结束======", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.Kdata["BTC-USDT"]))
+	var newTicker dbType.CoinTickerTable
+	db.Table.FindOne(db.Ctx, FK).Decode(&newTicker)
+
+	if len(newTicker.Kdata) != len(newTicker.TickerVol) || len(newTicker.Kdata["BTC-USDT"]) < 280 {
+		global.LogErr("====错误结束======", newTicker.TimeStr, len(newTicker.Kdata), len(newTicker.Kdata["BTC-USDT"]))
+	} else {
+		global.Run.Println("====结束======", newTicker.TimeStr, len(newTicker.Kdata), len(newTicker.Kdata["BTC-USDT"]))
+	}
 }
 
-func FetchKdata(Ticker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
+func FetchKdata(newTicker dbType.CoinTickerTable, dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 	KdataList := make(map[string][]mOKX.TypeKd)
 
-	for _, val := range Ticker.TickerVol {
-		if len(Ticker.Kdata[val.InstID]) < 280 {
-			kdata_list := []mOKX.TypeKd{}
-
-			time.Sleep(time.Second / 8)
-			kdata_1 := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
-				InstID:  val.InstID,
-				Current: 0,
-				After:   val.Ts,
-				Size:    100,
-			})
-			kdata_list = append(kdata_list, kdata_1...)
-			time.Sleep(time.Second / 8)
-			kdata_2 := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
-				InstID:  val.InstID,
-				Current: 1,
-				After:   val.Ts,
-				Size:    100,
-			})
-			kdata_list = append(kdata_list, kdata_2...)
-			time.Sleep(time.Second / 8)
-			kdata_3 := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
-				InstID:  val.InstID,
-				Current: 2,
-				After:   val.Ts,
-				Size:    100,
-			})
-			kdata_list = append(kdata_list, kdata_3...)
-
-			KdataList[val.InstID] = kdata_list
-
-			global.Run.Println("请求结束", val.InstID, len(kdata_list))
-
+	for _, val := range newTicker.TickerVol {
+		if len(dbTicker.Kdata[val.InstID]) > 290 {
+			continue
 		}
+
+		time.Sleep(time.Second / 8)
+		kdata_list := []mOKX.TypeKd{}
+		kdata_1 := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
+			InstID:  val.InstID,
+			Current: 0,
+			After:   val.Ts,
+			Size:    100,
+		})
+		kdata_list = append(kdata_list, kdata_1...)
+
+		time.Sleep(time.Second / 8)
+		kdata_2 := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
+			InstID:  val.InstID,
+			Current: 1,
+			After:   val.Ts,
+			Size:    100,
+		})
+		kdata_list = append(kdata_list, kdata_2...)
+
+		time.Sleep(time.Second / 8)
+		kdata_3 := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
+			InstID:  val.InstID,
+			Current: 2,
+			After:   val.Ts,
+			Size:    100,
+		})
+		kdata_list = append(kdata_list, kdata_3...)
+
+		CheckTicker(kdata_list)
+
+		KdataList[val.InstID] = kdata_list
+		global.Run.Println("请求结束", val.InstID, len(kdata_list))
+
 	}
 
 	return KdataList
+}
+
+func CheckTicker(KdataList []mOKX.TypeKd) {
+	for _, val := range KdataList {
+		fmt.Println(val.TimeStr)
+	}
 }
