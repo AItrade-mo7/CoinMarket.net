@@ -22,7 +22,7 @@ func GetCoinKdata() {
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "AITrade",
-		Timeout: 3189*10*10,
+		Timeout:  3189 * 10 * 10,
 	}).Connect().Collection("CoinTicker")
 	defer db.Close()
 
@@ -89,7 +89,7 @@ func FetchKdata(Ticker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 
 	for _, val := range Ticker.TickerVol {
 		if len(Ticker.Kdata[val.InstID]) != 100 {
-			time.Sleep(time.Second / 2)
+			time.Sleep(time.Second / 7)
 			kdata := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
 				InstID: val.InstID,
 				After:  val.Ts,
