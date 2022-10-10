@@ -21,7 +21,27 @@ func main() {
 	// ready.Start()
 
 	// router.Start()
-
+	// global.Email(global.EmailOpt{
+	// 	To: []string{
+	// 		"meichangliang@mo7.cc",
+	// 	},
+	// 	Subject:  "ServeStart",
+	// 	Template: tmpl.SysEmail,
+	// 	SendData: tmpl.SysParam{
+	// 		Message: "开始执行脚本",
+	// 		SysTime: time.Now(),
+	// 	},
+	// }).Send()
 	dbTidy.FormatMarket()
-
+	// global.Email(global.EmailOpt{
+	// 	To: []string{
+	// 		"meichangliang@mo7.cc",
+	// 	},
+	// 	Subject:  "ServeStart",
+	// 	Template: tmpl.SysEmail,
+	// 	SendData: tmpl.SysParam{
+	// 		Message: "脚本执行结束",
+	// 		SysTime: time.Now(),
+	// 	},
+	// }).Send()
 }

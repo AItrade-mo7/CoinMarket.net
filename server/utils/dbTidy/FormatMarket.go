@@ -1,6 +1,7 @@
 package dbTidy
 
 import (
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -11,13 +12,16 @@ import (
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
+	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mStruct"
+	"github.com/EasyGolang/goTools/mTime"
 	jsoniter "github.com/json-iterator/go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func FormatMarket() {
+	fmt.Println("开始执行")
 	inst.Start()
 
 	db := mMongo.New(mMongo.Opt{
@@ -32,7 +36,7 @@ func FormatMarket() {
 	findOpt := options.Find()
 	findOpt.SetAllowDiskUse(true)
 	findOpt.SetSort(map[string]int{
-		"TimeUnix": -1,
+		"TimeUnix": 1,
 	})
 
 	FK := bson.D{}
@@ -43,12 +47,10 @@ func FormatMarket() {
 		cursor.Decode(&curData)
 		var Ticker dbType.CoinTickerTable
 		jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
+		Ticker.TimeStr = mTime.UnixFormat(mStr.ToStr(Ticker.TimeUnix))
 
 		kdata_list := FetchKdata(Ticker)
-		if len(kdata_list) == 0 {
-			global.Run.Println("跳过", Ticker.TimeStr, len(Ticker.TickerVol), len(Ticker.Kdata), len(Ticker.Kdata["BTC-USDT"]))
-			continue
-		}
+
 		Ticker.Kdata = kdata_list
 
 		UK := bson.D{}
@@ -63,8 +65,20 @@ func FormatMarket() {
 				},
 			})
 		})
+		UK = append(UK, bson.E{
+			Key: "$unset ",
+			Value: bson.D{
+				{
+					Key:   "Time",
+					Value: 1,
+				},
+			},
+		})
+
+		fmt.Println("更新数据", len(Ticker.Kdata), len(Ticker.Kdata["BTC-USDT"]), Ticker.TimeStr)
 
 		_, err = db.Table.UpdateOne(db.Ctx, FK, UK)
+
 		if err != nil {
 			global.LogErr("更新数据失败 %+v", err, Ticker.TimeUnix)
 			return
@@ -88,17 +102,19 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 	KdataList := make(map[string][]mOKX.TypeKd)
 
 	for _, val := range dbTicker.TickerVol {
-		if len(dbTicker.Kdata[val.InstID]) > 290 {
-			continue
+		kdata_list := dbTicker.Kdata[val.InstID]
+
+		if len(kdata_list) < 290 {
+			time.Sleep(time.Second / 3)
+			kdata_list = kdata.GetHistory300List(kdata.History300Param{
+				InstID: val.InstID,
+				After:  val.Ts,
+			})
+
 		}
-		time.Sleep(time.Second / 3)
-		kdata_list := kdata.GetHistory300List(kdata.History300Param{
-			InstID: val.InstID,
-			After:  val.Ts,
-		})
 
 		KdataList[val.InstID] = kdata_list
-		global.Run.Println("请求结束", val.InstID, len(KdataList[val.InstID]))
+		global.Run.Println("填充结束", val.InstID, len(KdataList[val.InstID]))
 	}
 
 	return KdataList
