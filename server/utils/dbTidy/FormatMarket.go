@@ -39,8 +39,7 @@ func FormatMarket() {
 		"TimeUnix": 1,
 	})
 
-	FK := bson.D{}
-	cursor, err := db.Table.Find(db.Ctx, FK, findOpt)
+	cursor, err := db.Table.Find(db.Ctx, bson.D{}, findOpt)
 
 	for cursor.Next(db.Ctx) {
 		var curData map[string]any
@@ -53,8 +52,10 @@ func FormatMarket() {
 
 		Ticker.Kdata = kdata_list
 
-		fmt.Println("更新数据", len(Ticker.Kdata), len(Ticker.TickerVol), len(Ticker.Kdata["BTC-USDT"]), Ticker.TimeStr)
-
+		FK := bson.D{{
+			Key:   "TimeUnix",
+			Value: Ticker.TimeUnix,
+		}}
 		UK := bson.D{}
 		mStruct.Traverse(Ticker, func(key string, val any) {
 			UK = append(UK, bson.E{
@@ -67,15 +68,6 @@ func FormatMarket() {
 				},
 			})
 		})
-		UK = append(UK, bson.E{
-			Key: "$unset ",
-			Value: bson.D{
-				{
-					Key:   "Time",
-					Value: 1,
-				},
-			},
-		})
 
 		_, err = db.Table.UpdateOne(db.Ctx, FK, UK)
 
@@ -86,6 +78,7 @@ func FormatMarket() {
 
 		var newTicker dbType.CoinTickerTable
 		db.Table.FindOne(db.Ctx, FK).Decode(&newTicker)
+
 		if len(newTicker.Kdata) != len(newTicker.TickerVol) || len(newTicker.Kdata["BTC-USDT"]) < 280 {
 			global.LogErr("==错误==", newTicker.TimeStr, len(newTicker.Kdata), len(newTicker.Kdata["BTC-USDT"]))
 		} else {
