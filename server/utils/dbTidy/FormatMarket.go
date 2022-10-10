@@ -53,6 +53,8 @@ func FormatMarket() {
 
 		Ticker.Kdata = kdata_list
 
+		fmt.Println("更新数据", len(Ticker.Kdata), len(Ticker.TickerVol), len(Ticker.Kdata["BTC-USDT"]), Ticker.TimeStr)
+
 		UK := bson.D{}
 		mStruct.Traverse(Ticker, func(key string, val any) {
 			UK = append(UK, bson.E{
@@ -74,8 +76,6 @@ func FormatMarket() {
 				},
 			},
 		})
-
-		fmt.Println("更新数据", len(Ticker.Kdata), len(Ticker.Kdata["BTC-USDT"]), Ticker.TimeStr)
 
 		_, err = db.Table.UpdateOne(db.Ctx, FK, UK)
 
