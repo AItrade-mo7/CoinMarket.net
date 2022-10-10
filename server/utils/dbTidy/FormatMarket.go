@@ -17,6 +17,7 @@ import (
 	"github.com/EasyGolang/goTools/mTime"
 	jsoniter "github.com/json-iterator/go"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func FormatMarket() {
@@ -40,8 +41,11 @@ func FormatMarket() {
 	}).Connect().Collection("CoinTicker")
 	defer dbCoin.Close()
 
+	findOpt := options.Find()
+	findOpt.SetSort(-1)
+
 	FK := bson.D{}
-	cursor, err := db.Table.Find(db.Ctx, FK)
+	cursor, err := db.Table.Find(db.Ctx, FK, findOpt)
 
 	for cursor.Next(db.Ctx) {
 		var curData map[string]any
