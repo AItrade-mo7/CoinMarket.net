@@ -27,7 +27,7 @@ func FormatMarket() {
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "AITrade",
-		Timeout:  3189 * 10 * 10,
+		Timeout:  3241 * 10000 * 60,
 	}).Connect().Collection("MarketTicker")
 	defer db.Close()
 
@@ -36,7 +36,7 @@ func FormatMarket() {
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "AITrade",
-		Timeout:  3189 * 10 * 10,
+		Timeout:  3241 * 10000 * 60,
 	}).Connect().Collection("CoinTicker")
 	defer dbCoin.Close()
 
