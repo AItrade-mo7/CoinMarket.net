@@ -22,4 +22,6 @@ func main() {
 	ready.Start()
 
 	router.Start()
+
+	// select {} // 阻塞主线程停止
 }
