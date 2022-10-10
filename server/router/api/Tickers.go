@@ -1,8 +1,10 @@
 package api
 
 import (
+	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/router/result"
+	"CoinMarket.net/server/tickerAnaly"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/gofiber/fiber/v2"
 )
@@ -17,7 +19,17 @@ type TickerResType struct {
 
 func Tickers(c *fiber.Ctx) error {
 	TickerRes := TickerResType{}
-	TickerRes.List = okxInfo.TickerList
 
-	return c.JSON(result.Succeed.WithData("接口开发中"))
+	AnalyResult := tickerAnaly.GetAnaly(tickerAnaly.TickerAnalyParam{
+		TickerList:  okxInfo.TickerList,
+		MarketKdata: okxInfo.MarketKdata,
+	})
+
+	TickerRes.List = okxInfo.TickerList
+	TickerRes.AnalyWhole = AnalyResult.AnalyWhole
+	TickerRes.AnalySingle = AnalyResult.AnalySingle
+	TickerRes.WholeDir = AnalyResult.WholeDir
+	TickerRes.Unit = config.Unit
+
+	return c.JSON(result.Succeed.WithData(TickerRes))
 }
