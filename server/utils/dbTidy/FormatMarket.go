@@ -42,8 +42,10 @@ func FormatMarket() {
 	defer dbCoin.Close()
 
 	findOpt := options.Find()
-	findOpt.SetSort(-1)
-
+	findOpt.SetSort(map[string]int{
+		"TimeUnix": -1,
+	})
+	findOpt.SetAllowDiskUse(true)
 	FK := bson.D{}
 	cursor, err := db.Table.Find(db.Ctx, FK, findOpt)
 
