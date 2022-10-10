@@ -1,7 +1,6 @@
 package dbTidy
 
 import (
-	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -9,6 +8,7 @@ import (
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/kdata"
+	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -21,7 +21,17 @@ import (
 )
 
 func FormatMarket() {
-	fmt.Println("开始执行")
+	global.Email(global.EmailOpt{
+		To: []string{
+			"meichangliang@mo7.cc",
+		},
+		Subject:  "ServeStart",
+		Template: tmpl.SysEmail,
+		SendData: tmpl.SysParam{
+			Message: "开始执行脚本",
+			SysTime: time.Now(),
+		},
+	}).Send()
 	inst.Start()
 
 	db := mMongo.New(mMongo.Opt{
@@ -36,7 +46,7 @@ func FormatMarket() {
 	findOpt := options.Find()
 	findOpt.SetAllowDiskUse(true)
 	findOpt.SetSort(map[string]int{
-		"TimeUnix": 1,
+		"TimeUnix": -1,
 	})
 
 	cursor, err := db.Table.Find(db.Ctx, bson.D{}, findOpt)
@@ -76,19 +86,24 @@ func FormatMarket() {
 			global.LogErr("数据更插失败", err)
 		}
 
-		var newTicker dbType.CoinTickerTable
-		db.Table.FindOne(db.Ctx, FK).Decode(&newTicker)
-
-		if len(newTicker.Kdata) != len(newTicker.TickerVol) || len(newTicker.Kdata["BTC-USDT"]) < 280 {
-			global.LogErr("==错误==", newTicker.TimeStr, len(newTicker.Kdata), len(newTicker.Kdata["BTC-USDT"]))
-		} else {
-			global.Run.Println("==结束==", newTicker.TimeStr, len(newTicker.Kdata), len(newTicker.Kdata["BTC-USDT"]))
-		}
+		global.Run.Println("==结束==", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.Kdata["BTC-USDT"]))
 	}
 
 	if err != nil {
 		global.LogErr(err)
 	}
+
+	global.Email(global.EmailOpt{
+		To: []string{
+			"meichangliang@mo7.cc",
+		},
+		Subject:  "ServeStart",
+		Template: tmpl.SysEmail,
+		SendData: tmpl.SysParam{
+			Message: "脚本执行结束",
+			SysTime: time.Now(),
+		},
+	}).Send()
 }
 
 func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
