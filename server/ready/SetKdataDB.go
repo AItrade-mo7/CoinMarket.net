@@ -8,9 +8,9 @@ import (
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mMongo"
-	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStruct"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func SetEthDB() {
@@ -39,20 +39,12 @@ func SetEthDB() {
 				},
 			})
 		})
-		var result mOKX.TypeKd
-		db.Table.FindOne(db.Ctx, FK).Decode(&result)
-		var err error
-		lType := ""
-		if result.TimeUnix > 0 {
-			lType = "更新"
-			_, err = db.Table.UpdateOne(db.Ctx, FK, UK)
-		} else {
-			lType = "插入"
-			_, err = db.Table.InsertOne(db.Ctx, Kd)
-		}
 
+		upOpt := options.Update()
+		upOpt.SetUpsert(true)
+		_, err := db.Table.UpdateOne(db.Ctx, FK, UK, upOpt)
 		if err != nil {
-			resErr := fmt.Errorf(lType+"数据失败 ETH %+v", err)
+			resErr := fmt.Errorf("数据更插失败 ETH %+v", err)
 			global.LogErr(resErr)
 		}
 	}
@@ -86,20 +78,11 @@ func SetBtcDB() {
 				},
 			})
 		})
-		var result mOKX.TypeKd
-		db.Table.FindOne(db.Ctx, FK).Decode(&result)
-		var err error
-		lType := ""
-		if result.TimeUnix > 0 {
-			lType = "更新"
-			_, err = db.Table.UpdateOne(db.Ctx, FK, UK)
-		} else {
-			lType = "插入"
-			_, err = db.Table.InsertOne(db.Ctx, Kd)
-		}
-
+		upOpt := options.Update()
+		upOpt.SetUpsert(true)
+		_, err := db.Table.UpdateOne(db.Ctx, FK, UK, upOpt)
 		if err != nil {
-			resErr := fmt.Errorf(lType+"数据失败 BTC %+v", err)
+			resErr := fmt.Errorf("数据更插失败 BTC %+v", err)
 			global.LogErr(resErr)
 		}
 	}
@@ -133,26 +116,16 @@ func SetMarketTickerDB() {
 		})
 	})
 
-	var result dbType.CoinTickerTable
-	db.Table.FindOne(db.Ctx, FK).Decode(&result)
-
-	var err error
-	lType := ""
-	if result.TimeUnix > 0 {
-		lType = "更新"
-		_, err = db.Table.UpdateOne(db.Ctx, FK, UK)
-	} else {
-		lType = "插入"
-		_, err = db.Table.InsertOne(db.Ctx, CoinTickerData)
-	}
-
+	upOpt := options.Update()
+	upOpt.SetUpsert(true)
+	_, err := db.Table.UpdateOne(db.Ctx, FK, UK, upOpt)
 	if err != nil {
-		resErr := fmt.Errorf(lType+"数据失败 ETH %+v", err)
+		resErr := fmt.Errorf("数据更插失败 Ticker %+v", err)
 		global.LogErr(resErr)
 	}
 
 	var newTicker dbType.CoinTickerTable
 	db.Table.FindOne(db.Ctx, FK).Decode(&newTicker)
 
-	global.Run.Println("CoinTicker", lType, "完毕", newTicker.TimeStr, len(newTicker.TickerVol), len(newTicker.Kdata))
+	global.Run.Println("CoinTicker", "更插完毕", newTicker.TimeStr, len(newTicker.TickerVol), len(newTicker.Kdata))
 }

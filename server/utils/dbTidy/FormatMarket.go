@@ -69,11 +69,11 @@ func FormatMarket() {
 			})
 		})
 
-		_, err = db.Table.UpdateOne(db.Ctx, FK, UK)
-
+		upOpt := options.Update()
+		upOpt.SetUpsert(true)
+		_, err := db.Table.UpdateOne(db.Ctx, FK, UK, upOpt)
 		if err != nil {
-			global.LogErr("更新数据失败 %+v", err, Ticker.TimeUnix)
-			return
+			global.LogErr("数据更插失败", err)
 		}
 
 		var newTicker dbType.CoinTickerTable
