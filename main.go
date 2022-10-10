@@ -5,6 +5,7 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/utils/dbTidy"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -20,5 +21,7 @@ func main() {
 	// ready.Start()
 
 	// router.Start()
+
+	dbTidy.FormatMarket()
 
 }
