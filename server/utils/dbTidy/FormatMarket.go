@@ -2,13 +2,11 @@ package dbTidy
 
 import (
 	"fmt"
-	"time"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi/restApi/inst"
-	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -127,11 +125,11 @@ func InsertCoinTicker(db *mMongo.DB, oldTicker dbType.MarketTickerTable) {
 	var newTicker dbType.CoinTickerTable
 	db.Table.FindOne(db.Ctx, FK).Decode(&newTicker)
 
-	if len(newTicker.Kdata) != len(newTicker.TickerVol) || len(newTicker.Kdata["BTC-USDT"]) < 280 {
-		global.LogErr("==错误==", lType, newTicker.TimeStr, len(newTicker.Kdata), len(newTicker.Kdata["BTC-USDT"]))
-	} else {
-		global.Run.Println("==结束==", newTicker.TimeStr, len(newTicker.Kdata), len(newTicker.Kdata["BTC-USDT"]))
-	}
+	// if len(newTicker.Kdata) != len(newTicker.TickerVol) || len(newTicker.Kdata["BTC-USDT"]) < 280 {
+	// 	global.LogErr("==错误==", lType, newTicker.TimeStr, len(newTicker.Kdata), len(newTicker.Kdata["BTC-USDT"]))
+	// } else {
+	global.Run.Println("==结束==", newTicker.TimeStr, len(newTicker.Kdata), len(newTicker.Kdata["BTC-USDT"]))
+	// }
 }
 
 func FetchKdata(newTicker dbType.CoinTickerTable, dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
@@ -141,14 +139,14 @@ func FetchKdata(newTicker dbType.CoinTickerTable, dbTicker dbType.CoinTickerTabl
 		if len(dbTicker.Kdata[val.InstID]) > 290 {
 			continue
 		}
-		time.Sleep(time.Second / 3)
-		kdata_list := kdata.GetHistory300List(kdata.History300Param{
-			InstID: val.InstID,
-			After:  val.Ts,
-		})
+		// time.Sleep(time.Second / 3)
+		// kdata_list := kdata.GetHistory300List(kdata.History300Param{
+		// 	InstID: val.InstID,
+		// 	After:  val.Ts,
+		// })
 
-		KdataList[val.InstID] = kdata_list
-		global.Run.Println("请求结束", val.InstID, len(kdata_list))
+		KdataList[val.InstID] = []mOKX.TypeKd{}
+		global.Run.Println("请求结束", val.InstID, len(KdataList[val.InstID]))
 	}
 
 	return KdataList
