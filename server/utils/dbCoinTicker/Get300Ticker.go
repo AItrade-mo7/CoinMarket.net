@@ -1,11 +1,12 @@
 package dbCoinTicker
 
 import (
+	"fmt"
 	"log"
 
+	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
-	"CoinMarket.net/server/tickerAnaly"
 	"CoinMarket.net/server/utils/dbSearch"
 	"github.com/EasyGolang/goTools/mMongo"
 )
@@ -35,22 +36,30 @@ func GetTickerList(json dbSearch.FindParam) (resData dbSearch.PagingType, resErr
 	}
 	// 提取数据
 	var ResultList []any
-	log.Println("开始分析", len(ResultList))
+	global.Run.Println("开始分析", len(ResultList))
 	for resCur.Cursor.Next(db.Ctx) {
 		var Ticker dbType.CoinTickerTable
 		resCur.Cursor.Decode(&Ticker)
-		log.Println("分析第", len(ResultList), "条")
-		AnalyResult := tickerAnaly.GetAnaly(tickerAnaly.TickerAnalyParam{
-			TickerList:  Ticker.TickerVol,
-			MarketKdata: Ticker.Kdata,
-		})
-		ResultList = append(ResultList, AnalyResult)
+		global.Run.Println("分析第", len(ResultList), "条")
+		// AnalyResult := tickerAnaly.GetAnaly(tickerAnaly.TickerAnalyParam{
+		// 	TickerList:  Ticker.TickerVol,
+		// 	MarketKdata: Ticker.Kdata,
+		// })
+		// ResultList = append(ResultList, AnalyResult)
+		global.Run.Println("开始遍历")
+
+		for _, val := range Ticker.Kdata {
+			for _, k := range val {
+				fmt.Println(k.InstID)
+			}
+		}
+		global.Run.Println("遍历结束")
 	}
-	log.Println("分析结束", len(ResultList))
+	global.Run.Println("分析结束", len(ResultList))
 	// 生成返回数据
 	resData = resCur.GenerateData(ResultList)
 
-	log.Println("读取结束", len(ResultList))
+	global.Run.Println("读取结束", len(ResultList))
 
 	return
 }
