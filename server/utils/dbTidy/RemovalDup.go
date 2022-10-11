@@ -26,7 +26,7 @@ func RemovalDup() {
 	var TimeUnixArr []TimeUnixType
 
 	fileCont, _ := os.ReadFile(TimeUnixArr_file)
-	jsoniter.Unmarshal(fileCont, TimeUnixArr)
+	jsoniter.Unmarshal(fileCont, &TimeUnixArr)
 
 	if len(TimeUnixArr) > 2000 {
 		CheckRepeat(TimeUnixArr)
@@ -93,4 +93,8 @@ func RemovalDup() {
 
 func CheckRepeat(list []TimeUnixType) {
 	fmt.Println("读取文件", len(list))
+
+	for key, val := range list {
+		fmt.Println(key, val)
+	}
 }
