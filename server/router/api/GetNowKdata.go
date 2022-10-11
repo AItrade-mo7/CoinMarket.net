@@ -12,7 +12,7 @@ type GetAnalyKdataParam struct {
 	InstID string `bson:"InstID"` // 列表
 }
 
-func GetKdata(c *fiber.Ctx) error {
+func GetNowKdata(c *fiber.Ctx) error {
 	var json GetAnalyKdataParam
 	mFiber.Parser(c, &json)
 
