@@ -1,6 +1,8 @@
 package dbTidy
 
 import (
+	"fmt"
+
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
@@ -18,9 +20,9 @@ type TimeUnixType struct {
 	TimeStr  string `bson:"TimeStr"`
 }
 
-var TimeUnixArr_file = mStr.Join(config.Dir.JsonData, "/", "TimeUnixArr", ".json")
-
 func RemovalDup() {
+	TimeUnixArr_file := mStr.Join(config.Dir.JsonData, "TimeUnixArr", ".json")
+
 	db := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
@@ -39,6 +41,7 @@ func RemovalDup() {
 	FK := bson.D{}
 
 	cursor, err := db.Table.Find(db.Ctx, FK, findOpt)
+	fmt.Println(cursor, err)
 
 	TimeUnixArr := []TimeUnixType{}
 
