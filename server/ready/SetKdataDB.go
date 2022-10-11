@@ -101,8 +101,8 @@ func SetMarketTickerDB() {
 	CoinTickerData := dbType.JoinCoinTicker()
 
 	FK := bson.D{{
-		Key:   "TimeUnix",
-		Value: CoinTickerData.TimeUnix,
+		Key:   "TimeID",
+		Value: CoinTickerData.TimeID,
 	}}
 	UK := bson.D{}
 	mStruct.Traverse(CoinTickerData, func(key string, val any) {
