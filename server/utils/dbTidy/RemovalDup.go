@@ -93,9 +93,20 @@ func RemovalDup() {
 }
 
 func CheckRepeat(list []TimeUnixType) {
+	RepeatTimeID_file := mStr.Join(config.Dir.JsonData, "/RepeatTimeID", ".json")
+	RepeatIndex_file := mStr.Join(config.Dir.JsonData, "/RepeatIndex", ".json")
+
 	timeMap := make(map[string]TimeUnixType)
-	RepeatTimeID := []string{}
-	RepeatIndex := []int{}
+	var RepeatTimeID []string
+	var RepeatIndex []int
+
+	fileCont, _ := os.ReadFile(RepeatTimeID_file)
+	jsoniter.Unmarshal(fileCont, &RepeatTimeID)
+
+	if len(RepeatTimeID) > 0 {
+		RemoveRepeat(RepeatTimeID)
+		return
+	}
 
 	for key, val := range list {
 		TimeID := val.TimeID
@@ -108,9 +119,10 @@ func CheckRepeat(list []TimeUnixType) {
 		}
 	}
 
-	RepeatArr_file := mStr.Join(config.Dir.JsonData, "/RepeatArr", ".json")
-	RepeatIndex_file := mStr.Join(config.Dir.JsonData, "/RepeatIndex", ".json")
-
-	mFile.Write(RepeatArr_file, mJson.ToStr(RepeatTimeID))
+	mFile.Write(RepeatTimeID_file, mJson.ToStr(RepeatTimeID))
 	mFile.Write(RepeatIndex_file, mJson.ToStr(RepeatIndex))
+}
+
+func RemoveRepeat(timeIDList []string) {
+	fmt.Println(timeIDList)
 }
