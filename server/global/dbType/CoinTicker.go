@@ -16,7 +16,7 @@ type CoinTickerTable struct {
 	TimeID    string                   `bson:"TimeID"`
 }
 
-func JoinNowCoinTicker(TickerList []mOKX.TypeTicker, KdataList map[string][]mOKX.TypeKd) CoinTickerTable {
+func JoinCoinTicker(TickerList []mOKX.TypeTicker, KdataList map[string][]mOKX.TypeKd) CoinTickerTable {
 	var CoinTicker CoinTickerTable
 	CoinTicker.TickerVol = TickerList
 	CoinTicker.Kdata = make(map[string][]mOKX.TypeKd)

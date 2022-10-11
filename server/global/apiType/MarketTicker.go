@@ -1,4 +1,4 @@
-package dbType
+package apiType
 
 import (
 	"github.com/EasyGolang/goTools/mOKX"

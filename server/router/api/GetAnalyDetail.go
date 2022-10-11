@@ -1,8 +1,8 @@
 package api
 
 import (
+	"CoinMarket.net/server/global/apiType"
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/router/result"
 	"github.com/EasyGolang/goTools/mFiber"
 	"github.com/EasyGolang/goTools/mJson"
@@ -38,7 +38,7 @@ func GetAnalyDetail(c *fiber.Ctx) error {
 	var curData map[string]any
 	db.Table.FindOne(db.Ctx, FK).Decode(&curData)
 
-	var returnData dbType.MarketTickerTable
+	var returnData apiType.MarketTickerTable
 	jsoniter.Unmarshal(mJson.ToJson(curData), &returnData)
 
 	return c.JSON(result.Succeed.WithData(returnData))

@@ -102,7 +102,7 @@ func SetMarketTickerDB() {
 	defer db.Close()
 
 	// 获取当前的榜单数据并拼接
-	CoinTickerData := dbType.JoinNowCoinTicker(okxInfo.TickerList, okxInfo.TickerKdata)
+	CoinTickerData := dbType.JoinCoinTicker(okxInfo.TickerList, okxInfo.TickerKdata)
 
 	FK := bson.D{{
 		Key:   "TimeID",
