@@ -58,9 +58,11 @@ func FormatMarket() {
 		jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
 
 		if len(Ticker.Kdata) == len(Ticker.TickerVol) {
-			Ticker.Kdata = FetchKdata(Ticker)
-			global.Run.Println("跳过", Ticker.TimeStr)
+			global.Run.Println("跳过", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.TickerVol), len(Ticker.Kdata["BTC-USDT"]))
 			continue
+		} else {
+			global.Run.Println("开始", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.TickerVol))
+			Ticker.Kdata = FetchKdata(Ticker)
 		}
 
 		FK := bson.D{{
