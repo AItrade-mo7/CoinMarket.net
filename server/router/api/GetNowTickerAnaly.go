@@ -9,7 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func Tickers(c *fiber.Ctx) error {
+func GetNowTickerAnaly(c *fiber.Ctx) error {
 	TickerRes := apiType.AnalyTickerType{}
 
 	AnalyResult := tickerAnaly.GetAnaly(tickerAnaly.TickerAnalyParam{

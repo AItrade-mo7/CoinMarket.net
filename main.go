@@ -23,7 +23,7 @@ func main() {
 
 	router.Start()
 
-	// select {} // 阻塞主线程停止
+	select {} // 阻塞主线程停止
 
 	// dbTidy.FormatMarket()
 }
