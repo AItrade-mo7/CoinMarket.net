@@ -21,7 +21,8 @@ func SetEthDB() {
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "AITrade",
 	}).Connect().Collection("ETHUSDT")
-	defer db.Close()
+	defer DBClose(db)
+
 	for _, Kd := range list {
 		FK := bson.D{{
 			Key:   "TimeUnix",
@@ -59,7 +60,7 @@ func SetBtcDB() {
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "AITrade",
 	}).Connect().Collection("BTCUSDT")
-	defer db.Close()
+	defer DBClose(db)
 
 	for _, Kd := range list {
 		FK := bson.D{{
@@ -95,7 +96,7 @@ func SetMarketTickerDB() {
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "AITrade",
 	}).Connect().Collection("CoinTicker")
-	defer db.Close()
+	defer DBClose(db)
 
 	CoinTickerData := dbType.JoinCoinTicker()
 
@@ -128,4 +129,9 @@ func SetMarketTickerDB() {
 	db.Table.FindOne(db.Ctx, FK).Decode(&newTicker)
 
 	global.Run.Println("CoinTicker", "更插完毕", newTicker.TimeStr, len(newTicker.TickerVol), len(newTicker.Kdata))
+}
+
+func DBClose(db *mMongo.DB) {
+	global.Run.Println("数据库关闭链接")
+	db.Close()
 }
