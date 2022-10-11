@@ -38,7 +38,7 @@ func GetTickerList(json dbSearch.FindParam) (resData dbSearch.PagingType, resErr
 		resCur.Cursor.Decode(&Ticker)
 		CoinTickerList = append(CoinTickerList, Ticker)
 
-		fmt.Println(Ticker.TimeID, len(Ticker.TickerVol), len(Ticker.Kdata))
+		fmt.Println(Ticker.TimeID, len(Ticker.TickerVol), len(Ticker.Kdata), len(Ticker.Kdata["BTC-USDT"]))
 	}
 
 	return

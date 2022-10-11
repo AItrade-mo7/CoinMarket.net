@@ -30,6 +30,6 @@ func main() {
 	dbCoinTicker.GetTickerList(dbSearch.FindParam{
 		Size:    3,
 		Current: 0,
-		Type:    "",
+		Type:    "Client",
 	})
 }
