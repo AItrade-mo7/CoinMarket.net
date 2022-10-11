@@ -7,7 +7,6 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
-	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
@@ -32,7 +31,7 @@ func FormatMarket() {
 	// 		SysTime: time.Now(),
 	// 	},
 	// }).Send()
-	inst.Start()
+	// inst.Start()
 
 	db := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
@@ -46,7 +45,7 @@ func FormatMarket() {
 	findOpt := options.Find()
 	findOpt.SetAllowDiskUse(true)
 	findOpt.SetSort(map[string]int{
-		"TimeUnix": 1,
+		"TimeUnix": -1,
 	})
 	FK := bson.D{{
 		Key:   "TimeUnix",
@@ -69,7 +68,6 @@ func FormatMarket() {
 		Ticker.Kdata = kdata_list
 
 		fmt.Println("找到数据", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.TickerVol), len(Ticker.Kdata["BTC-USDT"]))
-		continue
 
 		UK := bson.D{}
 		UK = append(UK, bson.E{
@@ -141,13 +139,11 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 		kdata_list := dbTicker.Kdata[val.InstID]
 
 		if len(kdata_list) < 290 {
-			fmt.Println(val.InstID, val.Ts)
 			time.Sleep(time.Second / 3)
 			kdata_list = kdata.GetHistory300List(kdata.History300Param{
 				InstID: val.InstID,
 				After:  val.Ts,
 			})
-
 		}
 
 		KdataList[val.InstID] = kdata_list

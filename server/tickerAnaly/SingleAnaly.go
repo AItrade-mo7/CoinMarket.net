@@ -21,7 +21,7 @@ func NewSingle(list []mOKX.TypeKd) (_this *SingleType) {
 	_this = &SingleType{}
 
 	if len(list) < config.SliceHour[len(config.SliceHour)-1]*4 {
-		global.LogErr("tickerAnaly.NewSingle list 长度不足")
+		global.LogErr("tickerAnaly.NewSingle list 长度不足", len(list), list[0].InstID, list[0].TimeStr)
 		return
 	}
 
