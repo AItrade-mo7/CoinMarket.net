@@ -146,7 +146,10 @@ func RemoveRepeat(timeIDList []string) {
 			Value: val,
 		}}
 		cursor, err := db.Table.Find(db.Ctx, findFK, findOpt)
-		mJson.Println(cursor)
+
+		fmt.Println("开始处理", cursor, err)
+
+		IDArr := []string{}
 
 		for cursor.Next(db.Ctx) {
 			var curData map[string]any
@@ -154,9 +157,24 @@ func RemoveRepeat(timeIDList []string) {
 			var Ticker dbType.CoinTickerTable
 			jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
 
+			IDArr = append(IDArr, Ticker.TimeID)
+
 			BtcList := Ticker.Kdata["BTC-USDT"]
 			global.Run.Println("==结束==", curData["_id"], Ticker.TimeStr, Ticker.TimeID, len(Ticker.Kdata), len(BtcList))
 		}
+
+		if len(IDArr) > 1 {
+			fmt.Println("开始删除", IDArr)
+			findOneFK := bson.D{{
+				Key:   "TimeID",
+				Value: IDArr[0],
+			}}
+			db.Table.DeleteOne(db.Ctx, findOneFK)
+		}
+
+		cursor2, err := db.Table.Find(db.Ctx, findFK, findOpt)
+
+		fmt.Println("处理完毕", cursor2, err)
 
 		if err != nil {
 			global.LogErr(err)
