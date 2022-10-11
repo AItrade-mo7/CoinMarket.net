@@ -22,5 +22,9 @@ func JoinCoinTicker() CoinTickerTable {
 	CoinTicker.TimeUnix = CoinTicker.TickerVol[0].Ts
 	CoinTicker.TimeStr = mTime.UnixFormat(mStr.ToStr(CoinTicker.TimeUnix))
 
+	T := mTime.MsToTime(CoinTicker.TimeUnix, "0")
+	timeStr := T.Format("2006-01-02T15:04")
+	CoinTicker.TimeID = timeStr
+
 	return CoinTicker
 }
