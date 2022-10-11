@@ -47,10 +47,7 @@ func FormatMarket() {
 		"TimeUnix": -1,
 	})
 
-	findFK := bson.D{{
-		Key:   "TimeUnix",
-		Value: 1662453885809,
-	}}
+	findFK := bson.D{}
 
 	cursor, err := db.Table.Find(db.Ctx, findFK, findOpt)
 
