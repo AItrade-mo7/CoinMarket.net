@@ -13,8 +13,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var KdataList []mOKX.TypeKd
+
 func CheckCoinKdata() {
-	fmt.Println("开始检查重复数据")
+	fmt.Println("开始检查CoinHistory")
 	CoinName := "BTC"
 	db := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
@@ -40,10 +42,22 @@ func CheckCoinKdata() {
 		var Kdata mOKX.TypeKd
 		jsoniter.Unmarshal(mJson.ToJson(curData), &Kdata)
 
+		KdataList = append(KdataList, Kdata)
+
 		global.Run.Println("==结束==", Kdata.InstID, Kdata.TimeStr, Kdata.C)
 	}
 
 	if err != nil {
 		global.LogErr(err)
+	}
+
+	for key, val := range KdataList {
+		index := key - 1
+		if index < 0 {
+			index = 0
+		}
+		pre := KdataList[index]
+
+		global.Run.Println("==结束==", key, val.TimeUnix-pre.TimeUnix)
 	}
 }
