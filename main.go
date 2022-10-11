@@ -5,7 +5,7 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/ready"
+	"CoinMarket.net/server/utils/dbTidy"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -18,11 +18,11 @@ func main() {
 	// 初始化系统参数
 	global.Start()
 
-	ready.Start()
+	// ready.Start()
 
 	// router.Start()
 
-	select {} // 阻塞主线程停止
+	// select {} // 阻塞主线程停止
 
-	// dbTidy.CheckCoinKdata()
+	dbTidy.FormatMarket()
 }
