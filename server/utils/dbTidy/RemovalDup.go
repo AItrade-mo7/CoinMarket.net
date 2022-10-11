@@ -93,6 +93,7 @@ func RemovalDup() {
 }
 
 func CheckRepeat(list []TimeUnixType) {
+	fmt.Println("开始检查重复", len(list))
 	RepeatTimeID_file := mStr.Join(config.Dir.JsonData, "/RepeatTimeID", ".json")
 	RepeatIndex_file := mStr.Join(config.Dir.JsonData, "/RepeatIndex", ".json")
 
@@ -124,5 +125,5 @@ func CheckRepeat(list []TimeUnixType) {
 }
 
 func RemoveRepeat(timeIDList []string) {
-	fmt.Println(timeIDList)
+	fmt.Println("开始删除重复数据", timeIDList)
 }
