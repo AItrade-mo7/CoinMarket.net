@@ -11,7 +11,6 @@ import (
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mStr"
-	"github.com/EasyGolang/goTools/mTime"
 	jsoniter "github.com/json-iterator/go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -20,6 +19,7 @@ import (
 type TimeUnixType struct {
 	TimeUnix int64  `bson:"TimeUnix"`
 	TimeStr  string `bson:"TimeStr"`
+	TimeID   string `bson:"TimeID"`
 }
 
 func RemovalDup() {
@@ -31,7 +31,6 @@ func RemovalDup() {
 
 	if len(TimeUnixArr) > 2000 {
 		CheckRepeat(TimeUnixArr)
-
 		return
 	}
 
@@ -64,6 +63,7 @@ func RemovalDup() {
 		TimeObj := TimeUnixType{
 			TimeUnix: Ticker.TimeUnix,
 			TimeStr:  Ticker.TimeStr,
+			TimeID:   Ticker.TimeID,
 		}
 
 		TimeUnixArr = append(TimeUnixArr, TimeObj)
@@ -94,26 +94,23 @@ func RemovalDup() {
 
 func CheckRepeat(list []TimeUnixType) {
 	timeMap := make(map[string]TimeUnixType)
-	RepeatArr := []TimeUnixType{}
+	RepeatTimeID := []string{}
 	RepeatIndex := []int{}
 
 	for key, val := range list {
-		TimeUnix := val.TimeUnix
-		T := mTime.MsToTime(TimeUnix, "0")
-		timeStr := T.Format("2006-01-02T15:04")
-		_, ok := timeMap[timeStr]
+		TimeID := val.TimeID
+		_, ok := timeMap[TimeID]
 		if ok {
-			RepeatArr = append(RepeatArr, val)
+			RepeatTimeID = append(RepeatTimeID, val.TimeID)
 			RepeatIndex = append(RepeatIndex, key)
 		} else {
-			timeMap[timeStr] = val
+			timeMap[TimeID] = val
 		}
-
 	}
 
 	RepeatArr_file := mStr.Join(config.Dir.JsonData, "/RepeatArr", ".json")
 	RepeatIndex_file := mStr.Join(config.Dir.JsonData, "/RepeatIndex", ".json")
 
-	mFile.Write(RepeatArr_file, mJson.ToStr(RepeatArr))
+	mFile.Write(RepeatArr_file, mJson.ToStr(RepeatTimeID))
 	mFile.Write(RepeatIndex_file, mJson.ToStr(RepeatIndex))
 }

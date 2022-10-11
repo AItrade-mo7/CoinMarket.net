@@ -24,5 +24,5 @@ func main() {
 
 	// select {} // 阻塞主线程停止
 
-	dbTidy.FormatMarket()
+	dbTidy.RemovalDup()
 }
