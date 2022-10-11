@@ -20,7 +20,7 @@ func GetKdata(c *fiber.Ctx) error {
 		return c.JSON(result.Fail.WithData("需要 InstID"))
 	}
 
-	KdataList := okxInfo.MarketKdata[json.InstID]
+	KdataList := okxInfo.TickerKdata[json.InstID]
 
 	if len(KdataList) < 120 {
 		return c.JSON(result.Fail.WithData(mStr.Join("长度不足,", len(KdataList))))

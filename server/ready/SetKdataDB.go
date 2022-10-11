@@ -14,7 +14,7 @@ import (
 )
 
 func SetEthDB() {
-	list := okxInfo.MarketKdata["ETH-USDT"]
+	list := okxInfo.TickerKdata["ETH-USDT"]
 	db := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
@@ -53,7 +53,7 @@ func SetEthDB() {
 }
 
 func SetBtcDB() {
-	list := okxInfo.MarketKdata["BTC-USDT"]
+	list := okxInfo.TickerKdata["BTC-USDT"]
 
 	db := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
@@ -101,7 +101,7 @@ func SetMarketTickerDB() {
 	defer global.Run.Println("关闭数据库连接 CoinTicker")
 	defer db.Close()
 
-	CoinTickerData := dbType.JoinCoinTicker()
+	CoinTickerData := dbType.JoinNowCoinTicker(okxInfo.TickerList, okxInfo.TickerKdata)
 
 	FK := bson.D{{
 		Key:   "TimeID",

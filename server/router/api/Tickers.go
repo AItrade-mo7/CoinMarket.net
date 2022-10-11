@@ -14,7 +14,7 @@ func Tickers(c *fiber.Ctx) error {
 
 	AnalyResult := tickerAnaly.GetAnaly(tickerAnaly.TickerAnalyParam{
 		TickerList:  okxInfo.TickerList,
-		MarketKdata: okxInfo.MarketKdata,
+		MarketKdata: okxInfo.TickerKdata,
 	})
 
 	TickerRes.List = okxInfo.TickerList

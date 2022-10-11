@@ -3,7 +3,6 @@ package dbType
 import (
 	"strings"
 
-	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
@@ -17,12 +16,12 @@ type CoinTickerTable struct {
 	TimeID    string                   `bson:"TimeID"`
 }
 
-func JoinCoinTicker() CoinTickerTable {
+func JoinNowCoinTicker(TickerList []mOKX.TypeTicker, KdataList map[string][]mOKX.TypeKd) CoinTickerTable {
 	var CoinTicker CoinTickerTable
-	CoinTicker.TickerVol = okxInfo.TickerList
+	CoinTicker.TickerVol = TickerList
 	CoinTicker.Kdata = make(map[string][]mOKX.TypeKd)
 
-	for key, val := range okxInfo.MarketKdata {
+	for key, val := range KdataList {
 		find := strings.Contains(key, "-SWAP")
 		if !find {
 			CoinTicker.Kdata[key] = val

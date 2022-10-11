@@ -11,7 +11,7 @@ import (
 )
 
 func TickerKdata() {
-	okxInfo.MarketKdata = make(map[string][]mOKX.TypeKd)
+	okxInfo.TickerKdata = make(map[string][]mOKX.TypeKd)
 	TickerList := []mOKX.TypeTicker{}
 	for _, item := range okxInfo.TickerList {
 		time.Sleep(time.Second / 3) // 1秒最多 3 次
@@ -39,8 +39,8 @@ func TickerKdata() {
 
 		if len(List) == 300 {
 			TickerList = append(TickerList, item)
-			okxInfo.MarketKdata[item.InstID] = List
-			okxInfo.MarketKdata[SwapInst.InstID] = SWAPList
+			okxInfo.TickerKdata[item.InstID] = List
+			okxInfo.TickerKdata[SwapInst.InstID] = SWAPList
 		}
 
 	}
