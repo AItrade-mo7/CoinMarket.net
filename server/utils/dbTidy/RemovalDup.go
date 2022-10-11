@@ -2,6 +2,7 @@ package dbTidy
 
 import (
 	"fmt"
+	"os"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
@@ -21,7 +22,15 @@ type TimeUnixType struct {
 }
 
 func RemovalDup() {
-	TimeUnixArr_file := mStr.Join(config.Dir.JsonData, "TimeUnixArr", ".json")
+	TimeUnixArr_file := mStr.Join(config.Dir.JsonData, "/TimeUnixArr", ".json")
+	var TimeUnixArr []TimeUnixType
+
+	fileCont, _ := os.ReadFile(TimeUnixArr_file)
+	jsoniter.Unmarshal(fileCont, TimeUnixArr)
+
+	if len(TimeUnixArr) > 2000 {
+		CheckRepeat(TimeUnixArr)
+	}
 
 	db := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
@@ -42,8 +51,6 @@ func RemovalDup() {
 
 	cursor, err := db.Table.Find(db.Ctx, FK, findOpt)
 	fmt.Println(cursor, err)
-
-	TimeUnixArr := []TimeUnixType{}
 
 	for cursor.Next(db.Ctx) {
 		var curData map[string]any
@@ -79,5 +86,9 @@ func RemovalDup() {
 		global.LogErr(err)
 	}
 
-	mFile.Write(TimeUnixArr_file, mStr.ToStr(TimeUnixArr))
+	mFile.Write(TimeUnixArr_file, mJson.ToStr(TimeUnixArr))
+}
+
+func CheckRepeat(list []TimeUnixType) {
+	fmt.Println("读取文件", len(list))
 }
