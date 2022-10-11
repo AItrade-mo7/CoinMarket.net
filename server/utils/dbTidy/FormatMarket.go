@@ -1,15 +1,20 @@
 package dbTidy
 
 import (
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
+	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
+	"github.com/EasyGolang/goTools/mStr"
+	"github.com/EasyGolang/goTools/mStruct"
+	"github.com/EasyGolang/goTools/mTime"
 	jsoniter "github.com/json-iterator/go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -27,7 +32,7 @@ func FormatMarket() {
 	// 		SysTime: time.Now(),
 	// 	},
 	// }).Send()
-	// inst.Start()
+	inst.Start()
 
 	db := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
@@ -43,24 +48,29 @@ func FormatMarket() {
 	findOpt.SetSort(map[string]int{
 		"TimeUnix": 1,
 	})
+	FK := bson.D{{
+		Key:   "TimeUnix",
+		Value: (1662453885809),
+	}}
 
-	cursor, err := db.Table.Find(db.Ctx, bson.D{}, findOpt)
+	cursor, err := db.Table.Find(db.Ctx, FK, findOpt)
+
+	fmt.Println(cursor)
 
 	for cursor.Next(db.Ctx) {
 		var curData map[string]any
 		cursor.Decode(&curData)
 		var Ticker dbType.CoinTickerTable
 		jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
-		// Ticker.TimeStr = mTime.UnixFormat(mStr.ToStr(Ticker.TimeUnix))
+		Ticker.TimeStr = mTime.UnixFormat(mStr.ToStr(Ticker.TimeUnix))
 
-		// kdata_list := FetchKdata(Ticker)
+		kdata_list := FetchKdata(Ticker)
 
-		// Ticker.Kdata = kdata_list
+		Ticker.Kdata = kdata_list
 
-		FK := bson.D{{
-			Key:   "TimeUnix",
-			Value: Ticker.TimeUnix,
-		}}
+		fmt.Println("找到数据", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.TickerVol), len(Ticker.Kdata["BTC-USDT"]))
+		continue
+
 		UK := bson.D{}
 		UK = append(UK, bson.E{
 			Key: "$unset",
@@ -71,17 +81,17 @@ func FormatMarket() {
 				},
 			},
 		})
-		// mStruct.Traverse(Ticker, func(key string, val any) {
-		// 	UK = append(UK, bson.E{
-		// 		Key: "$set",
-		// 		Value: bson.D{
-		// 			{
-		// 				Key:   key,
-		// 				Value: val,
-		// 			},
-		// 		},
-		// 	})
-		// })
+		mStruct.Traverse(Ticker, func(key string, val any) {
+			UK = append(UK, bson.E{
+				Key: "$set",
+				Value: bson.D{
+					{
+						Key:   key,
+						Value: val,
+					},
+				},
+			})
+		})
 
 		upOpt := options.Update()
 		upOpt.SetUpsert(true)
@@ -131,6 +141,7 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 		kdata_list := dbTicker.Kdata[val.InstID]
 
 		if len(kdata_list) < 290 {
+			fmt.Println(val.InstID, val.Ts)
 			time.Sleep(time.Second / 3)
 			kdata_list = kdata.GetHistory300List(kdata.History300Param{
 				InstID: val.InstID,

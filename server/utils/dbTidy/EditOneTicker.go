@@ -1,6 +1,0 @@
-package dbTidy
-
-
-func EditOneTicker(){
-	
-}
