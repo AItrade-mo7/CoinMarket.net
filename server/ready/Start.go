@@ -59,7 +59,7 @@ func GetTicker() {
 // 获取历史数据
 
 func TimerClickStart() {
-	time.Sleep(time.Second)
+	time.Sleep(time.Second / 3)
 	SetKdata("mClock")
 }
 
@@ -73,8 +73,8 @@ func SetKdata(lType string) {
 
 	// 数据库存储
 	if lType == "mClock" {
-		SetMarketTickerDB()
-		SetEthDB()
-		SetBtcDB()
+		go SetMarketTickerDB()
+		go SetEthDB()
+		go SetBtcDB()
 	}
 }

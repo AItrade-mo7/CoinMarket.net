@@ -101,6 +101,7 @@ func SetMarketTickerDB() {
 	defer global.Run.Println("关闭数据库连接 CoinTicker")
 	defer db.Close()
 
+	// 获取当前的榜单数据并拼接
 	CoinTickerData := dbType.JoinNowCoinTicker(okxInfo.TickerList, okxInfo.TickerKdata)
 
 	FK := bson.D{{
@@ -119,7 +120,6 @@ func SetMarketTickerDB() {
 			},
 		})
 	})
-
 	upOpt := options.Update()
 	upOpt.SetUpsert(true)
 	_, err := db.Table.UpdateOne(db.Ctx, FK, UK, upOpt)
@@ -132,9 +132,4 @@ func SetMarketTickerDB() {
 	db.Table.FindOne(db.Ctx, FK).Decode(&newTicker)
 
 	global.Run.Println("CoinTicker", "更插完毕", newTicker.TimeStr, len(newTicker.TickerVol), len(newTicker.Kdata))
-}
-
-func DBClose(db *mMongo.DB) {
-	global.Run.Println("数据库关闭链接")
-	db.Close()
 }
