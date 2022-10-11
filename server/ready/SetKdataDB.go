@@ -92,11 +92,18 @@ func SetBtcDB() {
 }
 
 func SetMarketTickerDB() {
+	Timeout := len(okxInfo.TickerList) * 20
+
+	if Timeout < 100 {
+		Timeout = 100
+	}
+
 	db := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "AITrade",
+		Timeout:  Timeout,
 	}).Connect().Collection("CoinTicker")
 	defer global.Run.Println("关闭数据库连接 CoinTicker")
 	defer db.Close()

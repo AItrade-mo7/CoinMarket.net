@@ -12,7 +12,6 @@ import (
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
-	"github.com/EasyGolang/goTools/mTime"
 	jsoniter "github.com/json-iterator/go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -58,9 +57,7 @@ func FormatMarket() {
 		cursor.Decode(&curData)
 		var Ticker dbType.CoinTickerTable
 		jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
-		T := mTime.MsToTime(Ticker.TimeUnix, "0")
-		timeStr := T.Format("2006-01-02T15:04")
-		Ticker.TimeID = timeStr
+		Ticker.TimeID = mOKX.GetTimeID(Ticker.TimeUnix)
 
 		FK := bson.D{{
 			Key:   "_id",
@@ -73,7 +70,7 @@ func FormatMarket() {
 			Value: bson.D{
 				{
 					Key:   "TimeID",
-					Value: timeStr,
+					Value: Ticker.TimeID,
 				},
 			},
 		})

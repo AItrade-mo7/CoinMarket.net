@@ -30,10 +30,7 @@ func JoinCoinTicker(TickerList []mOKX.TypeTicker, KdataList map[string][]mOKX.Ty
 
 	CoinTicker.TimeUnix = CoinTicker.TickerVol[0].Ts
 	CoinTicker.TimeStr = mTime.UnixFormat(mStr.ToStr(CoinTicker.TimeUnix))
-
-	T := mTime.MsToTime(CoinTicker.TimeUnix, "0")
-	timeStr := T.Format("2006-01-02T15:04")
-	CoinTicker.TimeID = timeStr
+	CoinTicker.TimeID = mOKX.GetTimeID(CoinTicker.TimeUnix)
 
 	return CoinTicker
 }
