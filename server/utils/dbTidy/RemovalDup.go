@@ -125,5 +125,42 @@ func CheckRepeat(list []TimeUnixType) {
 }
 
 func RemoveRepeat(timeIDList []string) {
-	fmt.Println("开始删除重复数据", timeIDList)
+	fmt.Println("开始删除重复数据", len(timeIDList))
+	db := mMongo.New(mMongo.Opt{
+		UserName: config.SysEnv.MongoUserName,
+		Password: config.SysEnv.MongoPassword,
+		Address:  config.SysEnv.MongoAddress,
+		DBName:   "AITrade",
+		Timeout:  3241 * 10000 * 60,
+	}).Connect().Collection("CoinTicker")
+	defer db.Close()
+
+	findOpt := options.Find()
+	findOpt.SetAllowDiskUse(true)
+	findOpt.SetSort(map[string]int{
+		"TimeUnix": -1,
+	})
+	for _, val := range timeIDList {
+		findFK := bson.D{{
+			Key:   "TimeID",
+			Value: val,
+		}}
+		cursor, err := db.Table.Find(db.Ctx, findFK, findOpt)
+		mJson.Println(cursor)
+
+		for cursor.Next(db.Ctx) {
+			var curData map[string]any
+			cursor.Decode(&curData)
+			var Ticker dbType.CoinTickerTable
+			jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
+
+			BtcList := Ticker.Kdata["BTC-USDT"]
+			global.Run.Println("==结束==", curData["_id"], Ticker.TimeStr, Ticker.TimeID, len(Ticker.Kdata), len(BtcList))
+		}
+
+		if err != nil {
+			global.LogErr(err)
+		}
+
+	}
 }
