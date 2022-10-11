@@ -28,7 +28,7 @@ func main() {
 	// dbTidy.FormatMarket()
 
 	dbCoinTicker.GetTickerList(dbSearch.FindParam{
-		Size:    3,
+		Size:    300,
 		Current: 0,
 		Type:    "Client",
 	})
