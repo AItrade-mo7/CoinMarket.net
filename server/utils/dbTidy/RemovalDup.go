@@ -30,6 +30,8 @@ func RemovalDup() {
 
 	if len(TimeUnixArr) > 2000 {
 		CheckRepeat(TimeUnixArr)
+
+		return
 	}
 
 	db := mMongo.New(mMongo.Opt{
