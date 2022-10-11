@@ -12,6 +12,7 @@ type CoinTickerTable struct {
 	Kdata     map[string][]mOKX.TypeKd `bson:"Kdata"`     //
 	TimeUnix  int64                    `bson:"TimeUnix"`
 	TimeStr   string                   `bson:"TimeStr"`
+	TimeID    string                   `bson:"TimeID"`
 }
 
 func JoinCoinTicker() CoinTickerTable {

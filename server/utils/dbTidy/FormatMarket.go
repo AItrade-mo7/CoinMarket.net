@@ -7,12 +7,11 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
+	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
-	"github.com/EasyGolang/goTools/mStr"
-	"github.com/EasyGolang/goTools/mStruct"
 	"github.com/EasyGolang/goTools/mTime"
 	jsoniter "github.com/json-iterator/go"
 	"go.mongodb.org/mongo-driver/bson"
@@ -31,7 +30,7 @@ func FormatMarket() {
 	// 		SysTime: time.Now(),
 	// 	},
 	// }).Send()
-	// inst.Start()
+	inst.Start()
 
 	db := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
@@ -47,12 +46,13 @@ func FormatMarket() {
 	findOpt.SetSort(map[string]int{
 		"TimeUnix": -1,
 	})
-	FK := bson.D{{
+
+	findFK := bson.D{{
 		Key:   "TimeUnix",
-		Value: (1662453885809),
+		Value: 1662453885809,
 	}}
 
-	cursor, err := db.Table.Find(db.Ctx, FK, findOpt)
+	cursor, err := db.Table.Find(db.Ctx, findFK, findOpt)
 
 	fmt.Println(cursor)
 
@@ -61,38 +61,28 @@ func FormatMarket() {
 		cursor.Decode(&curData)
 		var Ticker dbType.CoinTickerTable
 		jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
-		Ticker.TimeStr = mTime.UnixFormat(mStr.ToStr(Ticker.TimeUnix))
+		T := mTime.MsToTime(Ticker.TimeUnix, "0")
+		timeStr := T.Format("2006-01-02T15:04")
+		Ticker.TimeID = timeStr
 
-		kdata_list := FetchKdata(Ticker)
-
-		Ticker.Kdata = kdata_list
-
-		fmt.Println("找到数据", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.TickerVol), len(Ticker.Kdata["BTC-USDT"]))
-
+		FK := bson.D{{
+			Key:   "_id",
+			Value: curData["_id"],
+		}}
 		UK := bson.D{}
+
 		UK = append(UK, bson.E{
-			Key: "$unset",
+			Key: "$set",
 			Value: bson.D{
 				{
-					Key:   "Time",
-					Value: 1,
+					Key:   "TimeID",
+					Value: timeStr,
 				},
 			},
 		})
-		mStruct.Traverse(Ticker, func(key string, val any) {
-			UK = append(UK, bson.E{
-				Key: "$set",
-				Value: bson.D{
-					{
-						Key:   key,
-						Value: val,
-					},
-				},
-			})
-		})
 
 		upOpt := options.Update()
-		upOpt.SetUpsert(true)
+		// upOpt.SetUpsert(true)
 		_, err := db.Table.UpdateOne(db.Ctx, FK, UK, upOpt)
 		if err != nil {
 			global.LogErr("数据更插失败", err)
@@ -112,7 +102,7 @@ func FormatMarket() {
 			}
 		}
 
-		global.Run.Println("==结束==", Ticker.TimeStr, len(Ticker.Kdata), len(BtcList), timeC, errArr)
+		global.Run.Println("==结束==", Ticker.TimeStr, Ticker.TimeID, len(Ticker.Kdata), len(BtcList), timeC, errArr)
 	}
 
 	if err != nil {

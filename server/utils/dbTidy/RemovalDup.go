@@ -11,6 +11,7 @@ import (
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mStr"
+	"github.com/EasyGolang/goTools/mTime"
 	jsoniter "github.com/json-iterator/go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -92,9 +93,27 @@ func RemovalDup() {
 }
 
 func CheckRepeat(list []TimeUnixType) {
-	fmt.Println("读取文件", len(list))
+	timeMap := make(map[string]TimeUnixType)
+	RepeatArr := []TimeUnixType{}
+	RepeatIndex := []int{}
 
 	for key, val := range list {
-		fmt.Println(key, val)
+		TimeUnix := val.TimeUnix
+		T := mTime.MsToTime(TimeUnix, "0")
+		timeStr := T.Format("2006-01-02T15:04")
+		_, ok := timeMap[timeStr]
+		if ok {
+			RepeatArr = append(RepeatArr, val)
+			RepeatIndex = append(RepeatIndex, key)
+		} else {
+			timeMap[timeStr] = val
+		}
+
 	}
+
+	RepeatArr_file := mStr.Join(config.Dir.JsonData, "/RepeatArr", ".json")
+	RepeatIndex_file := mStr.Join(config.Dir.JsonData, "/RepeatIndex", ".json")
+
+	mFile.Write(RepeatArr_file, mJson.ToStr(RepeatArr))
+	mFile.Write(RepeatIndex_file, mJson.ToStr(RepeatIndex))
 }
