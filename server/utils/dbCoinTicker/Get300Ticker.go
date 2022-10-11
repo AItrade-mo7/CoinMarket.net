@@ -9,8 +9,7 @@ import (
 	"github.com/EasyGolang/goTools/mMongo"
 )
 
-func Get300Ticker() (resData dbSearch.PagingType, resErr error) {
-	var json dbSearch.FindParam
+func GetTickerList(json dbSearch.FindParam) (resData dbSearch.PagingType, resErr error) {
 	resData = dbSearch.PagingType{}
 	resErr = nil
 
@@ -24,7 +23,6 @@ func Get300Ticker() (resData dbSearch.PagingType, resErr error) {
 	defer db.Close()
 
 	// 构建搜索参数
-
 	resCur, err := dbSearch.GetCursor(dbSearch.CurOpt{
 		Param: json,
 		DB:    db,

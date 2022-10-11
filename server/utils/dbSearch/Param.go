@@ -20,26 +20,19 @@ type (
 )
 
 type PagingType struct {
-	List           []any     `bson:"List"`
-	Total          int64     `bson:"Total"`
-	Current        int64     `bson:"Current"`
-	Size           int64     `bson:"Size"`
-	Sort           SortType  `bson:"Sort"`           // key:value  -1 倒序 1：正序
-	Match          MatchType `bson:"Match"`          // 匹配
-	Query          QueryType `bson:"Query"`          // 查询
-	CreateTimeUnix TimeType  `bson:"CreateTimeUnix"` // 创建时间查询
-	TimeUnix       TimeType  `bson:"TimeUnix"`       // 更新时间查询
+	List  []any `bson:"List"`
+	Total int64 `bson:"Total"`
+	FindParam
 }
 
 type FindParam struct {
-	Size           int64     `bson:"Size"`           // 每页多少条
-	Current        int64     `bson:"Current"`        // 当前页码 0 为第一页
-	Sort           SortType  `bson:"Sort"`           // 排序
-	Match          MatchType `bson:"Match"`          // 匹配
-	Query          QueryType `bson:"Query"`          // 查询
-	CreateTimeUnix TimeType  `bson:"CreateTimeUnix"` // 创建时间查询
-	TimeUnix       TimeType  `bson:"TimeUnix"`       // 更新时间查询
-	Type           string    `bson:"Type"`           // Serve  && Client  全面数据和简陋数据
+	Size     int64     `bson:"Size"`     // 每页多少条
+	Current  int64     `bson:"Current"`  // 当前页码 0 为第一页
+	Sort     SortType  `bson:"Sort"`     // 排序
+	Match    MatchType `bson:"Match"`    // 匹配
+	Query    QueryType `bson:"Query"`    // 查询
+	TimeUnix TimeType  `bson:"TimeUnix"` // 范围查询
+	Type     string    `bson:"Type"`     // Serve 全面数据 || Client 简陋数据
 }
 
 type CurOpt struct {
@@ -57,7 +50,7 @@ func GetCursor(opt CurOpt) (resCur *CurOpt, resErr error) {
 
 	if len(json.Sort) < 1 {
 		sort := make(SortType)
-		sort["CreateTime"] = -1
+		sort["TimeUnix"] = -1
 		json.Sort = sort
 	}
 
@@ -99,16 +92,16 @@ func GetCursor(opt CurOpt) (resCur *CurOpt, resErr error) {
 	}
 
 	// 构建时间范围查询
-	if (json.CreateTimeUnix[0] + json.CreateTimeUnix[1]) > 946656000000 {
+	if (json.TimeUnix[0] + json.TimeUnix[1]) > 946656000000 {
 		FK = append(FK, bson.E{
-			Key: "CreateTimeUnix",
+			Key: "TimeUnix",
 			Value: bson.D{
 				{
 					Key:   "$gte", // 大于或等于
-					Value: json.CreateTimeUnix[0],
+					Value: json.TimeUnix[0],
 				}, {
 					Key:   "$lte", // 小于或等于
-					Value: json.CreateTimeUnix[1],
+					Value: json.TimeUnix[1],
 				},
 			},
 		})
@@ -159,8 +152,8 @@ func (obj *CurOpt) GenerateData(list []any) PagingType {
 	returnData.Sort = json.Sort
 	returnData.Match = json.Match
 	returnData.Query = json.Query
-	returnData.CreateTimeUnix = json.CreateTimeUnix
 	returnData.TimeUnix = json.TimeUnix
+	returnData.Type = json.Type
 
 	return returnData
 }
