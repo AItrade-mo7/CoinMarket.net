@@ -6,33 +6,28 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
-	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/kdata"
-	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
-	"github.com/EasyGolang/goTools/mStr"
-	"github.com/EasyGolang/goTools/mStruct"
-	"github.com/EasyGolang/goTools/mTime"
 	jsoniter "github.com/json-iterator/go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func FormatMarket() {
-	global.Email(global.EmailOpt{
-		To: []string{
-			"meichangliang@mo7.cc",
-		},
-		Subject:  "ServeStart",
-		Template: tmpl.SysEmail,
-		SendData: tmpl.SysParam{
-			Message: "开始执行脚本",
-			SysTime: time.Now(),
-		},
-	}).Send()
-	inst.Start()
+	// global.Email(global.EmailOpt{
+	// 	To: []string{
+	// 		"meichangliang@mo7.cc",
+	// 	},
+	// 	Subject:  "ServeStart",
+	// 	Template: tmpl.SysEmail,
+	// 	SendData: tmpl.SysParam{
+	// 		Message: "开始执行脚本",
+	// 		SysTime: time.Now(),
+	// 	},
+	// }).Send()
+	// inst.Start()
 
 	db := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
@@ -46,7 +41,7 @@ func FormatMarket() {
 	findOpt := options.Find()
 	findOpt.SetAllowDiskUse(true)
 	findOpt.SetSort(map[string]int{
-		"TimeUnix": -1,
+		"TimeUnix": 1,
 	})
 
 	cursor, err := db.Table.Find(db.Ctx, bson.D{}, findOpt)
@@ -56,28 +51,37 @@ func FormatMarket() {
 		cursor.Decode(&curData)
 		var Ticker dbType.CoinTickerTable
 		jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
-		Ticker.TimeStr = mTime.UnixFormat(mStr.ToStr(Ticker.TimeUnix))
+		// Ticker.TimeStr = mTime.UnixFormat(mStr.ToStr(Ticker.TimeUnix))
 
-		kdata_list := FetchKdata(Ticker)
+		// kdata_list := FetchKdata(Ticker)
 
-		Ticker.Kdata = kdata_list
+		// Ticker.Kdata = kdata_list
 
 		FK := bson.D{{
 			Key:   "TimeUnix",
 			Value: Ticker.TimeUnix,
 		}}
 		UK := bson.D{}
-		mStruct.Traverse(Ticker, func(key string, val any) {
-			UK = append(UK, bson.E{
-				Key: "$set",
-				Value: bson.D{
-					{
-						Key:   key,
-						Value: val,
-					},
+		UK = append(UK, bson.E{
+			Key: "$unset",
+			Value: bson.D{
+				{
+					Key:   "Time",
+					Value: 1,
 				},
-			})
+			},
 		})
+		// mStruct.Traverse(Ticker, func(key string, val any) {
+		// 	UK = append(UK, bson.E{
+		// 		Key: "$set",
+		// 		Value: bson.D{
+		// 			{
+		// 				Key:   key,
+		// 				Value: val,
+		// 			},
+		// 		},
+		// 	})
+		// })
 
 		upOpt := options.Update()
 		upOpt.SetUpsert(true)
@@ -86,24 +90,38 @@ func FormatMarket() {
 			global.LogErr("数据更插失败", err)
 		}
 
-		global.Run.Println("==结束==", Ticker.TimeStr, len(Ticker.Kdata), len(Ticker.Kdata["BTC-USDT"]))
+		BtcList := Ticker.Kdata["BTC-USDT"]
+		var timeC int64
+		if len(BtcList) > 0 {
+			BtcNow := BtcList[len(BtcList)-1]
+			timeC = BtcNow.TimeUnix - Ticker.TimeUnix
+		}
+		errArr := []any{}
+		for key, val := range Ticker.Kdata {
+			if len(val) != 300 {
+				errArr = append(errArr, key)
+				errArr = append(errArr, len(val))
+			}
+		}
+
+		global.Run.Println("==结束==", Ticker.TimeStr, len(Ticker.Kdata), len(BtcList), timeC, errArr)
 	}
 
 	if err != nil {
 		global.LogErr(err)
 	}
 
-	global.Email(global.EmailOpt{
-		To: []string{
-			"meichangliang@mo7.cc",
-		},
-		Subject:  "ServeStart",
-		Template: tmpl.SysEmail,
-		SendData: tmpl.SysParam{
-			Message: "脚本执行结束",
-			SysTime: time.Now(),
-		},
-	}).Send()
+	// global.Email(global.EmailOpt{
+	// 	To: []string{
+	// 		"meichangliang@mo7.cc",
+	// 	},
+	// 	Subject:  "ServeStart",
+	// 	Template: tmpl.SysEmail,
+	// 	SendData: tmpl.SysParam{
+	// 		Message: "脚本执行结束",
+	// 		SysTime: time.Now(),
+	// 	},
+	// }).Send()
 }
 
 func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
