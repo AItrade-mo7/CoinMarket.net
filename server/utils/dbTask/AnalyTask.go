@@ -5,6 +5,7 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -51,12 +52,36 @@ func (_this *AnalyTaskObj) CoinDBTraverse() {
 		cursor.Decode(&Kdata)
 		TimeID := mOKX.GetTimeID(Kdata.TimeUnix)
 
-		global.Run.Println(TimeID, Kdata.InstID, Kdata.C)
+		_this.FindTicker(TimeID)
+		// global.Run.Println(TimeID, Kdata.InstID, Kdata.C)
 	}
 
 	if err != nil {
 		global.LogErr(err)
 	}
+}
+
+func (_this *AnalyTaskObj) FindTicker(TimeID string) {
+	db := _this.TickerDB
+
+	FK := bson.D{{
+		Key:   "TimeID",
+		Value: TimeID,
+	}}
+
+	var Ticker dbType.CoinTickerTable
+	db.Table.FindOne(db.Ctx, FK).Decode(&Ticker)
+
+	BtcList := Ticker.Kdata["BTC-USDT"]
+
+	global.Run.Println(
+		"提取 Ticker 数据",
+		Ticker.TimeID,
+		len(Ticker.TickerVol),
+		Ticker.TickerVol[0].CcyName,
+		len(Ticker.Kdata),
+		len(BtcList),
+	)
 }
 
 func StartEmail() {
