@@ -23,13 +23,5 @@ func main() {
 
 	router.Start()
 
-	// select {} // 阻塞主线程停止
-
-	// dbTidy.FormatMarket()
-
-	// dbCoinTicker.GetTickerList(dbSearch.FindParam{
-	// 	Size:    1,
-	// 	Current: 0,
-	// 	Type:    "Client",
-	// })
+	// dbTask.AnalyTask()
 }

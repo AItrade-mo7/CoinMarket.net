@@ -1,0 +1,4 @@
+package dbTask
+
+func AnalyTask() {
+}
