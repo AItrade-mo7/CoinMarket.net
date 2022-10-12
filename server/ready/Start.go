@@ -67,10 +67,11 @@ func SetTickerAnaly() {
 		len(okxInfo.TickerKdata["BTC-USDT"]),
 	)
 
+	// 在这里计算分析结果
 	okxInfo.TickerAnaly = dbType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
 		TickerVol:   okxInfo.TickerVol,
 		TickerKdata: okxInfo.TickerKdata,
-	}) // 在这里计算分析结果
+	}) 
 
 	global.Run.Println(
 		"分析完毕",

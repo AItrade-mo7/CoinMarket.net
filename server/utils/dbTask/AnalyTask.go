@@ -6,9 +6,12 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
+	"CoinMarket.net/server/okxInfo"
+	"CoinMarket.net/server/tickerAnaly"
 	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
+	"github.com/EasyGolang/goTools/mStruct"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -23,16 +26,30 @@ func NewAnalyTask() *AnalyTaskObj {
 	var NewTask AnalyTaskObj
 
 	Timeout := 4000 * 60
-	dbTable := mMongo.New(mMongo.Opt{
+
+	NewTask.TickerDB = mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "AITrade",
 		Timeout:  Timeout,
-	}).Connect()
-	NewTask.TickerDB = dbTable.Collection("CoinTicker")
-	NewTask.AnalyDB = dbTable.Collection("TickerAnaly")
-	NewTask.CoinDB = dbTable.Collection("BTCUSDT")
+	}).Connect().Collection("CoinTicker")
+
+	NewTask.AnalyDB = mMongo.New(mMongo.Opt{
+		UserName: config.SysEnv.MongoUserName,
+		Password: config.SysEnv.MongoPassword,
+		Address:  config.SysEnv.MongoAddress,
+		DBName:   "AITrade",
+		Timeout:  Timeout,
+	}).Connect().Collection("TickerAnaly")
+
+	NewTask.CoinDB = mMongo.New(mMongo.Opt{
+		UserName: config.SysEnv.MongoUserName,
+		Password: config.SysEnv.MongoPassword,
+		Address:  config.SysEnv.MongoAddress,
+		DBName:   "AITrade",
+		Timeout:  Timeout,
+	}).Connect().Collection("BTCUSDT")
 
 	return &NewTask
 }
@@ -50,9 +67,8 @@ func (_this *AnalyTaskObj) CoinDBTraverse() {
 	for cursor.Next(db.Ctx) {
 		var Kdata mOKX.TypeKd
 		cursor.Decode(&Kdata)
-		TimeID := mOKX.GetTimeID(Kdata.TimeUnix)
 
-		_this.FindTicker(TimeID)
+		_this.FindTicker(Kdata)
 		// global.Run.Println(TimeID, Kdata.InstID, Kdata.C)
 	}
 
@@ -61,26 +77,89 @@ func (_this *AnalyTaskObj) CoinDBTraverse() {
 	}
 }
 
-func (_this *AnalyTaskObj) FindTicker(TimeID string) {
+func (_this *AnalyTaskObj) FindTicker(Kdata mOKX.TypeKd) {
 	db := _this.TickerDB
 
 	FK := bson.D{{
 		Key:   "TimeID",
-		Value: TimeID,
+		Value: mOKX.GetTimeID(Kdata.TimeUnix),
 	}}
 
 	var Ticker dbType.CoinTickerTable
 	db.Table.FindOne(db.Ctx, FK).Decode(&Ticker)
 
 	BtcList := Ticker.Kdata["BTC-USDT"]
+	if len(BtcList) == 300 && len(Ticker.TickerVol) == len(Ticker.Kdata) {
+	} else {
+		Ticker.TimeID = mOKX.GetTimeID(Kdata.TimeUnix)
+		Ticker.TimeUnix = Kdata.TimeUnix
+		Ticker.TimeStr = Kdata.TimeStr
+	}
+	_this.AnalyStart(Ticker)
+}
+
+func (_this *AnalyTaskObj) AnalyStart(Ticker dbType.CoinTickerTable) {
+	db := _this.AnalyDB
+
+	BtcList := Ticker.Kdata["BTC-USDT"]
+
+	AnalyResult := dbType.AnalyTickerType{}
+	if len(BtcList) == 300 && len(Ticker.TickerVol) == len(Ticker.Kdata) {
+		global.Run.Println(
+			"开始分析",
+			Ticker.TimeID,
+			len(Ticker.TickerVol),
+			len(Ticker.Kdata),
+			len(BtcList),
+		)
+		AnalyResult = dbType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
+			TickerVol:   okxInfo.TickerVol,
+			TickerKdata: okxInfo.TickerKdata,
+		})
+	} else {
+		global.Run.Println(
+			"数据错误",
+			Ticker.TimeID,
+			len(Ticker.TickerVol),
+			len(Ticker.Kdata),
+			len(BtcList),
+		)
+		AnalyResult.WholeDir = 0
+		AnalyResult.Unit = config.Unit
+		AnalyResult.TimeUnix = Ticker.TimeUnix
+		AnalyResult.TimeStr = Ticker.TimeStr
+		AnalyResult.TimeID = Ticker.TimeID
+	}
+
+	FK := bson.D{{
+		Key:   "TimeID",
+		Value: AnalyResult.TimeID,
+	}}
+
+	UK := bson.D{}
+	mStruct.Traverse(AnalyResult, func(key string, val any) {
+		UK = append(UK, bson.E{
+			Key: "$set",
+			Value: bson.D{
+				{
+					Key:   key,
+					Value: val,
+				},
+			},
+		})
+	})
+	upOpt := options.Update()
+	upOpt.SetUpsert(true)
+	_, err := db.Table.UpdateOne(db.Ctx, FK, UK, upOpt)
+	if err != nil {
+		global.LogErr("数据更插失败", err)
+	}
 
 	global.Run.Println(
-		"提取 Ticker 数据",
-		Ticker.TimeID,
-		len(Ticker.TickerVol),
-		Ticker.TickerVol[0].CcyName,
-		len(Ticker.Kdata),
-		len(BtcList),
+		"插入完毕",
+		AnalyResult.TimeID,
+		len(AnalyResult.TickerVol),
+		AnalyResult.WholeDir,
 	)
 }
 
