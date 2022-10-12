@@ -6,7 +6,6 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
-	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
 	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mMongo"
@@ -106,15 +105,15 @@ func (_this *AnalyTaskObj) AnalyStart(Ticker dbType.CoinTickerTable) {
 	AnalyResult := dbType.AnalyTickerType{}
 	if len(BtcList) == 300 && len(Ticker.TickerVol) == len(Ticker.Kdata) {
 		global.Run.Println(
-			"开始分析",
+			"~开始分析",
 			Ticker.TimeID,
 			len(Ticker.TickerVol),
 			len(Ticker.Kdata),
 			len(BtcList),
 		)
 		AnalyResult = dbType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
-			TickerVol:   okxInfo.TickerVol,
-			TickerKdata: okxInfo.TickerKdata,
+			TickerVol:   Ticker.TickerVol,
+			TickerKdata: Ticker.Kdata,
 		})
 	} else {
 		global.Run.Println(
@@ -156,7 +155,7 @@ func (_this *AnalyTaskObj) AnalyStart(Ticker dbType.CoinTickerTable) {
 	}
 
 	global.Run.Println(
-		"插入完毕",
+		"E插入完毕",
 		AnalyResult.TimeID,
 		len(AnalyResult.TickerVol),
 		AnalyResult.WholeDir,
