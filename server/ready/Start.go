@@ -53,7 +53,6 @@ func Start() {
 }
 
 func SetTickerAnaly() {
-	global.Run.Println("========= 开始获取榜单 TickerVol TickerKdata ===========")
 	binanceApi.GetTicker() //  获取币安的 Ticker
 	tickers.GetTicker()    // 获取 okx 的Ticker
 	SetTicker()            // 计算并设置综合排行榜单 产出 okxInfo.TickerVol 数据
@@ -71,10 +70,10 @@ func SetTickerAnaly() {
 	okxInfo.TickerAnaly = dbType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
 		TickerVol:   okxInfo.TickerVol,
 		TickerKdata: okxInfo.TickerKdata,
-	}) 
+	})
 
 	global.Run.Println(
-		"分析完毕",
+		"===== 分析完毕 =====",
 		okxInfo.TickerAnaly.TimeID,
 		len(okxInfo.TickerAnaly.TickerVol),
 		okxInfo.TickerAnaly.TickerVol[0].CcyName,
@@ -96,7 +95,7 @@ func SetKdata(lType string) {
 	if lType == "mClock" {
 		go SetCoinKdataDB("BTC")
 		go SetCoinKdataDB("ETH")
-		go SetCoinTickerDB()
-		go SetTickerAnalyDB()
+		SetTickerAnalyDB()
+		SetCoinTickerDB()
 	}
 }
