@@ -20,7 +20,6 @@ func main() {
 	global.Start()
 
 	ready.Start()
-
 	router.Start()
 
 	// dbTask.AnalyTask()
