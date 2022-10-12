@@ -113,15 +113,6 @@ func SetCoinTickerDB() {
 		resErr := fmt.Errorf("数据更插失败 CoinTicker %+v", err)
 		global.LogErr(resErr)
 	}
-
-	global.Run.Println(
-		"CoinTicker更插完毕",
-		Ticker.TimeStr,
-		len(Ticker.TickerVol),
-		Ticker.TickerVol[0].CcyName,
-		len(Ticker.Kdata),
-		len(Ticker.Kdata["BTC-USDT"]),
-	)
 }
 
 func SetTickerAnalyDB() {
