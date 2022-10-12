@@ -1,6 +1,7 @@
 package okxInfo
 
 import (
+	"CoinMarket.net/server/tickerAnaly"
 	"github.com/EasyGolang/goTools/mOKX"
 )
 
@@ -21,3 +22,6 @@ var TickerList []mOKX.TypeTicker
 
 // 当前榜单 K线数据 榜单币种 近 300 条 15 分钟间隔 共 75 小时
 var TickerKdata map[string][]mOKX.TypeKd
+
+// 当前的分析结果
+var AnalyDetail tickerAnaly.AnalyResult
