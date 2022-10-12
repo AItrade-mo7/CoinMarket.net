@@ -36,7 +36,9 @@ func GetTickerAnaly(opt dbSearch.FindParam) (resData dbSearch.PagingType, resErr
 		var Analy dbType.AnalyTickerType
 		resCur.Cursor.Decode(&Analy)
 
-		if opt.Type == "Client" {
+		if opt.Type == "Serve" {
+			AnyList = append(AnyList, Analy)
+		} else {
 			var ClientAnaly apiType.ClientAnalyType
 			ClientAnaly.Unit = Analy.Unit
 			ClientAnaly.TimeUnix = Analy.TimeUnix
@@ -49,8 +51,8 @@ func GetTickerAnaly(opt dbSearch.FindParam) (resData dbSearch.PagingType, resErr
 			ClientAnaly.MaxDown = Analy.AnalyWhole[0].MaxDown.CcyName
 			ClientAnaly.MaxDown_RosePer = Analy.AnalyWhole[0].MaxDown.RosePer
 
-		} else {
-			AnyList = append(AnyList, Analy)
+			AnyList = append(AnyList, ClientAnaly)
+
 		}
 
 	}
