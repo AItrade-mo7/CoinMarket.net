@@ -7,6 +7,7 @@ import (
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxInfo"
+	"CoinMarket.net/server/tickerAnaly"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mStruct"
 	"go.mongodb.org/mongo-driver/bson"
@@ -91,7 +92,7 @@ func SetBtcDB() {
 	}
 }
 
-func SetMarketTickerDB() {
+func SetCoinTickerDB() {
 	Timeout := len(okxInfo.TickerVol) * 20
 
 	if Timeout < 100 {
@@ -109,7 +110,10 @@ func SetMarketTickerDB() {
 	defer db.Close()
 
 	// 获取当前的榜单数据并拼接
-	CoinTickerData := dbType.JoinCoinTicker(okxInfo.TickerVol, okxInfo.TickerKdata)
+	CoinTickerData := dbType.JoinCoinTicker(tickerAnaly.TickerAnalyParam{
+		TickerVol:   okxInfo.TickerVol,
+		TickerKdata: okxInfo.TickerKdata,
+	})
 
 	FK := bson.D{{
 		Key:   "TimeID",
@@ -139,4 +143,7 @@ func SetMarketTickerDB() {
 	db.Table.FindOne(db.Ctx, FK).Decode(&newTicker)
 
 	global.Run.Println("CoinTicker", "更插完毕", newTicker.TimeStr, len(newTicker.TickerVol), len(newTicker.Kdata))
+}
+
+func SetTickerAnalyDB() {
 }

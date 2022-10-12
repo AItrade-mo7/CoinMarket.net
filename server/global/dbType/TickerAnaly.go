@@ -1,4 +1,4 @@
-package apiType
+package dbType
 
 import (
 	"CoinMarket.net/server/global/config"

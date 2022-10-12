@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"CoinMarket.net/server/global"
-	"CoinMarket.net/server/global/apiType"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/tickers"
@@ -67,7 +67,7 @@ func SetTickerAnaly() {
 		len(okxInfo.TickerKdata["BTC-USDT"]),
 	)
 
-	okxInfo.TickerAnaly = apiType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
+	okxInfo.TickerAnaly = dbType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
 		TickerVol:   okxInfo.TickerVol,
 		TickerKdata: okxInfo.TickerKdata,
 	}) // 在这里计算分析结果
@@ -93,8 +93,8 @@ func SetKdata(lType string) {
 
 	// 数据库存储
 	if lType == "mClock" {
-		SetMarketTickerDB()
 		SetEthDB()
 		SetBtcDB()
+		SetCoinTickerDB()
 	}
 }
