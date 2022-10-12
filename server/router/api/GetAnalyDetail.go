@@ -13,7 +13,7 @@ import (
 )
 
 type GetAnalyDetailParam struct {
-	CreateTimeUnix int64 `bson:"CreateTimeUnix"`
+	TimeID string `bson:"TimeID"`
 }
 
 func GetAnalyDetail(c *fiber.Ctx) error {
@@ -25,13 +25,13 @@ func GetAnalyDetail(c *fiber.Ctx) error {
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "AITrade",
-	}).Connect().Collection("MarketTicker")
+	}).Connect().Collection("CoinTicker")
 	defer db.Close()
 
 	FK := bson.D{
 		{
-			Key:   "CreateTimeUnix",
-			Value: json.CreateTimeUnix,
+			Key:   "TimeID",
+			Value: json.TimeID,
 		},
 	}
 
