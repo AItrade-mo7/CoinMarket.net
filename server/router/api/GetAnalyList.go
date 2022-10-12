@@ -1,6 +1,7 @@
 package api
 
 import (
+	"CoinMarket.net/server/ready"
 	"CoinMarket.net/server/router/result"
 	"CoinMarket.net/server/utils/dbSearch"
 	"github.com/EasyGolang/goTools/mFiber"
@@ -11,5 +12,10 @@ func GetAnalyList(c *fiber.Ctx) error {
 	var json dbSearch.FindParam
 	mFiber.Parser(c, &json)
 
-	return c.JSON(result.Succeed.WithData("接口开发中"))
+	resData, err := ready.GetTickerAnaly(json)
+	if err != nil {
+		return c.JSON(result.Fail.WithData(err))
+	}
+
+	return c.JSON(result.Succeed.WithData(resData))
 }
