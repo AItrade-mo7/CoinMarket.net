@@ -52,7 +52,7 @@ func FormatKdata(data []byte, Symbol string) {
 
 	InstID := Symbol
 
-	for _, item := range okxInfo.TickerList {
+	for _, item := range okxInfo.TickerVol {
 		if item.Symbol == Symbol {
 			InstID = item.InstID
 			break

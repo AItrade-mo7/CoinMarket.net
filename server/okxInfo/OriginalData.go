@@ -18,7 +18,7 @@ var BinanceTickerList []mOKX.TypeBinanceTicker // 币安的Ticker 排行
 var OKXTickerList []mOKX.TypeOKXTicker // okx的Ticker
 
 // 当前综合榜单数据
-var TickerList []mOKX.TypeTicker
+var TickerVol []mOKX.TypeTicker
 
 // 当前榜单 K线数据 榜单币种 近 300 条 15 分钟间隔 共 75 小时
 var TickerKdata map[string][]mOKX.TypeKd

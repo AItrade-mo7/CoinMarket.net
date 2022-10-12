@@ -7,8 +7,8 @@ import (
 )
 
 type TickerAnalyParam struct {
-	TickerList  []mOKX.TypeTicker
-	MarketKdata map[string][]mOKX.TypeKd
+	TickerVol   []mOKX.TypeTicker
+	TickerKdata map[string][]mOKX.TypeKd
 }
 
 type AnalyResult struct {
@@ -21,8 +21,8 @@ func GetAnaly(opt TickerAnalyParam) AnalyResult {
 	// 基于  mOKX.MarketKdata  进行数据分析
 	TickerAnalySingle := make(map[string][]mOKX.AnalySliceType)
 
-	for _, item := range opt.TickerList {
-		list := opt.MarketKdata[item.InstID]
+	for _, item := range opt.TickerVol {
+		list := opt.TickerKdata[item.InstID]
 
 		Single := NewSingle(list)
 		if len(Single.ResData) == len(config.SliceHour) {

@@ -92,7 +92,7 @@ func SetBtcDB() {
 }
 
 func SetMarketTickerDB() {
-	Timeout := len(okxInfo.TickerList) * 20
+	Timeout := len(okxInfo.TickerVol) * 20
 
 	if Timeout < 100 {
 		Timeout = 100
@@ -109,7 +109,7 @@ func SetMarketTickerDB() {
 	defer db.Close()
 
 	// 获取当前的榜单数据并拼接
-	CoinTickerData := dbType.JoinCoinTicker(okxInfo.TickerList, okxInfo.TickerKdata)
+	CoinTickerData := dbType.JoinCoinTicker(okxInfo.TickerVol, okxInfo.TickerKdata)
 
 	FK := bson.D{{
 		Key:   "TimeID",

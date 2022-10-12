@@ -10,10 +10,10 @@ import (
 	"github.com/EasyGolang/goTools/mOKX"
 )
 
-func GetTickerKdata() {
+func SetTickerKdata() {
 	TickerKdata := make(map[string][]mOKX.TypeKd)
 	TickerList := []mOKX.TypeTicker{}
-	for _, item := range okxInfo.TickerList {
+	for _, item := range okxInfo.TickerVol {
 		time.Sleep(time.Second / 3) // 1秒最多 3 次
 		// 开始设置 SWAP
 		SwapInst := mOKX.TypeInst{}
@@ -48,8 +48,8 @@ func GetTickerKdata() {
 	okxInfo.TickerKdata = make(map[string][]mOKX.TypeKd)
 	okxInfo.TickerKdata = TickerKdata
 
-	okxInfo.TickerList = make([]mOKX.TypeTicker, len(TickerList))
-	okxInfo.TickerList = TickerList
+	okxInfo.TickerVol = make([]mOKX.TypeTicker, len(TickerList))
+	okxInfo.TickerVol = TickerList
 }
 
 type DataMergeOpt struct {

@@ -4,11 +4,13 @@ import (
 	"time"
 
 	"CoinMarket.net/server/global"
+	"CoinMarket.net/server/global/apiType"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/tickers"
 	"CoinMarket.net/server/okxInfo"
+	"CoinMarket.net/server/tickerAnaly"
 	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mCycle"
@@ -54,7 +56,11 @@ func GetTicker() {
 	binanceApi.GetTicker() //  获取币安的 Ticker
 	tickers.GetTicker()    // 获取 okx 的Ticker
 	SetTicker()            // 计算并设置综合排行榜单 产出 okxInfo.TickerList 数据
-	GetTickerKdata()       // 产出 okxInfo.TickerList 和 okxInfo.TickerList 数据
+	SetTickerKdata()       // 产出 okxInfo.TickerList 和 okxInfo.TickerKdata 数据
+	apiType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
+		TickerVol:   okxInfo.TickerVol,
+		TickerKdata: okxInfo.TickerKdata,
+	}) // 在这里计算分析结果
 }
 
 // 获取历史数据
@@ -67,7 +73,7 @@ func TimerClickStart() {
 func SetKdata(lType string) {
 	global.Run.Println("========= 开始获取榜单数据和K线历史 ===========")
 	GetTicker() //  产出 okxInfo.TickerList 数据
-	global.Run.Println("数据准备完毕", len(okxInfo.TickerList), okxInfo.TickerList[0].CcyName, len(okxInfo.TickerKdata), len(okxInfo.TickerKdata["BTC-USDT"]))
+	global.Run.Println("数据准备完毕", len(okxInfo.TickerVol), okxInfo.TickerVol[0].CcyName, len(okxInfo.TickerKdata), len(okxInfo.TickerKdata["BTC-USDT"]))
 
 	// 数据库存储
 	if lType == "mClock" {

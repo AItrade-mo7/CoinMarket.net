@@ -29,7 +29,7 @@ func SetTicker() {
 	}
 
 	VolumeSortList := mOKX.SortVolume(tickerList)
-	okxInfo.TickerList = VolumeSortList
+	okxInfo.TickerVol = VolumeSortList
 }
 
 func TickerCount(OKXTicker mOKX.TypeOKXTicker, BinanceTicker mOKX.TypeBinanceTicker) (Ticker mOKX.TypeTicker) {

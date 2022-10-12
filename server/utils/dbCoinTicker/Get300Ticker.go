@@ -40,8 +40,8 @@ func GetTickerList(json dbSearch.FindParam) (resData dbSearch.PagingType, resErr
 		resCur.Cursor.Decode(&Ticker)
 		// 该过程2秒钟
 		AnalyResult := tickerAnaly.GetAnaly(tickerAnaly.TickerAnalyParam{
-			TickerList:  Ticker.TickerVol,
-			MarketKdata: Ticker.Kdata,
+			TickerVol:   Ticker.TickerVol,
+			TickerKdata: Ticker.Kdata,
 		})
 		ResultList = append(ResultList, AnalyResult)
 	}
