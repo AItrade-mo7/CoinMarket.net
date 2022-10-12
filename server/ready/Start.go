@@ -48,7 +48,7 @@ func Start() {
 	SetKdata("Start")
 	go mClock.New(mClock.OptType{
 		Func: TimerClickStart,
-		Spec: "0 0,15,30,45 * * * ? ",
+		Spec: "1 0,15,30,45 * * * ? ",
 	})
 }
 
@@ -76,7 +76,7 @@ func SetTickerAnaly() {
 // 获取历史数据
 
 func TimerClickStart() {
-	time.Sleep(time.Second)
+	time.Sleep(time.Second / 3)
 	SetKdata("mClock")
 }
 
