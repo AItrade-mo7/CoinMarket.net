@@ -71,31 +71,22 @@ func SetTickerAnaly() {
 		TickerVol:   okxInfo.TickerVol,
 		TickerKdata: okxInfo.TickerKdata,
 	})
-
-	global.Run.Println(
-		"===== 分析完毕 =====",
-		okxInfo.TickerAnaly.TimeID,
-		len(okxInfo.TickerAnaly.TickerVol),
-		okxInfo.TickerAnaly.TickerVol[0].CcyName,
-		okxInfo.TickerAnaly.WholeDir,
-	)
 }
 
 // 获取历史数据
 
 func TimerClickStart() {
-	time.Sleep(time.Second / 3)
+	time.Sleep(time.Second)
 	SetKdata("mClock")
 }
 
 func SetKdata(lType string) {
 	SetTickerAnaly() //  产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 以及 okxInfo.TickerAnaly
 
-	// 数据库存储
 	if lType == "mClock" {
+		go SetTickerAnalyDB()
+		go SetCoinTickerDB()
 		go SetCoinKdataDB("BTC")
 		go SetCoinKdataDB("ETH")
-		go SetCoinTickerDB()
-		SetTickerAnalyDB()
 	}
 }
