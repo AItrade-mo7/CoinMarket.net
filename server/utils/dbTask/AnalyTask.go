@@ -60,7 +60,7 @@ func (_this *AnalyTaskObj) CoinDBTraverse() {
 }
 
 func StartEmail() {
-	global.Email(global.EmailOpt{
+	go global.Email(global.EmailOpt{
 		To: []string{
 			"meichangliang@mo7.cc",
 		},
@@ -71,9 +71,11 @@ func StartEmail() {
 			SysTime: time.Now(),
 		},
 	}).Send()
+	global.Run.Println("======= 脚本开始 =======")
 }
 
 func EndEmail() {
+	global.Run.Println("======= 脚本结束 =======")
 	global.Email(global.EmailOpt{
 		To: []string{
 			"meichangliang@mo7.cc",
