@@ -4,7 +4,6 @@ source "./_shell/init.sh"
 #############
 
 startName="TickerAnaly.Task"
-buildName=${startName}
 deployPath="/root/ProdProject/TickerAnaly"
 
 echo "开始打包" &&
