@@ -54,6 +54,7 @@ func GetTicker() {
 	binanceApi.GetTicker() //  获取币安的 Ticker
 	tickers.GetTicker()    // 获取 okx 的Ticker
 	SetTicker()            // 计算并设置综合排行榜单 产出 okxInfo.TickerList 数据
+	GetTickerKdata()       // 产出 okxInfo.TickerList 和 okxInfo.TickerList 数据
 }
 
 // 获取历史数据
@@ -64,12 +65,9 @@ func TimerClickStart() {
 }
 
 func SetKdata(lType string) {
-	global.Run.Println("========= 开始获取榜单数据 ===========", len(okxInfo.TickerList))
+	global.Run.Println("========= 开始获取榜单数据和K线历史 ===========")
 	GetTicker() //  产出 okxInfo.TickerList 数据
-	global.Run.Println("榜单数据获取完成", len(okxInfo.TickerList))
-
-	GetTickerKdata() // 获取并设置榜单币种最近 75 小时的历史数据 产出 okxInfo.TickerList 数据
-	global.Run.Println("历史价格获取完成", len(okxInfo.TickerKdata), len(okxInfo.TickerKdata["BTC-USDT"]))
+	global.Run.Println("数据准备完毕", len(okxInfo.TickerList), okxInfo.TickerList[0].CcyName, len(okxInfo.TickerKdata), len(okxInfo.TickerKdata["BTC-USDT"]))
 
 	// 数据库存储
 	if lType == "mClock" {
