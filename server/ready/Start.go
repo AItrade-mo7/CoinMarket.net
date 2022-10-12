@@ -93,8 +93,9 @@ func SetKdata(lType string) {
 
 	// 数据库存储
 	if lType == "mClock" {
-		SetEthDB()
-		SetBtcDB()
-		SetCoinTickerDB()
+		go SetCoinKdataDB("BTC")
+		go SetCoinKdataDB("ETH")
+		go SetCoinTickerDB()
+		go SetTickerAnalyDB()
 	}
 }
