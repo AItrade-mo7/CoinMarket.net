@@ -77,14 +77,6 @@ func (_this *SingleType) SliceKdata(hour int) (resData mOKX.AnalySliceType) {
 
 	startTimeUnix := tarTimeUnix - diffM
 
-	// for i := len(list) - 1; i >= 0; i-- {
-	// 	item := list[i]
-	// 	if item.TimeUnix < startTimeUnix {
-	// 		break
-	// 	}
-	// 	cList = append([]mOKX.TypeKd{item}, cList...)
-	// }
-
 	for _, item := range list {
 		if item.TimeUnix >= startTimeUnix {
 			cList = append(cList, item)

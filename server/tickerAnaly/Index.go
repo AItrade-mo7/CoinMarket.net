@@ -1,8 +1,6 @@
 package tickerAnaly
 
 import (
-	"log"
-
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -22,7 +20,7 @@ type AnalyResult struct {
 func GetAnaly(opt TickerAnalyParam) AnalyResult {
 	// 基于  mOKX.MarketKdata  进行数据分析
 	TickerAnalySingle := make(map[string][]mOKX.AnalySliceType)
-	log.Println("开始进行切片")
+
 	for _, item := range opt.TickerList {
 		list := opt.MarketKdata[item.InstID]
 
@@ -33,7 +31,7 @@ func GetAnaly(opt TickerAnalyParam) AnalyResult {
 			global.LogErr("tickerAnaly.Start  数据长度不足", Single.Info.InstID, len(Single.ResData))
 		}
 	}
-	log.Println("切片完成")
+
 	TickerAnalyWhole := WholeAnaly(TickerAnalySingle)
 	WholeDir := AnalyDir(TickerAnalyWhole)
 
