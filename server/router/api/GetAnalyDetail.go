@@ -23,18 +23,16 @@ func GetAnalyDetail(c *fiber.Ctx) error {
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "AITrade",
-	}).Connect().Collection("CoinTicker")
+	}).Connect().Collection("TickerAnaly")
 	defer db.Close()
 
-	FK := bson.D{
-		{
-			Key:   "TimeID",
-			Value: json.TimeID,
-		},
-	}
+	FK := bson.D{{
+		Key:   "TimeID",
+		Value: json.TimeID,
+	}}
 
-	var Ticker dbType.CoinTickerTable
-	db.Table.FindOne(db.Ctx, FK).Decode(&Ticker)
+	var Analy dbType.AnalyTickerType
+	db.Table.FindOne(db.Ctx, FK).Decode(&Analy)
 
-	return c.JSON(result.Succeed.WithData("returnData"))
+	return c.JSON(result.Succeed.WithData(Analy))
 }
