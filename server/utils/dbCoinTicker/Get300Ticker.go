@@ -3,7 +3,6 @@ package dbCoinTicker
 import (
 	"log"
 
-	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/tickerAnaly"
@@ -36,22 +35,18 @@ func GetTickerList(json dbSearch.FindParam) (resData dbSearch.PagingType, resErr
 	}
 	// 提取数据
 	var ResultList []any
-	global.Run.Println("开始分析", len(ResultList))
 	for resCur.Cursor.Next(db.Ctx) {
 		var Ticker dbType.CoinTickerTable
 		resCur.Cursor.Decode(&Ticker)
-		global.Run.Println("分析第", len(ResultList), "条")
+		// 该过程2秒钟
 		AnalyResult := tickerAnaly.GetAnaly(tickerAnaly.TickerAnalyParam{
 			TickerList:  Ticker.TickerVol,
 			MarketKdata: Ticker.Kdata,
 		})
 		ResultList = append(ResultList, AnalyResult)
 	}
-	global.Run.Println("分析结束", len(ResultList))
 	// 生成返回数据
 	resData = resCur.GenerateData(ResultList)
-
-	global.Run.Println("读取结束", len(ResultList))
 
 	return
 }
