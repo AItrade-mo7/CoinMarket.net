@@ -95,7 +95,7 @@ func SetKdata(lType string) {
 	if lType == "mClock" {
 		go SetCoinKdataDB("BTC")
 		go SetCoinKdataDB("ETH")
+		go SetCoinTickerDB()
 		SetTickerAnalyDB()
-		SetCoinTickerDB()
 	}
 }

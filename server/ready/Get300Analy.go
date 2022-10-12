@@ -1,13 +1,15 @@
 package ready
 
 import (
+	"CoinMarket.net/server/global/apiType"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/utils/dbSearch"
 	"github.com/EasyGolang/goTools/mMongo"
 )
 
-func Get300Analy(opt dbSearch.FindParam) (resData []any, resErr error) {
-	resData = []any{}
+func GetTickerAnaly(opt dbSearch.FindParam) (resData dbSearch.PagingType, resErr error) {
+	resData = dbSearch.PagingType{}
 	resErr = nil
 
 	db := mMongo.New(mMongo.Opt{
@@ -15,7 +17,7 @@ func Get300Analy(opt dbSearch.FindParam) (resData []any, resErr error) {
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "AITrade",
-	}).Connect().Collection("CoinTicker")
+	}).Connect().Collection("TickerAnaly")
 	defer db.Close()
 	// 构建搜索参数
 
@@ -29,19 +31,32 @@ func Get300Analy(opt dbSearch.FindParam) (resData []any, resErr error) {
 	}
 
 	// 提取数据
-	// var AnyList []any
+	var AnyList []any
 	for resCur.Cursor.Next(db.Ctx) {
-		var result map[string]any
-		resCur.Cursor.Decode(&result)
+		var Analy dbType.AnalyTickerType
+		resCur.Cursor.Decode(&Analy)
 
-		// var AbilityActive dbType.AbilityActiveTable
-		// jsoniter.Unmarshal(mJson.ToJson(result), &AbilityActive)
+		if opt.Type == "Client" {
+			var ClientAnaly apiType.ClientAnalyType
+			ClientAnaly.Unit = Analy.Unit
+			ClientAnaly.TimeUnix = Analy.TimeUnix
+			ClientAnaly.TimeStr = Analy.TimeStr
+			ClientAnaly.TimeID = Analy.TimeID
 
-		// abilityActiveList = append(abilityActiveList, AbilityActive)
+			ClientAnaly.MaxUP = Analy.AnalyWhole[0].MaxUP.CcyName
+			ClientAnaly.MaxUP_RosePer = Analy.AnalyWhole[0].MaxUP.RosePer
+
+			ClientAnaly.MaxDown = Analy.AnalyWhole[0].MaxDown.CcyName
+			ClientAnaly.MaxDown_RosePer = Analy.AnalyWhole[0].MaxDown.RosePer
+
+		} else {
+			AnyList = append(AnyList, Analy)
+		}
+
 	}
 
 	// 生成返回数据
-	// returnData := resCur.GenerateData(AnyList)
+	resData = resCur.GenerateData(AnyList)
 
 	return
 }
