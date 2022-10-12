@@ -1,7 +1,7 @@
 package okxInfo
 
 import (
-	"CoinMarket.net/server/tickerAnaly"
+	"CoinMarket.net/server/global/apiType"
 	"github.com/EasyGolang/goTools/mOKX"
 )
 
@@ -24,4 +24,4 @@ var TickerVol []mOKX.TypeTicker
 var TickerKdata map[string][]mOKX.TypeKd
 
 // 当前的分析结果
-var AnalyDetail tickerAnaly.AnalyResult
+var TickerAnaly apiType.AnalyTickerType

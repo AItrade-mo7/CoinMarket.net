@@ -40,7 +40,7 @@ func Start() {
 
 	// 获取排行榜单
 	mCycle.New(mCycle.Opt{
-		Func:      GetTicker,
+		Func:      SetTickerAnaly,
 		SleepTime: time.Minute * 5, // 每 5 分钟获取一次
 	}).Start()
 
@@ -52,15 +52,33 @@ func Start() {
 	})
 }
 
-func GetTicker() {
+func SetTickerAnaly() {
+	global.Run.Println("========= 开始获取榜单 TickerVol TickerKdata ===========")
 	binanceApi.GetTicker() //  获取币安的 Ticker
 	tickers.GetTicker()    // 获取 okx 的Ticker
-	SetTicker()            // 计算并设置综合排行榜单 产出 okxInfo.TickerList 数据
-	SetTickerKdata()       // 产出 okxInfo.TickerList 和 okxInfo.TickerKdata 数据
-	apiType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
+	SetTicker()            // 计算并设置综合排行榜单 产出 okxInfo.TickerVol 数据
+	SetTickerKdata()       // 产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 数据
+
+	global.Run.Println(
+		"========= 开始分析 ===========",
+		len(okxInfo.TickerVol),
+		okxInfo.TickerVol[0].CcyName,
+		len(okxInfo.TickerKdata),
+		len(okxInfo.TickerKdata["BTC-USDT"]),
+	)
+
+	okxInfo.TickerAnaly = apiType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
 		TickerVol:   okxInfo.TickerVol,
 		TickerKdata: okxInfo.TickerKdata,
 	}) // 在这里计算分析结果
+
+	global.Run.Println(
+		"分析完毕",
+		okxInfo.TickerAnaly.TimeID,
+		len(okxInfo.TickerAnaly.TickerVol),
+		okxInfo.TickerAnaly.TickerVol[0].CcyName,
+		okxInfo.TickerAnaly.WholeDir,
+	)
 }
 
 // 获取历史数据
@@ -71,9 +89,7 @@ func TimerClickStart() {
 }
 
 func SetKdata(lType string) {
-	global.Run.Println("========= 开始获取榜单数据和K线历史 ===========")
-	GetTicker() //  产出 okxInfo.TickerList 数据
-	global.Run.Println("数据准备完毕", len(okxInfo.TickerVol), okxInfo.TickerVol[0].CcyName, len(okxInfo.TickerKdata), len(okxInfo.TickerKdata["BTC-USDT"]))
+	SetTickerAnaly() //  产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 以及 okxInfo.TickerAnaly
 
 	// 数据库存储
 	if lType == "mClock" {
