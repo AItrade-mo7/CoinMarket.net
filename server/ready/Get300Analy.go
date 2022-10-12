@@ -44,12 +44,13 @@ func GetTickerAnaly(opt dbSearch.FindParam) (resData dbSearch.PagingType, resErr
 			ClientAnaly.TimeUnix = Analy.TimeUnix
 			ClientAnaly.TimeStr = Analy.TimeStr
 			ClientAnaly.TimeID = Analy.TimeID
-
-			ClientAnaly.MaxUP = Analy.AnalyWhole[0].MaxUP.CcyName
-			ClientAnaly.MaxUP_RosePer = Analy.AnalyWhole[0].MaxUP.RosePer
-
-			ClientAnaly.MaxDown = Analy.AnalyWhole[0].MaxDown.CcyName
-			ClientAnaly.MaxDown_RosePer = Analy.AnalyWhole[0].MaxDown.RosePer
+			ClientAnaly.WholeDir = Analy.WholeDir
+			if len(Analy.AnalyWhole) > 0 {
+				ClientAnaly.MaxUP = Analy.AnalyWhole[0].MaxUP.CcyName
+				ClientAnaly.MaxUP_RosePer = Analy.AnalyWhole[0].MaxUP.RosePer
+				ClientAnaly.MaxDown = Analy.AnalyWhole[0].MaxDown.CcyName
+				ClientAnaly.MaxDown_RosePer = Analy.AnalyWhole[0].MaxDown.RosePer
+			}
 
 			AnyList = append(AnyList, ClientAnaly)
 
