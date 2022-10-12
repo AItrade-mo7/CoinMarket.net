@@ -68,13 +68,13 @@ func SetKdata(lType string) {
 	GetTicker() //  产出 okxInfo.TickerList 数据
 	global.Run.Println("榜单数据获取完成", len(okxInfo.TickerList))
 
-	TickerKdata() // 获取并设置榜单币种最近 75 小时的历史数据 产出 okxInfo.TickerList 数据
+	GetTickerKdata() // 获取并设置榜单币种最近 75 小时的历史数据 产出 okxInfo.TickerList 数据
 	global.Run.Println("历史价格获取完成", len(okxInfo.TickerKdata), len(okxInfo.TickerKdata["BTC-USDT"]))
 
 	// 数据库存储
 	if lType == "mClock" {
-		go SetMarketTickerDB()
-		go SetEthDB()
-		go SetBtcDB()
+		SetMarketTickerDB()
+		SetEthDB()
+		SetBtcDB()
 	}
 }

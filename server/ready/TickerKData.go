@@ -10,7 +10,7 @@ import (
 	"github.com/EasyGolang/goTools/mOKX"
 )
 
-func TickerKdata() {
+func GetTickerKdata() {
 	okxInfo.TickerKdata = make(map[string][]mOKX.TypeKd)
 	TickerList := []mOKX.TypeTicker{}
 	for _, item := range okxInfo.TickerList {
