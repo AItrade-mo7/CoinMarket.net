@@ -78,12 +78,18 @@ func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWhol
 	UDAvg := mCount.Add(upAvg, downAvg)
 	resData.UDAvg = mCount.Cent(UDAvg, 3)
 
-	// 上涨趋势方向
+	// 上涨指数 计算
 	resData.UPLe = mCount.Le(resData.UPIndex, "50")
-	// 涨幅均值方向
+	// 综合涨幅均值 计算
 	resData.UDLe = mCount.Le(resData.UDAvg, "0")
 
 	resData.DirIndex = 0
+	if resData.UPLe == 0 {
+		resData.DirIndex = resData.UDLe
+	} else if resData.UDLe == 0 {
+		resData.DirIndex = resData.UPLe
+	}
+
 	if resData.UPLe > 0 && resData.UDLe > 0 {
 		resData.DirIndex = 1
 	} else if resData.UPLe < 0 && resData.UDLe < 0 {
