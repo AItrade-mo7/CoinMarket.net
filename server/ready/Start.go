@@ -61,7 +61,6 @@ func SetTickerAnaly() {
 	global.Run.Println(
 		"========= 开始分析 ===========",
 		len(okxInfo.TickerVol),
-		okxInfo.TickerVol[0].CcyName,
 		len(okxInfo.TickerKdata),
 		len(okxInfo.TickerKdata["BTC-USDT"]),
 	)

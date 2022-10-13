@@ -1,6 +1,7 @@
 package dbType
 
 import (
+	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/tickerAnaly"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -21,6 +22,12 @@ type AnalyTickerType struct {
 
 func GetAnalyTicker(opt tickerAnaly.TickerAnalyParam) (resData AnalyTickerType) {
 	resData = AnalyTickerType{}
+
+	if len(opt.TickerVol) > 5 && len(opt.TickerKdata) > 5 {
+	} else {
+		global.LogErr("dbType.GetAnalyTicker", len(opt.TickerVol), len(opt.TickerKdata))
+		return
+	}
 
 	AnalyResult := tickerAnaly.GetAnaly(opt)
 
