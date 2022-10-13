@@ -25,6 +25,7 @@ func Start() {
 	global.KdataLog.Println("ready.Start inst.Start", len(okxInfo.SPOT_inst), len(okxInfo.SWAP_inst))
 
 	// 数据榜单并进行数据库存储
+	SetTickerAnaly()
 	go mClock.New(mClock.OptType{
 		Func: SetTickerAnaly,
 		Spec: "5 0,5,10,15,20,25,30,35,40,45,50,55 * * * ? ", // 5 分的整数过 5秒
