@@ -10,14 +10,8 @@ import (
 func MiddleWare(c *fiber.Ctx) error {
 	c.Set("Data-Path", "CoinMarket.net/CoinMarket/private")
 
-	// 授权验证
-	err := middle.EncryptAuth(c)
-	if err != nil {
-		return c.JSON(result.ErrAuth.WithData(mStr.ToStr(err)))
-	}
-
 	// Token 验证
-	_, err = middle.TokenAuth(c)
+	_, err := middle.TokenAuth(c)
 	if err != nil {
 		return c.JSON(result.ErrToken.WithData(mStr.ToStr(err)))
 	}
