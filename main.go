@@ -26,4 +26,6 @@ func main() {
 	// Task := dbTask.NewAnalyTask()
 	// Task.CoinDBTraverse()
 	// dbTask.EndEmail()
+
+	select {} // 阻塞主线程停止
 }

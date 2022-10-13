@@ -1,7 +1,7 @@
 package ready
 
 import (
-	"log"
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -27,41 +27,56 @@ func Start() {
 	// 数据榜单并进行数据库存储
 	go mClock.New(mClock.OptType{
 		Func: SetDBTickerData,
-		Spec: "0,5,10,15,20,25,30,35,40,45,50,55 * * * * ? ",
+		Spec: "0 0,5,10,15,20,25,30,35,40,45,50,55 * * * ? ",
 	})
 }
 
 // 获取历史数据并存储
 func SetDBTickerData() {
-	log.Println("开始获取数据")
-
-	// time.Sleep(time.Second / 3)
 	SetTickerAnaly() //  产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 以及 okxInfo.TickerAnaly
+	KTime := mOKX.GetKdataTime(okxInfo.TickerKdata)
 
-	nowTime := mOKX.GetKdataTime(okxInfo.TickerKdata)
+	for key, val := range okxInfo.TickerKdata {
+		fmt.Println(key)
 
-	log.Println("数据获取结束", nowTime)
+		for _, K := range val {
+			fmt.Println(K.TimeStr)
+		}
 
-	// go SetTickerAnalyDB()
-	// go SetCoinTickerDB()
-	// go SetCoinKdataDB("BTC")
-	// go SetCoinKdataDB("ETH")
+	}
+
+	if IsTimeScale(KTime) {
+		// go SetTickerAnalyDB()
+		// go SetCoinTickerDB()
+		// go SetCoinKdataDB("BTC")
+		// go SetCoinKdataDB("ETH")
+	}
 }
 
 // 获取榜单数据
 func SetTickerAnaly() {
+	global.Run.Println("========= 开始获取数据 ===========")
+
 	binanceApi.GetTicker() // 获取币安的 Ticker
 	tickers.GetTicker()    // 获取 okx 的Ticker
 	SetTicker()            // 计算并设置综合榜单 产出 okxInfo.TickerVol 数据
 	SetTickerKdata()       // 产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 数据
 	global.Run.Println(
-		"========= 开始分析 ===========",
+		"== 开始分析 ==",
 		len(okxInfo.TickerVol),
 		len(okxInfo.TickerKdata),
-		len(okxInfo.TickerKdata["BTC-USDT"]),
 	)
 	okxInfo.TickerAnaly = dbType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
 		TickerVol:   okxInfo.TickerVol,
 		TickerKdata: okxInfo.TickerKdata,
 	})
+	global.Run.Println(
+		"== 分析结束 ==",
+		len(okxInfo.TickerAnaly.TickerVol),
+		len(okxInfo.TickerAnaly.AnalyWhole),
+		len(okxInfo.TickerAnaly.AnalySingle),
+		len(okxInfo.TickerAnaly.Unit),
+		okxInfo.TickerAnaly.WholeDir,
+		okxInfo.TickerAnaly.TimeID,
+	)
 }
