@@ -1,7 +1,7 @@
 package ready
 
 import (
-	"fmt"
+	"log"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -11,9 +11,8 @@ import (
 	"CoinMarket.net/server/okxApi/restApi/tickers"
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
-	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mCycle"
-	"github.com/EasyGolang/goTools/mOKX"
+	"github.com/EasyGolang/goTools/mTime"
 )
 
 func Start() {
@@ -25,25 +24,20 @@ func Start() {
 	global.KdataLog.Println("ready.Start inst.Start", len(okxInfo.SPOT_inst), len(okxInfo.SWAP_inst))
 
 	// 数据榜单并进行数据库存储
-	go mClock.New(mClock.OptType{
-		Func: SetDBTickerData,
-		Spec: "0 0,5,10,15,20,25,30,35,40,45,50,55 * * * ? ",
-	})
+	// go mClock.New(mClock.OptType{
+	// 	Func: SetDBTickerData,
+	// 	Spec: "0 0,5,10,15,20,25,30,35,40,45,50,55 * * * ? ",
+	// })
+
+	SetDBTickerData()
 }
 
 // 获取历史数据并存储
 func SetDBTickerData() {
 	SetTickerAnaly() //  产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 以及 okxInfo.TickerAnaly
-	KTime := mOKX.GetKdataTime(okxInfo.TickerKdata)
+	KTime := GetKdataTime(okxInfo.TickerVol)
 
-	for key, val := range okxInfo.TickerKdata {
-		fmt.Println(key)
-
-		for _, K := range val {
-			fmt.Println(K.TimeStr)
-		}
-
-	}
+	log.Println("分析结束", mTime.UnixFormat(KTime))
 
 	if IsTimeScale(KTime) {
 		// go SetTickerAnalyDB()
