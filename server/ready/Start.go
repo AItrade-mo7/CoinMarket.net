@@ -1,6 +1,7 @@
 package ready
 
 import (
+	"log"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -12,6 +13,7 @@ import (
 	"CoinMarket.net/server/tickerAnaly"
 	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mCycle"
+	"github.com/EasyGolang/goTools/mOKX"
 )
 
 func Start() {
@@ -31,12 +33,19 @@ func Start() {
 
 // 获取历史数据并存储
 func SetDBTickerData() {
-	time.Sleep(time.Second / 3)
+	log.Println("开始获取数据")
+
+	// time.Sleep(time.Second / 3)
 	SetTickerAnaly() //  产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 以及 okxInfo.TickerAnaly
-	go SetTickerAnalyDB()
-	go SetCoinTickerDB()
-	go SetCoinKdataDB("BTC")
-	go SetCoinKdataDB("ETH")
+
+	nowTime := mOKX.GetKdataTime(okxInfo.TickerKdata)
+
+	log.Println("数据获取结束", nowTime)
+
+	// go SetTickerAnalyDB()
+	// go SetCoinTickerDB()
+	// go SetCoinKdataDB("BTC")
+	// go SetCoinKdataDB("ETH")
 }
 
 // 获取榜单数据
