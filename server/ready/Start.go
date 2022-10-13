@@ -4,45 +4,23 @@ import (
 	"time"
 
 	"CoinMarket.net/server/global"
-	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/tickers"
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
-	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mCycle"
 )
 
 func Start() {
-	// 发送启动邮件
-	if config.SysEnv.RunMod == 0 {
-		go global.Email(global.EmailOpt{
-			To: []string{
-				"meichangliang@mo7.cc",
-			},
-			Subject:  "ServeStart",
-			Template: tmpl.SysEmail,
-			SendData: tmpl.SysParam{
-				Message: "服务启动",
-				SysTime: time.Now(),
-			},
-		}).Send()
-	}
 	// 获取 OKX 交易产品信息
 	mCycle.New(mCycle.Opt{
 		Func:      inst.Start,
 		SleepTime: time.Hour * 4, // 每 4 时获取一次
 	}).Start()
 	global.KdataLog.Println("ready.Start inst.Start", len(okxInfo.SPOT_inst), len(okxInfo.SWAP_inst))
-
-	// 获取排行榜单
-	mCycle.New(mCycle.Opt{
-		Func:      SetTickerAnaly,
-		SleepTime: time.Minute * 5, // 每 5 分钟获取一次
-	}).Start()
 
 	// 数据榜单并进行数据库存储
 	go mClock.New(mClock.OptType{

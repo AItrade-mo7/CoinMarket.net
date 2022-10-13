@@ -1,8 +1,6 @@
 package dbTask
 
 import (
-	"time"
-
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
@@ -11,6 +9,7 @@ import (
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStruct"
+	"github.com/EasyGolang/goTools/mTime"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -171,7 +170,7 @@ func StartEmail() {
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{
 			Message: "开始执行 AnalyTask",
-			SysTime: time.Now(),
+			SysTime: mTime.IsoTime(false),
 		},
 	}).Send()
 	global.Run.Println("======= 脚本开始 =======")
@@ -187,7 +186,7 @@ func EndEmail() {
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{
 			Message: "AnalyTask 执行完毕",
-			SysTime: time.Now(),
+			SysTime: mTime.IsoTime(false),
 		},
 	}).Send()
 }

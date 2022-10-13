@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/tmpl"
@@ -74,7 +73,7 @@ func LogErr(sum ...any) {
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{
 			Message: str,
-			SysTime: time.Now(),
+			SysTime: mTime.IsoTime(false),
 		},
 	})
 	Log.Println(str)

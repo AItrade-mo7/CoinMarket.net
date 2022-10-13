@@ -13,6 +13,7 @@ import (
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStruct"
+	"github.com/EasyGolang/goTools/mTime"
 	jsoniter "github.com/json-iterator/go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -27,7 +28,7 @@ func FormatMarket() {
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{
 			Message: "开始执行脚本",
-			SysTime: time.Now(),
+			SysTime: mTime.IsoTime(false),
 		},
 	}).Send()
 	inst.Start()
@@ -118,7 +119,7 @@ func FormatMarket() {
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{
 			Message: "脚本执行结束",
-			SysTime: time.Now(),
+			SysTime: mTime.IsoTime(false),
 		},
 	}).Send()
 }
