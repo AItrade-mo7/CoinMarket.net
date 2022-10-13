@@ -27,10 +27,8 @@ func SetTickerKdata() {
 			continue
 		}
 
-		OKXList := kdata.GetKdata(item.InstID)
 		BinanceList := binanceApi.GetKdata(item.Symbol)
-
-		SWAPList := kdata.GetKdata(SwapInst.InstID)
+		OKXList := kdata.GetKdata(item.InstID)
 
 		List := DataMerge(DataMergeOpt{
 			OKXList:     OKXList,
@@ -40,7 +38,6 @@ func SetTickerKdata() {
 		if len(List) == 300 {
 			TickerList = append(TickerList, item)
 			TickerKdata[item.InstID] = List
-			TickerKdata[SwapInst.InstID] = SWAPList
 		}
 
 	}
