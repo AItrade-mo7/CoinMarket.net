@@ -4,7 +4,9 @@ import (
 	"time"
 
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mCycle"
+	"github.com/EasyGolang/goTools/mTime"
 )
 
 func Start() {
@@ -21,18 +23,16 @@ func Start() {
 	ServerEnvInit()
 
 	// 发送启动邮件
-	// if config.SysEnv.RunMod == 0 {
-	// 	go Email(EmailOpt{
-	// 		To: []string{
-	// 			"meichangliang@mo7.cc",
-	// 		},
-	// 		Subject:  "ServeStart",
-	// 		Template: tmpl.SysEmail,
-	// 		SendData: tmpl.SysParam{
-	// 			Message: "服务启动",
-	// 			SysTime: mTime.IsoTime(false),
-	// 		},
-	// 	}).Send()
-	// }
+	go Email(EmailOpt{
+		To: []string{
+			"meichangliang@mo7.cc",
+		},
+		Subject:  "ServeStart",
+		Template: tmpl.SysEmail,
+		SendData: tmpl.SysParam{
+			Message: "服务启动",
+			SysTime: mTime.IsoTime(false),
+		},
+	}).Send()
 	Log.Println(`系统初始化完成`)
 }
