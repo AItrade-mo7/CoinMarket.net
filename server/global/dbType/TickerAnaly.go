@@ -23,7 +23,7 @@ type AnalyTickerType struct {
 func GetAnalyTicker(opt tickerAnaly.TickerAnalyParam) (resData AnalyTickerType) {
 	resData = AnalyTickerType{}
 
-	if len(opt.TickerVol) > 5 && len(opt.TickerKdata) > 5 {
+	if len(opt.TickerVol) > 5 && len(opt.TickerKdata) > 5 && len(opt.TickerKdata["BTC-USDT"]) > 5 {
 	} else {
 		global.LogErr("dbType.GetAnalyTicker", len(opt.TickerVol), len(opt.TickerKdata))
 		return
@@ -36,7 +36,7 @@ func GetAnalyTicker(opt tickerAnaly.TickerAnalyParam) (resData AnalyTickerType) 
 	resData.AnalySingle = AnalyResult.AnalySingle
 	resData.WholeDir = AnalyResult.WholeDir
 	resData.Unit = config.Unit
-	resData.TimeUnix = resData.TickerVol[0].Ts
+	resData.TimeUnix = mOKX.GetKdataTime(opt.TickerKdata)
 	resData.TimeStr = mTime.UnixFormat(mStr.ToStr(resData.TimeUnix))
 	resData.TimeID = mOKX.GetTimeID(resData.TimeUnix)
 
