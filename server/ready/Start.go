@@ -52,11 +52,9 @@ func SetTickerAnaly() {
 		TickerKdata: okxInfo.TickerKdata,
 	})
 
-	KTime := mOKX.GetKdataTime(okxInfo.TickerKdata)
-
 	global.Run.Println(
 		"== 分析结束 ==",
-		mTime.UnixFormat(KTime),
+		mTime.UnixFormat(mOKX.GetKdataTime(okxInfo.TickerKdata)),
 		len(okxInfo.TickerAnaly.TickerVol),
 		len(okxInfo.TickerAnaly.AnalyWhole),
 		len(okxInfo.TickerAnaly.AnalySingle),
@@ -65,7 +63,7 @@ func SetTickerAnaly() {
 		okxInfo.TickerAnaly.TimeID,
 	)
 
-	if IsTimeScale(KTime) {
+	if IsTimeScale(mTime.GetUnixInt64()) {
 		go SetTickerAnalyDB()
 		go SetCoinTickerDB()
 		go SetCoinKdataDB("BTC")
