@@ -84,11 +84,6 @@ func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWhol
 	resData.UDLe = mCount.Le(resData.UDAvg, "0")
 
 	resData.DirIndex = 0
-	if resData.UPLe == 0 {
-		resData.DirIndex = resData.UDLe
-	} else if resData.UDLe == 0 {
-		resData.DirIndex = resData.UPLe
-	}
 
 	if resData.UPLe > 0 && resData.UDLe > 0 {
 		resData.DirIndex = 1
