@@ -43,15 +43,17 @@ func Start() {
 	ReStartMongoDB()
 	go mClock.New(mClock.OptType{
 		Func: ReStartMongoDB,
-		Spec: "0 7 0,3,6,9,12,15,18,21 * * ? ", // 数据库重启
+		Spec: "0 8 0,3,6,9,12,15,18,21 * * ? ", // 数据库重启
 	})
 }
 
 func ReStartMongoDB() {
-	isShellPath := mPath.Exists(config.File.ReStartMongo)
+	isShellPath := mPath.Exists(config.File.ReStartShell)
 	if !isShellPath {
-		Log.Println("未找到重启脚本")
+		Log.Println("未找到 ReStartShell 脚本")
+		return
 	}
-	Succeed, err := exec.Command("/bin/bash", config.File.ReStartMongo).Output()
+
+	Succeed, err := exec.Command("/bin/bash", config.File.ReStartShell).Output()
 	Log.Println("执行脚本", Succeed, err)
 }

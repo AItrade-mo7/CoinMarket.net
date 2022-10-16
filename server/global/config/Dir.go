@@ -19,7 +19,7 @@ var Dir DirType
 type FileType struct {
 	SysEnv       string // /root/sys_env.yaml
 	LocalSysEnv  string // ./sys_env.yaml
-	ReStartMongo string
+	ReStartShell string // 启动时需要执行的脚本
 }
 
 var File FileType
@@ -52,13 +52,9 @@ func DirInit() {
 		"sys_env.yaml",
 	)
 
-	File.ReStartMongo = mStr.Join(
+	File.ReStartShell = mStr.Join(
 		Dir.App,
 		mStr.ToStr(os.PathSeparator),
-		"server",
-		mStr.ToStr(os.PathSeparator),
-		"tmpl",
-		mStr.ToStr(os.PathSeparator),
-		"ReStartMongo.sh",
+		"ReStart.sh",
 	)
 }

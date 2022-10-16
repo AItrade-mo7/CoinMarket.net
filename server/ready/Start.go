@@ -1,11 +1,9 @@
 package ready
 
 import (
-	"os/exec"
 	"time"
 
 	"CoinMarket.net/server/global"
-	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
@@ -15,18 +13,10 @@ import (
 	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mCycle"
 	"github.com/EasyGolang/goTools/mOKX"
-	"github.com/EasyGolang/goTools/mPath"
 	"github.com/EasyGolang/goTools/mTime"
 )
 
 func Start() {
-	// 设定数据库重启
-	ReStartMongoDB()
-	go mClock.New(mClock.OptType{
-		Func: ReStartMongoDB,
-		Spec: "0 7 0,3,6,9,12,15,18,21 * * ? ", // 数据库重启
-	})
-
 	// 获取 OKX 交易产品信息
 	mCycle.New(mCycle.Opt{
 		Func:      inst.Start,
@@ -79,13 +69,4 @@ func SetTickerAnaly() {
 		go SetCoinKdataDB("BTC")
 		go SetCoinKdataDB("ETH")
 	}
-}
-
-func ReStartMongoDB() {
-	isShellPath := mPath.Exists(config.File.ReStartMongo)
-	if !isShellPath {
-		global.Log.Println("未找到重启脚本")
-	}
-	Succeed, err := exec.Command("/bin/bash", config.File.ReStartMongo).Output()
-	global.Log.Println("执行脚本", Succeed, err)
 }
