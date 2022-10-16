@@ -156,7 +156,7 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 	Sort_HLPer := mOKX.Sort_HLPer(list) // 振幅排序 高 - 低
 
 	slice.Volume = Volume
-	slice.RosePer = mCount.RoseCent(lastElm.C, firstElm.CBas) // 最后一个的 C - 一开始的 CBas
+	slice.RosePer = mCount.RoseCent(lastElm.CBas, firstElm.CBas) // 最后一个的 C - 一开始的 CBas
 	slice.H = Sort_H[0].H
 	slice.L = Sort_L[len(Sort_H)-1].L
 
