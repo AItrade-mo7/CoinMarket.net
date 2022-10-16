@@ -1,11 +1,15 @@
 package global
 
 import (
+	"fmt"
+	"os/exec"
 	"time"
 
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/tmpl"
+	"github.com/EasyGolang/goTools/global"
 	"github.com/EasyGolang/goTools/mCycle"
+	"github.com/EasyGolang/goTools/mPath"
 	"github.com/EasyGolang/goTools/mTime"
 )
 
@@ -35,4 +39,13 @@ func Start() {
 		},
 	}).Send()
 	Log.Println(`系统初始化完成`)
+}
+
+func ReStartMongo() {
+	isShellPath := mPath.Exists(config.File.ReStartMongo)
+	if !isShellPath {
+		fmt.Println("未找到重启脚本")
+	}
+	Succeed, err := exec.Command("/bin/bash", config.File.ReStartMongo).Output()
+	global.Log.Println("执行脚本", Succeed, err)
 }

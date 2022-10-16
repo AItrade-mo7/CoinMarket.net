@@ -17,8 +17,9 @@ type DirType struct {
 var Dir DirType
 
 type FileType struct {
-	SysEnv      string // /root/sys_env.yaml
-	LocalSysEnv string // ./sys_env.yaml
+	SysEnv       string // /root/sys_env.yaml
+	LocalSysEnv  string // ./sys_env.yaml
+	ReStartMongo string
 }
 
 var File FileType
@@ -49,5 +50,15 @@ func DirInit() {
 		Dir.App,
 		mStr.ToStr(os.PathSeparator),
 		"sys_env.yaml",
+	)
+
+	File.ReStartMongo = mStr.Join(
+		Dir.App,
+		mStr.ToStr(os.PathSeparator),
+		"server",
+		mStr.ToStr(os.PathSeparator),
+		"tmpl",
+		mStr.ToStr(os.PathSeparator),
+		"ReStartMongo.sh",
 	)
 }
