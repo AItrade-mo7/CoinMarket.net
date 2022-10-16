@@ -50,9 +50,9 @@ func (_this *SingleType) SetTime() *SingleType {
 	list := _this.List
 	Len := len(_this.List)
 
-	_this.Info.StartTime = mTime.MsToTime(list[0].TimeUnix, "0")
+	_this.Info.StartTimeStr = mTime.UnixFormat(list[0].TimeUnix)
 	_this.Info.StartTimeUnix = list[0].TimeUnix
-	_this.Info.EndTime = mTime.MsToTime(list[Len-1].TimeUnix, "0")
+	_this.Info.EndTimeStr = mTime.UnixFormat(list[Len-1].TimeUnix)
 	_this.Info.EndTimeUnix = list[Len-1].TimeUnix
 	_this.Info.DiffHour = (_this.Info.EndTimeUnix - _this.Info.StartTimeUnix) / mTime.UnixTimeInt64.Hour
 
@@ -85,9 +85,9 @@ func (_this *SingleType) SliceKdata(hour int) (resData mOKX.AnalySliceType) {
 
 	cLen := len(cList)
 
-	resData.StartTime = mTime.MsToTime(cList[0].TimeUnix, "0")
+	resData.StartTimeStr = mTime.UnixFormat(cList[0].TimeUnix)
 	resData.StartTimeUnix = cList[0].TimeUnix
-	resData.EndTime = mTime.MsToTime(cList[cLen-1].TimeUnix, "0")
+	resData.EndTimeStr = mTime.UnixFormat(cList[cLen-1].TimeUnix)
 	resData.EndTimeUnix = cList[cLen-1].TimeUnix
 	DiffHour := (resData.EndTimeUnix - resData.StartTimeUnix) / mTime.UnixTimeInt64.Hour
 	resData.DiffHour = int(DiffHour)

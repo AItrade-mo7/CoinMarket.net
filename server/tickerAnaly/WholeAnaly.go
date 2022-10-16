@@ -99,9 +99,10 @@ func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWhol
 		resData.DirIndex = -1
 	}
 
-	resData.StartTime = list[0].StartTime
+	resData.StartTimeStr = list[0].StartTimeStr
 	resData.StartTimeUnix = list[0].StartTimeUnix
-	resData.EndTime = list[0].EndTime
+
+	resData.EndTimeStr = list[0].EndTimeStr
 	resData.EndTimeUnix = list[0].EndTimeUnix
 
 	resData.MaxUP = URList[0] // 这里要按照涨跌幅 排序
