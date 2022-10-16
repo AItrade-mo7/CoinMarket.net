@@ -1,8 +1,6 @@
 package tickerAnaly
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"github.com/EasyGolang/goTools/mCount"
@@ -53,19 +51,15 @@ func WholeAnaly(TickerAnalySingle map[string][]mOKX.AnalySliceType) []mOKX.TypeW
 func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWholeTickerAnaly) {
 	resData = mOKX.TypeWholeTickerAnaly{}
 
-	sortRosePerList := mOKX.Sort_RosePer(list)
-
-	for _, val := range sortRosePerList {
-		fmt.Println(val.RosePer)
-	}
-
 	// 开始
 	var (
 		Up_Num   []string // 上涨幅度的集合
 		Down_Num []string // 下跌幅度的集合
 	)
 
-	for _, val := range list {
+	newURList := URList[1 : len(URList)-1] // 去除一个最高值和最低值
+
+	for _, val := range newURList {
 		U_R_diff := mCount.Le(val.RosePer, "0")
 		if U_R_diff > -1 {
 			Up_Num = append(Up_Num, val.RosePer)
@@ -76,7 +70,7 @@ func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWhol
 
 	// 上涨指数
 	upN := mStr.ToStr(len(Up_Num))
-	allN := mStr.ToStr(len(list))
+	allN := mStr.ToStr(len(newURList))
 
 	resData.UPIndex = mCount.PerCent(upN, allN)
 
@@ -84,7 +78,7 @@ func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWhol
 	upAvg := mCount.Average(Up_Num)
 	downAvg := mCount.Average(Down_Num)
 	UDAvg := mCount.Add(upAvg, downAvg)
-	resData.UDAvg = mCount.Cent(UDAvg, 3)
+	resData.UDAvg = mCount.Cent(UDAvg, 2)
 
 	// 上涨指数 计算
 	resData.UPLe = mCount.Le(resData.UPIndex, "50")
@@ -92,6 +86,12 @@ func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWhol
 	resData.UDLe = mCount.Le(resData.UDAvg, "0")
 
 	resData.DirIndex = 0
+
+	if resData.UPLe == 0 {
+		resData.DirIndex = resData.UDLe
+	} else if resData.UDLe == 0 {
+		resData.DirIndex = resData.UPLe
+	}
 
 	if resData.UPLe > 0 && resData.UDLe > 0 {
 		resData.DirIndex = 1
