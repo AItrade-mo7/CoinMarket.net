@@ -65,23 +65,18 @@ func (_this *SingleType) SliceKdata(hour int) (resData mOKX.AnalySliceType) {
 	list := _this.List
 	Len := len(_this.List)
 
-	// 切片数组
-	cList := []mOKX.TypeKd{}
-
 	backward := int64(hour)
+	backwardUnix := backward * mTime.UnixTimeInt64.Hour
+
 	nowTimeUnix := list[Len-1].TimeUnix
-	tarTime := mTime.MsToTime(nowTimeUnix, mStr.Join("-", backward*mTime.UnixTimeInt64.Hour))
+	tarTime := mTime.MsToTime(nowTimeUnix, mStr.Join("-", backwardUnix))
 
 	tarTimeUnix := mTime.ToUnixMsec(tarTime)
-	diffM := int64(tarTime.Minute()) * (mTime.UnixTimeInt64.Minute)
 
-	startTimeUnix := tarTimeUnix - diffM
+	diffLen := (nowTimeUnix - tarTimeUnix) / (mTime.UnixTimeInt64.Minute * 15)
+	backLen := int(diffLen) + 1
 
-	for _, item := range list {
-		if item.TimeUnix >= startTimeUnix {
-			cList = append(cList, item)
-		}
-	}
+	cList := _this.List[Len-backLen : Len]
 
 	cLen := len(cList)
 
