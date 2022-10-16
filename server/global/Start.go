@@ -8,6 +8,7 @@ import (
 	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mCycle"
+	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mPath"
 	"github.com/EasyGolang/goTools/mTime"
 )
@@ -37,7 +38,7 @@ func Start() {
 			SysTime: mTime.IsoTime(false),
 		},
 	}).Send()
-	Log.Println(`系统初始化完成`, config.SysEnv)
+	Log.Println(`系统初始化完成`, mJson.Format(config.SysEnv))
 
 	// 设定数据库重启
 	ReStartMongoDB()
