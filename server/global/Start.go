@@ -7,7 +7,6 @@ import (
 
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/tmpl"
-	"github.com/EasyGolang/goTools/global"
 	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mCycle"
 	"github.com/EasyGolang/goTools/mPath"
@@ -55,5 +54,5 @@ func ReStartMongoDB() {
 		fmt.Println("未找到重启脚本")
 	}
 	Succeed, err := exec.Command("/bin/bash", config.File.ReStartMongo).Output()
-	global.Log.Println("执行脚本", Succeed, err)
+	Log.Println("执行脚本", Succeed, err)
 }
