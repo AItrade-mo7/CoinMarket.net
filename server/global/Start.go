@@ -39,9 +39,10 @@ func Start() {
 		},
 	}).Send()
 	Log.Println(`系统初始化完成`)
+	ReStartMongoDB()
 }
 
-func ReStartMongo() {
+func ReStartMongoDB() {
 	isShellPath := mPath.Exists(config.File.ReStartMongo)
 	if !isShellPath {
 		fmt.Println("未找到重启脚本")
