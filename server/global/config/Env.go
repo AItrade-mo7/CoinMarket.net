@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 
-	"github.com/EasyGolang/goTools/mJson"
 	"github.com/spf13/viper"
 )
 
@@ -29,7 +28,6 @@ func LoadSysEnv(envPath string) {
 		panic(errStr)
 	}
 	viper.Unmarshal(&SysEnv)
-	Log.Println("加载配置:SysEnv", mJson.JsonFormat(mJson.ToJson(SysEnv)))
 }
 
 type EmailInfo struct {

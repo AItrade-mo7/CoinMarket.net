@@ -37,7 +37,7 @@ func Start() {
 			SysTime: mTime.IsoTime(false),
 		},
 	}).Send()
-	Log.Println(`系统初始化完成`)
+	Log.Println(`系统初始化完成`, config.SysEnv)
 
 	// 设定数据库重启
 	ReStartMongoDB()
