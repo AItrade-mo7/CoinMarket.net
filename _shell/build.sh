@@ -14,4 +14,5 @@ mkdir ${outPutPath}
 
 echo "移动 go build 文件"
 mv ${buildName} ${outPutPath}"/" &&
-  exit
+  cp -r ${path}"/ReStart.sh" ${outPutPath}"/"
+exit
