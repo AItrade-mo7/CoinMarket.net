@@ -1,7 +1,6 @@
 package global
 
 import (
-	"fmt"
 	"os/exec"
 	"time"
 
@@ -51,7 +50,7 @@ func Start() {
 func ReStartMongoDB() {
 	isShellPath := mPath.Exists(config.File.ReStartMongo)
 	if !isShellPath {
-		fmt.Println("未找到重启脚本")
+		Log.Println("未找到重启脚本")
 	}
 	Succeed, err := exec.Command("/bin/bash", config.File.ReStartMongo).Output()
 	Log.Println("执行脚本", Succeed, err)
