@@ -1,6 +1,8 @@
 package tickerAnaly
 
 import (
+	"fmt"
+
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"github.com/EasyGolang/goTools/mCount"
@@ -50,6 +52,12 @@ func WholeAnaly(TickerAnalySingle map[string][]mOKX.AnalySliceType) []mOKX.TypeW
 
 func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWholeTickerAnaly) {
 	resData = mOKX.TypeWholeTickerAnaly{}
+
+	sortRosePerList := mOKX.Sort_RosePer(list)
+
+	for _, val := range sortRosePerList {
+		fmt.Println(val.RosePer)
+	}
 
 	// 开始
 	var (
