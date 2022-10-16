@@ -37,4 +37,6 @@ func Start() {
 	}
 	okxInfo.SPOT_inst = SPOT_inst
 	okxInfo.SWAP_inst = SWAP_inst
+
+	global.KdataLog.Println("ready.Start inst.Start", len(okxInfo.SPOT_inst), len(okxInfo.SWAP_inst))
 }

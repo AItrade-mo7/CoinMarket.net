@@ -1,15 +1,12 @@
 package global
 
 import (
-	"os/exec"
 	"time"
 
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/tmpl"
-	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mCycle"
 	"github.com/EasyGolang/goTools/mJson"
-	"github.com/EasyGolang/goTools/mPath"
 	"github.com/EasyGolang/goTools/mTime"
 )
 
@@ -39,22 +36,4 @@ func Start() {
 		},
 	}).Send()
 	Log.Println(`系统初始化完成`, mJson.Format(config.SysEnv))
-
-	// 设定数据库重启
-	ReStartMongoDB()
-	go mClock.New(mClock.OptType{
-		Func: ReStartMongoDB,
-		Spec: "0 8 0,3,6,9,12,15,18,21 * * ? ", // 数据库重启
-	})
-}
-
-func ReStartMongoDB() {
-	isShellPath := mPath.Exists(config.File.ReStartShell)
-	if !isShellPath {
-		Log.Println("未找到 ReStartShell 脚本")
-		return
-	}
-
-	Succeed, err := exec.Command("/bin/bash", config.File.ReStartShell).Output()
-	Log.Println("执行脚本", Succeed, err)
 }

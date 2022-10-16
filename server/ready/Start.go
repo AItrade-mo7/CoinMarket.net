@@ -1,9 +1,10 @@
 package ready
 
 import (
-	"time"
+	"os/exec"
 
 	"CoinMarket.net/server/global"
+	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
@@ -11,18 +12,25 @@ import (
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
 	"github.com/EasyGolang/goTools/mClock"
-	"github.com/EasyGolang/goTools/mCycle"
 	"github.com/EasyGolang/goTools/mOKX"
+	"github.com/EasyGolang/goTools/mPath"
 	"github.com/EasyGolang/goTools/mTime"
 )
 
 func Start() {
+	// 设定数据库重启
+	ReStartMongoDB()
+	go mClock.New(mClock.OptType{
+		Func: ReStartMongoDB,
+		Spec: "0 8 3,7,11,15,19,23 * * ? ", // 数据库重启
+	})
+
 	// 获取 OKX 交易产品信息
-	mCycle.New(mCycle.Opt{
-		Func:      inst.Start,
-		SleepTime: time.Hour * 4, // 每 4 时获取一次
-	}).Start()
-	global.KdataLog.Println("ready.Start inst.Start", len(okxInfo.SPOT_inst), len(okxInfo.SWAP_inst))
+	inst.Start()
+	go mClock.New(mClock.OptType{
+		Func: inst.Start,
+		Spec: "0 7 4,9,16,21 * * ? ",
+	})
 
 	// 数据榜单并进行数据库存储
 	SetTickerAnaly()
@@ -69,4 +77,15 @@ func SetTickerAnaly() {
 		go SetCoinKdataDB("BTC")
 		go SetCoinKdataDB("ETH")
 	}
+}
+
+func ReStartMongoDB() {
+	isShellPath := mPath.Exists(config.File.ReStartShell)
+	if !isShellPath {
+		global.Log.Println("未找到 ReStartShell 脚本")
+		return
+	}
+
+	Succeed, err := exec.Command("/bin/bash", config.File.ReStartShell).Output()
+	global.Log.Println("执行脚本", Succeed, err)
 }
