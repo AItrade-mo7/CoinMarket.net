@@ -10,6 +10,7 @@ import (
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStruct"
+	"github.com/EasyGolang/goTools/mTime"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -48,6 +49,9 @@ func (_this *FormatTickerObj) TickerDBTraverse() {
 
 		Ticker.Kdata = make(map[string][]mOKX.TypeKd)
 		Ticker.Kdata = FetchKdata(Ticker)
+		Ticker.TimeUnix = Ticker.TickerVol[0].Ts
+		Ticker.TimeStr = mTime.UnixFormat(Ticker.TimeUnix)
+		Ticker.TimeID = mOKX.GetTimeID(Ticker.TimeUnix)
 
 		FK := bson.D{{
 			Key:   "TimeID",
