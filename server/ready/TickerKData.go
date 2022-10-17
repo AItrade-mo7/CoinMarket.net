@@ -1,7 +1,6 @@
 package ready
 
 import (
-	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global/config"
@@ -36,8 +35,6 @@ func SetTickerKdata() {
 			OKXList:     OKXList,
 			BinanceList: BinanceList,
 		})
-
-		fmt.Println(len(List))
 
 		if len(List) == config.KdataLen {
 			TickerList = append(TickerList, item)
