@@ -65,9 +65,7 @@ func (_this *AnalyTaskObj) CoinDBTraverse() {
 	for cursor.Next(db.Ctx) {
 		var Kdata mOKX.TypeKd
 		cursor.Decode(&Kdata)
-
 		_this.FindTicker(Kdata)
-		// global.Run.Println(TimeID, Kdata.InstID, Kdata.C)
 	}
 
 	if err != nil {
@@ -87,7 +85,7 @@ func (_this *AnalyTaskObj) FindTicker(Kdata mOKX.TypeKd) {
 	db.Table.FindOne(db.Ctx, FK).Decode(&Ticker)
 
 	BtcList := Ticker.Kdata["BTC-USDT"]
-	if len(BtcList) >= config.KdataLen && len(Ticker.TickerVol) == len(Ticker.Kdata) {
+	if len(BtcList) > 90 && len(Ticker.TickerVol) == len(Ticker.Kdata) {
 	} else {
 		Ticker.TimeID = mOKX.GetTimeID(Kdata.TimeUnix)
 		Ticker.TimeUnix = Kdata.TimeUnix
@@ -103,14 +101,7 @@ func (_this *AnalyTaskObj) AnalyStart(Ticker dbType.CoinTickerTable) {
 	BtcList := Ticker.Kdata["BTC-USDT"]
 
 	AnalyResult := dbType.AnalyTickerType{}
-	if len(BtcList) >= config.KdataLen && len(Ticker.TickerVol) == len(Ticker.Kdata) {
-		global.Run.Println(
-			"~开始分析",
-			Ticker.TimeID,
-			len(Ticker.TickerVol),
-			len(Ticker.Kdata),
-			len(BtcList),
-		)
+	if len(BtcList) > 90 && len(Ticker.TickerVol) > 3 && len(Ticker.TickerVol) == len(Ticker.Kdata) {
 		AnalyResult = dbType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
 			TickerVol:   Ticker.TickerVol,
 			TickerKdata: Ticker.Kdata,
@@ -123,9 +114,9 @@ func (_this *AnalyTaskObj) AnalyStart(Ticker dbType.CoinTickerTable) {
 			len(Ticker.Kdata),
 			len(BtcList),
 		)
+		AnalyResult.Unit = config.Unit
 		AnalyResult.WholeDir = 0
 		AnalyResult.DirIndex = 0
-		AnalyResult.Unit = config.Unit
 		AnalyResult.TimeUnix = Ticker.TimeUnix
 		AnalyResult.TimeStr = Ticker.TimeStr
 		AnalyResult.TimeID = Ticker.TimeID
