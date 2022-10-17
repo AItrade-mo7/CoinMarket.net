@@ -61,6 +61,7 @@ func setTicker(data any) {
 	if tLen > 18 {
 		VolumeList = VolumeList[tLen-15:] // 取出最后 15 个
 	}
+	okxInfo.OKXTickerList = []mOKX.TypeOKXTicker{}
 	okxInfo.OKXTickerList = Reverse(VolumeList) // 翻转数组大的排在前面
 }
 

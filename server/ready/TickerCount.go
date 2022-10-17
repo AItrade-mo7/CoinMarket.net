@@ -29,6 +29,7 @@ func SetTicker() {
 	}
 
 	VolumeSortList := mOKX.SortVolume(tickerList)
+	okxInfo.TickerVol = []mOKX.TypeTicker{}
 	okxInfo.TickerVol = VolumeSortList
 }
 

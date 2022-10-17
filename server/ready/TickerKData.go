@@ -46,7 +46,7 @@ func SetTickerKdata() {
 	okxInfo.TickerKdata = make(map[string][]mOKX.TypeKd)
 	okxInfo.TickerKdata = TickerKdata
 
-	okxInfo.TickerVol = make([]mOKX.TypeTicker, len(TickerList))
+	okxInfo.TickerVol = []mOKX.TypeTicker{}
 	okxInfo.TickerVol = TickerList
 }
 

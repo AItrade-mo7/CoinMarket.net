@@ -54,7 +54,7 @@ func SetTickerAnaly() {
 		len(okxInfo.TickerVol),
 		len(okxInfo.TickerKdata),
 	)
-
+	okxInfo.TickerAnaly = dbType.AnalyTickerType{}
 	okxInfo.TickerAnaly = dbType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
 		TickerVol:   okxInfo.TickerVol,
 		TickerKdata: okxInfo.TickerKdata,
