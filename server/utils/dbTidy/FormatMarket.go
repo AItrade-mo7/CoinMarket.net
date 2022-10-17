@@ -98,7 +98,7 @@ func FormatMarket() {
 		}
 		errArr := []any{}
 		for key, val := range Ticker.Kdata {
-			if len(val) != 300 {
+			if len(val) != config.KdataLen {
 				errArr = append(errArr, key)
 				errArr = append(errArr, len(val))
 			}

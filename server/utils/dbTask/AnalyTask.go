@@ -87,7 +87,7 @@ func (_this *AnalyTaskObj) FindTicker(Kdata mOKX.TypeKd) {
 	db.Table.FindOne(db.Ctx, FK).Decode(&Ticker)
 
 	BtcList := Ticker.Kdata["BTC-USDT"]
-	if len(BtcList) == 300 && len(Ticker.TickerVol) == len(Ticker.Kdata) {
+	if len(BtcList) == config.KdataLen && len(Ticker.TickerVol) == len(Ticker.Kdata) {
 	} else {
 		Ticker.TimeID = mOKX.GetTimeID(Kdata.TimeUnix)
 		Ticker.TimeUnix = Kdata.TimeUnix
@@ -102,7 +102,7 @@ func (_this *AnalyTaskObj) AnalyStart(Ticker dbType.CoinTickerTable) {
 	BtcList := Ticker.Kdata["BTC-USDT"]
 
 	AnalyResult := dbType.AnalyTickerType{}
-	if len(BtcList) == 300 && len(Ticker.TickerVol) == len(Ticker.Kdata) {
+	if len(BtcList) == config.KdataLen && len(Ticker.TickerVol) == len(Ticker.Kdata) {
 		global.Run.Println(
 			"~开始分析",
 			Ticker.TimeID,

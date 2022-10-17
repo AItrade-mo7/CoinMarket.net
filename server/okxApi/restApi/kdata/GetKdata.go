@@ -11,7 +11,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-func GetKdata(InstID string) []mOKX.TypeKd {
+func GetKdata(InstID string, Size int) []mOKX.TypeKd {
 	InstInfo := GetInstInfo(InstID)
 	KdataList := []mOKX.TypeKd{}
 
@@ -21,13 +21,18 @@ func GetKdata(InstID string) []mOKX.TypeKd {
 
 	Kdata_file := mStr.Join(config.Dir.JsonData, "/", InstID, ".json")
 
+	limit := Size
+	if limit < 100 {
+		limit = 100
+	}
+
 	resData, err := mOKX.FetchOKX(mOKX.OptFetchOKX{
 		Path: "/api/v5/market/candles",
 		Data: map[string]any{
 			"instId": InstID,
 			"bar":    "15m",
 			"after":  mTime.GetUnix(),
-			"limit":  300,
+			"limit":  limit,
 		},
 		Method:        "get",
 		LocalJsonPath: Kdata_file,

@@ -14,8 +14,13 @@ import (
 
 var KdataList []mOKX.TypeKd
 
-func GetKdata(Symbol string) []mOKX.TypeKd {
+func GetKdata(Symbol string, Size int) []mOKX.TypeKd {
 	Kdata_file := mStr.Join(config.Dir.JsonData, "/B-", Symbol, ".json")
+
+	limit := Size
+	if limit < 100 {
+		limit = 100
+	}
 
 	KdataList = []mOKX.TypeKd{}
 	resData, err := mOKX.FetchBinance(mOKX.FetchBinanceOpt{
@@ -24,7 +29,7 @@ func GetKdata(Symbol string) []mOKX.TypeKd {
 		Data: map[string]any{
 			"symbol":   Symbol,
 			"interval": "15m",
-			"limit":    300,
+			"limit":    limit,
 		},
 		LocalJsonPath: Kdata_file,
 		IsLocalJson:   config.SysEnv.RunMod == 1,

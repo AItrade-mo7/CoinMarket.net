@@ -1,8 +1,10 @@
 package ready
 
 import (
+	"fmt"
 	"time"
 
+	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"CoinMarket.net/server/okxInfo"
@@ -27,15 +29,17 @@ func SetTickerKdata() {
 			continue
 		}
 
-		BinanceList := binanceApi.GetKdata(item.Symbol)
-		OKXList := kdata.GetKdata(item.InstID)
+		BinanceList := binanceApi.GetKdata(item.Symbol, config.KdataLen)
+		OKXList := kdata.GetKdata(item.InstID, config.KdataLen)
 
-		List := DataMerge(DataMergeOpt{
+		List := KdataMerge(DataMergeOpt{
 			OKXList:     OKXList,
 			BinanceList: BinanceList,
 		})
 
-		if len(List) == 300 {
+		fmt.Println(len(List))
+
+		if len(List) == config.KdataLen {
 			TickerList = append(TickerList, item)
 			TickerKdata[item.InstID] = List
 		}
@@ -54,7 +58,7 @@ type DataMergeOpt struct {
 	BinanceList []mOKX.TypeKd
 }
 
-func DataMerge(opt DataMergeOpt) []mOKX.TypeKd {
+func KdataMerge(opt DataMergeOpt) []mOKX.TypeKd {
 	OKXList := opt.OKXList
 	BinanceList := opt.BinanceList
 	Kdata := []mOKX.TypeKd{}
