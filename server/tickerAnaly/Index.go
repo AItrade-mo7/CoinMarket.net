@@ -59,12 +59,12 @@ func GetAnaly(opt TickerAnalyParam) AnalyResult {
 
 	global.Run.Println(
 		"== 分析结束 ==",
-		len(opt.TickerVol),
 		len(Analy.AnalyWhole),
 		len(Analy.AnalySingle),
 		config.Unit,
 		Analy.WholeDir,
-		mOKX.GetTimeID(opt.TickerVol[0].Ts),
+		Analy.DirIndex,
+		Analy.TimeID,
 	)
 
 	return Analy
