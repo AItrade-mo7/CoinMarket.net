@@ -32,7 +32,9 @@ func JoinCoinTicker(opt tickerAnaly.TickerAnalyParam) CoinTickerTable {
 	for key, val := range opt.TickerKdata {
 		find := strings.Contains(key, "-SWAP")
 		if !find {
-			CoinTicker.Kdata[key] = val
+			if len(val) == config.KdataLen {
+				CoinTicker.Kdata[key] = val
+			}
 		}
 	}
 
