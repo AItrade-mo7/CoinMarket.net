@@ -36,7 +36,7 @@ func SetTickerKdata() {
 			BinanceList: BinanceList,
 		})
 
-		if len(List) == config.KdataLen {
+		if len(List) >= config.KdataLen {
 			TickerList = append(TickerList, item)
 			TickerKdata[item.InstID] = List
 		}

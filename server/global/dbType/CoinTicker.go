@@ -19,7 +19,7 @@ type CoinTickerTable struct {
 }
 
 func JoinCoinTicker(opt tickerAnaly.TickerAnalyParam) CoinTickerTable {
-	if len(opt.TickerVol) > 3 && len(opt.TickerKdata) == len(opt.TickerVol) && len(opt.TickerKdata["BTC-USDT"]) == config.KdataLen {
+	if len(opt.TickerVol) > 3 && len(opt.TickerKdata) == len(opt.TickerVol) && len(opt.TickerKdata["BTC-USDT"]) >= config.KdataLen {
 	} else {
 		global.LogErr("dbType.GetAnalyTicker", len(opt.TickerVol), len(opt.TickerKdata))
 		return CoinTickerTable{}
@@ -32,7 +32,7 @@ func JoinCoinTicker(opt tickerAnaly.TickerAnalyParam) CoinTickerTable {
 	for key, val := range opt.TickerKdata {
 		find := strings.Contains(key, "-SWAP")
 		if !find {
-			if len(val) == config.KdataLen {
+			if len(val) >= config.KdataLen {
 				CoinTicker.Kdata[key] = val
 			}
 		}

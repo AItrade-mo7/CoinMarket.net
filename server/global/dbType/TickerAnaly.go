@@ -22,9 +22,9 @@ type AnalyTickerType struct {
 func GetAnalyTicker(opt tickerAnaly.TickerAnalyParam) (resData AnalyTickerType) {
 	resData = AnalyTickerType{}
 
-	if len(opt.TickerVol) > 3 && len(opt.TickerKdata) == len(opt.TickerVol) && len(opt.TickerKdata["BTC-USDT"]) == config.KdataLen {
+	if len(opt.TickerVol) > 3 && len(opt.TickerKdata) == len(opt.TickerVol) && len(opt.TickerKdata["BTC-USDT"]) >= config.KdataLen {
 	} else {
-		global.LogErr("dbType.GetAnalyTicker", len(opt.TickerVol), len(opt.TickerKdata))
+		global.LogErr("dbType.GetAnalyTicker", len(opt.TickerVol), len(opt.TickerKdata), len(opt.TickerKdata["BTC-USDT"]))
 		return
 	}
 
