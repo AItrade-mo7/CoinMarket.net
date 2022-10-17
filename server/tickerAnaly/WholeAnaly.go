@@ -1,8 +1,6 @@
 package tickerAnaly
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"github.com/EasyGolang/goTools/mCount"
@@ -68,8 +66,6 @@ func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWhol
 			Down_Num = append(Down_Num, val.RosePer)
 		}
 	}
-
-	fmt.Println(Up_Num, Down_Num)
 
 	// 上涨指数
 	upN := mStr.ToStr(len(Up_Num))
