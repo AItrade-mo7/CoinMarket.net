@@ -3,7 +3,7 @@
 source "./_shell/init.sh"
 #############
 
-startName="TickerAnaly.Task-Analy"
+startName="Task-TickerAnaly"
 deployPath="/root/ProdProject/"${startName}
 
 echo "开始打包" &&
