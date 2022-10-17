@@ -16,6 +16,7 @@ type AnalyResult struct {
 	AnalySingle map[string][]mOKX.AnalySliceType
 	AnalyWhole  []mOKX.TypeWholeTickerAnaly
 	WholeDir    int
+	DirIndex    int
 	TimeUnix    int64
 	TimeStr     string
 	TimeID      string
@@ -31,7 +32,6 @@ func GetAnaly(opt TickerAnalyParam) AnalyResult {
 	)
 
 	TickerAnalySingle := make(map[string][]mOKX.AnalySliceType)
-
 	for _, item := range opt.TickerVol {
 		list := opt.TickerKdata[item.InstID]
 		Single := NewSingle(list)
@@ -43,7 +43,7 @@ func GetAnaly(opt TickerAnalyParam) AnalyResult {
 	}
 
 	TickerAnalyWhole := WholeAnaly(TickerAnalySingle)
-	WholeDir := AnalyDir(AnalyDirParam{
+	WholeDir, DirIndex := AnalyDir(AnalyDirParam{
 		TickerVol:  opt.TickerVol,
 		AnalyWhole: TickerAnalyWhole,
 	})
@@ -52,6 +52,7 @@ func GetAnaly(opt TickerAnalyParam) AnalyResult {
 	Analy.AnalySingle = TickerAnalySingle
 	Analy.AnalyWhole = TickerAnalyWhole
 	Analy.WholeDir = WholeDir
+	Analy.DirIndex = DirIndex
 	Analy.TimeUnix = opt.TickerVol[0].Ts
 	Analy.TimeStr = mTime.UnixFormat(Analy.TimeUnix)
 	Analy.TimeID = mOKX.GetTimeID(Analy.TimeUnix)

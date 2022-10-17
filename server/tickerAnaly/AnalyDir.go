@@ -12,10 +12,12 @@ type AnalyDirParam struct {
 	AnalyWhole []mOKX.TypeWholeTickerAnaly
 }
 
-func AnalyDir(opt AnalyDirParam) int {
+func AnalyDir(opt AnalyDirParam) (WholeDir, DirIndex int) {
 	// 初始化为空值
-	WholeDir := 0
+	DirIndex = 0
+	WholeDir = 0
 	if len(opt.AnalyWhole) > 0 {
+		DirIndex = opt.AnalyWhole[0].DirIndex
 		WholeDir = opt.AnalyWhole[0].DirIndex
 	}
 
@@ -26,6 +28,7 @@ func AnalyDir(opt AnalyDirParam) int {
 			millionCoin = append(millionCoin, ticker.InstID)
 		}
 	}
+
 	// 过亿币种数量小于4 ， 交易量小的上涨不作数的
 	if len(millionCoin) < 4 {
 		// 如果此时判断为涨，修订为0
@@ -34,5 +37,5 @@ func AnalyDir(opt AnalyDirParam) int {
 		}
 	}
 
-	return WholeDir
+	return
 }
