@@ -130,11 +130,12 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 	for _, val := range dbTicker.TickerVol {
 		kdata_list := dbTicker.Kdata[val.InstID]
 
-		if len(kdata_list) < 290 {
+		if len(kdata_list) != 100 {
 			time.Sleep(time.Second / 3)
-			kdata_list = kdata.GetHistory300List(kdata.History300Param{
-				InstID: val.InstID,
-				After:  val.Ts,
+			kdata_list = kdata.GetHistoryKdata(kdata.HistoryKdataParam{
+				InstID:  val.InstID,
+				Current: 0,
+				After:   val.Ts,
 			})
 		}
 
