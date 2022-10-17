@@ -59,7 +59,8 @@ func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWhol
 
 	for _, val := range list {
 		U_R_diff := mCount.Le(val.RosePer, "0")
-		if U_R_diff >= -1 {
+
+		if U_R_diff >= 0 {
 			Up_Num = append(Up_Num, val.RosePer)
 		} else {
 			Down_Num = append(Down_Num, val.RosePer)
