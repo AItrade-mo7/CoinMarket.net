@@ -19,11 +19,11 @@ import (
 
 func Start() {
 	// 设定数据库重启
-	ReStartMongoDB()
-	go mClock.New(mClock.OptType{
-		Func: ReStartMongoDB,
-		Spec: "0 8 3,7,11,15,19,23 * * ? ", // 数据库重启
-	})
+	// ReStartMongoDB()
+	// go mClock.New(mClock.OptType{
+	// 	Func: ReStartMongoDB,
+	// 	Spec: "0 8 3,7,11,15,19,23 * * ? ", // 数据库重启
+	// })
 
 	// 获取 OKX 交易产品信息
 	inst.Start()
