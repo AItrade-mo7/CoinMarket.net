@@ -66,7 +66,7 @@ func SetTickerAnaly() {
 		len(okxInfo.TickerAnaly.TickerVol),
 		len(okxInfo.TickerAnaly.AnalyWhole),
 		len(okxInfo.TickerAnaly.AnalySingle),
-		len(okxInfo.TickerAnaly.Unit),
+		okxInfo.TickerAnaly.Unit,
 		okxInfo.TickerAnaly.WholeDir,
 		okxInfo.TickerAnaly.TimeID,
 	)
