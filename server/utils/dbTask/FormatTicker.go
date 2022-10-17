@@ -1,7 +1,6 @@
 package dbTask
 
 import (
-	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -107,7 +106,6 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 	for _, val := range dbTicker.TickerVol {
 		kdata_list := dbTicker.Kdata[val.InstID]
 
-		fmt.Println("db", len(kdata_list))
 		if len(kdata_list) != 100 {
 			time.Sleep(time.Second / 3)
 			kdata_list = kdata.GetHistoryKdata(kdata.HistoryKdataParam{
@@ -116,7 +114,6 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 				Size:    100,
 				After:   val.Ts,
 			})
-			fmt.Println("fetch", len(kdata_list))
 		}
 		KdataList[val.InstID] = kdata_list
 		global.Run.Println("填充结束", val.InstID, len(KdataList[val.InstID]), kdata_list[0].TimeStr, kdata_list[len(kdata_list)-1].TimeStr)
