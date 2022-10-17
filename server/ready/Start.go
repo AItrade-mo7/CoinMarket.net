@@ -12,7 +12,6 @@ import (
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
 	"github.com/EasyGolang/goTools/mClock"
-	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mPath"
 	"github.com/EasyGolang/goTools/mTime"
 )
@@ -49,33 +48,17 @@ func SetTickerAnaly() {
 	SetTicker()            // 计算并设置综合榜单 产出 okxInfo.TickerVol 数据
 	SetTickerKdata()       // 产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 数据
 
-	global.Run.Println(
-		"== 开始分析 ==",
-		len(okxInfo.TickerVol),
-		len(okxInfo.TickerKdata),
-	)
 	okxInfo.TickerAnaly = dbType.AnalyTickerType{}
 	okxInfo.TickerAnaly = dbType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
 		TickerVol:   okxInfo.TickerVol,
 		TickerKdata: okxInfo.TickerKdata,
 	})
 
-	global.Run.Println(
-		"== 分析结束 ==",
-		mTime.UnixFormat(mOKX.GetKdataTime(okxInfo.TickerKdata)),
-		len(okxInfo.TickerAnaly.TickerVol),
-		len(okxInfo.TickerAnaly.AnalyWhole),
-		len(okxInfo.TickerAnaly.AnalySingle),
-		okxInfo.TickerAnaly.Unit,
-		okxInfo.TickerAnaly.WholeDir,
-		okxInfo.TickerAnaly.TimeID,
-	)
-
 	if IsTimeScale(mTime.GetUnixInt64()) {
-		go SetTickerAnalyDB()
-		go SetCoinTickerDB()
-		go SetCoinKdataDB("BTC")
-		go SetCoinKdataDB("ETH")
+		// go SetTickerAnalyDB()
+		// go SetCoinTickerDB()
+		// go SetCoinKdataDB("BTC")
+		// go SetCoinKdataDB("ETH")
 	}
 }
 

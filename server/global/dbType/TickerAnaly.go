@@ -5,8 +5,6 @@ import (
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/tickerAnaly"
 	"github.com/EasyGolang/goTools/mOKX"
-	"github.com/EasyGolang/goTools/mStr"
-	"github.com/EasyGolang/goTools/mTime"
 )
 
 type AnalyTickerType struct {
@@ -23,7 +21,7 @@ type AnalyTickerType struct {
 func GetAnalyTicker(opt tickerAnaly.TickerAnalyParam) (resData AnalyTickerType) {
 	resData = AnalyTickerType{}
 
-	if len(opt.TickerVol) > 5 && len(opt.TickerKdata) > 5 && len(opt.TickerKdata["BTC-USDT"]) > 5 {
+	if len(opt.TickerVol) > 3 && len(opt.TickerKdata) == len(opt.TickerVol) && len(opt.TickerKdata["BTC-USDT"]) == config.KdataLen {
 	} else {
 		global.LogErr("dbType.GetAnalyTicker", len(opt.TickerVol), len(opt.TickerKdata))
 		return
@@ -36,9 +34,9 @@ func GetAnalyTicker(opt tickerAnaly.TickerAnalyParam) (resData AnalyTickerType) 
 	resData.AnalySingle = AnalyResult.AnalySingle
 	resData.WholeDir = AnalyResult.WholeDir
 	resData.Unit = config.Unit
-	resData.TimeUnix = mOKX.GetKdataTime(opt.TickerKdata)
-	resData.TimeStr = mTime.UnixFormat(mStr.ToStr(resData.TimeUnix))
-	resData.TimeID = mOKX.GetTimeID(resData.TimeUnix)
+	resData.TimeUnix = AnalyResult.TimeUnix
+	resData.TimeStr = AnalyResult.TimeStr
+	resData.TimeID = AnalyResult.TimeID
 
 	return
 }
