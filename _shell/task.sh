@@ -3,8 +3,8 @@
 source "./_shell/init.sh"
 #############
 
-startName="TickerAnaly.Task"
-deployPath="/root/ProdProject/TickerAnaly"
+startName="TickerAnaly.Task-Analy"
+deployPath="/root/ProdProject/"${startName}
 
 echo "开始打包" &&
   npm run build
