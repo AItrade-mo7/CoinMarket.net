@@ -33,11 +33,10 @@ func GetAnaly(opt TickerAnalyParam) AnalyResult {
 	}
 
 	TickerAnalyWhole := WholeAnaly(TickerAnalySingle)
-	// WholeDir := AnalyDir(TickerAnalyWhole)
-	WholeDir := 0
-	if len(TickerAnalyWhole) > 0 {
-		WholeDir = TickerAnalyWhole[0].DirIndex
-	}
+	WholeDir := AnalyDir(AnalyDirParam{
+		TickerVol:  opt.TickerVol,
+		AnalyWhole: TickerAnalyWhole,
+	})
 
 	var Analy AnalyResult
 	Analy.AnalySingle = TickerAnalySingle

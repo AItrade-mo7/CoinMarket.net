@@ -72,10 +72,10 @@ func SetTickerAnaly() {
 	)
 
 	if IsTimeScale(mTime.GetUnixInt64()) {
-		go SetTickerAnalyDB()
-		go SetCoinTickerDB()
-		go SetCoinKdataDB("BTC")
-		go SetCoinKdataDB("ETH")
+		// go SetTickerAnalyDB()
+		// go SetCoinTickerDB()
+		// go SetCoinKdataDB("BTC")
+		// go SetCoinKdataDB("ETH")
 	}
 }
 
