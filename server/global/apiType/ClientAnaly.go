@@ -7,6 +7,7 @@ type ClientAnalyType struct {
 	MaxDown_RosePer string `bson:"MaxDown_RosePer"`
 	Unit            string `bson:"Unit"`
 	WholeDir        int    `bson:"WholeDir"`
+	DirIndex        int    `bson:"DirIndex"`
 	TimeUnix        int64  `bson:"TimeUnix"`
 	TimeStr         string `bson:"TimeStr"`
 	TimeID          string `bson:"TimeID"`
