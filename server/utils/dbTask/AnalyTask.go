@@ -87,11 +87,12 @@ func (_this *AnalyTaskObj) FindTicker(Kdata mOKX.TypeKd) {
 	db.Table.FindOne(db.Ctx, FK).Decode(&Ticker)
 
 	BtcList := Ticker.Kdata["BTC-USDT"]
-	if len(BtcList) == config.KdataLen && len(Ticker.TickerVol) == len(Ticker.Kdata) {
+	if len(BtcList) >= config.KdataLen && len(Ticker.TickerVol) == len(Ticker.Kdata) {
 	} else {
 		Ticker.TimeID = mOKX.GetTimeID(Kdata.TimeUnix)
 		Ticker.TimeUnix = Kdata.TimeUnix
 		Ticker.TimeStr = Kdata.TimeStr
+		global.Log.Println("数据为空,造一个数据", Ticker.TimeID)
 	}
 	_this.AnalyStart(Ticker)
 }
@@ -123,6 +124,7 @@ func (_this *AnalyTaskObj) AnalyStart(Ticker dbType.CoinTickerTable) {
 			len(BtcList),
 		)
 		AnalyResult.WholeDir = 0
+		AnalyResult.DirIndex = 0
 		AnalyResult.Unit = config.Unit
 		AnalyResult.TimeUnix = Ticker.TimeUnix
 		AnalyResult.TimeStr = Ticker.TimeStr

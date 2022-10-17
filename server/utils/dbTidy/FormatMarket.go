@@ -19,6 +19,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+func NewFormatDB()  {
+	
+}
+
+
 func FormatMarket() {
 	global.Email(global.EmailOpt{
 		To: []string{
