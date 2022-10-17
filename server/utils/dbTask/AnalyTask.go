@@ -102,7 +102,7 @@ func (_this *AnalyTaskObj) AnalyStart(Ticker dbType.CoinTickerTable) {
 	BtcList := Ticker.Kdata["BTC-USDT"]
 
 	AnalyResult := dbType.AnalyTickerType{}
-	if len(BtcList) == config.KdataLen && len(Ticker.TickerVol) == len(Ticker.Kdata) {
+	if len(BtcList) >= config.KdataLen && len(Ticker.TickerVol) == len(Ticker.Kdata) {
 		global.Run.Println(
 			"~开始分析",
 			Ticker.TimeID,
