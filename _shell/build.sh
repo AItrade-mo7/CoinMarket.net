@@ -9,6 +9,7 @@ go mod tidy &&
 echo " server 端编译 完成"
 
 echo " =========== 开始进行文件整合 =========== "
+rm -rf ${outPutPath}
 
 mkdir ${outPutPath}
 
