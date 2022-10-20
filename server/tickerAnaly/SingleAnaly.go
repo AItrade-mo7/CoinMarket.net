@@ -66,12 +66,17 @@ func (_this *SingleType) SliceKdata(hour int) (resData mOKX.AnalySliceType) {
 	Len := len(_this.List)
 
 	backward := int64(hour)
-	backwardUnix := backward * mTime.UnixTimeInt64.Hour
+	backwardUnix := backward * mTime.UnixTimeInt64.Hour // 这个是，时间差 ~
 
 	nowTimeUnix := list[Len-1].TimeUnix
-	tarTime := mTime.MsToTime(nowTimeUnix, mStr.Join("-", backwardUnix))
 
-	tarTimeUnix := mTime.ToUnixMsec(tarTime)
+	nowTime := mTime.MsToTime(nowTimeUnix, "0")                        // 当前时间戳
+	diffMinute := int64(nowTime.Minute()) * mTime.UnixTimeInt64.Minute // 分钟数
+	backwardUnix = backwardUnix + diffMinute                           // 额外减去分钟数
+
+	startTime := mTime.MsToTime(nowTimeUnix, mStr.Join("-", backwardUnix)) // 当前时间戳 - 小时切片 = 起始时间
+
+	tarTimeUnix := mTime.ToUnixMsec(startTime)
 
 	diffLen := (nowTimeUnix - tarTimeUnix) / (mTime.UnixTimeInt64.Minute * 15)
 	backLen := int(diffLen) + 1
@@ -151,7 +156,7 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 	Sort_HLPer := mOKX.Sort_HLPer(list) // 振幅排序 高 - 低
 
 	slice.Volume = Volume
-	slice.RosePer = mCount.RoseCent(lastElm.C, firstElm.C) // 最后一个的 C - 一开始的 CBas
+	slice.RosePer = mCount.RoseCent(lastElm.CBas, firstElm.CBas) // 最后一个的 C - 一开始的 CBas
 	slice.H = Sort_H[0].H
 	slice.L = Sort_L[len(Sort_H)-1].L
 
