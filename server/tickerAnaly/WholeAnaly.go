@@ -57,7 +57,9 @@ func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWhol
 		Down_Num []string // 下跌幅度的集合
 	)
 
-	for _, val := range list {
+	newURList := URList[1 : len(URList)-1] // 去除一个最高值和最低值
+
+	for _, val := range newURList {
 		U_R_diff := mCount.Le(val.RosePer, "0")
 
 		if U_R_diff >= 0 {
@@ -69,7 +71,7 @@ func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWhol
 
 	// 上涨指数
 	upN := mStr.ToStr(len(Up_Num))
-	allN := mStr.ToStr(len(list))
+	allN := mStr.ToStr(len(newURList))
 
 	resData.UPIndex = mCount.PerCent(upN, allN)
 
