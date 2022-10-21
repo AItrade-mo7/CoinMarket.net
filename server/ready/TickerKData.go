@@ -15,7 +15,7 @@ func SetTickerKdata() {
 	TickerKdata := make(map[string][]mOKX.TypeKd)
 	TickerList := []mOKX.TypeTicker{}
 	for _, item := range okxInfo.TickerVol {
-		time.Sleep(time.Second / 3) // 1秒最多 3 次
+		time.Sleep(time.Second / 2) // 1秒最多 2 次
 		// 开始设置 SWAP
 		SwapInst := mOKX.TypeInst{}
 		for _, SWAP := range okxInfo.SWAP_inst {
