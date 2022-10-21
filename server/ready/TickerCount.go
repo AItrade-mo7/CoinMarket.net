@@ -13,6 +13,10 @@ import (
 )
 
 func SetTicker() {
+	if len(okxInfo.SWAP_inst) < 10 || len(okxInfo.SPOT_inst) < 10 {
+		global.LogErr("ready.SetTicker okxInfo.SWAP_inst 数据条目不正确", len(okxInfo.SWAP_inst), len(okxInfo.SPOT_inst))
+	}
+
 	if len(okxInfo.BinanceTickerList) != 15 || len(okxInfo.OKXTickerList) != 15 {
 		global.LogErr("ready.SetTicker TickerList 数据条目不正确", len(okxInfo.BinanceTickerList), len(okxInfo.OKXTickerList))
 	}
