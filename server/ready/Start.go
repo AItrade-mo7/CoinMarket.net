@@ -24,13 +24,6 @@ func Start() {
 	// 	Spec: "0 8 3,7,11,15,19,23 * * ? ", // 数据库重启
 	// })
 
-	// 获取 OKX 交易产品信息
-	inst.Start()
-	go mClock.New(mClock.OptType{
-		Func: inst.Start,
-		Spec: "0 7 4,9,16,21 * * ? ",
-	})
-
 	// 数据榜单并进行数据库存储
 	SetTickerAnaly()
 	go mClock.New(mClock.OptType{
@@ -42,7 +35,7 @@ func Start() {
 // 获取榜单数据
 func SetTickerAnaly() {
 	global.Run.Println("========= 开始获取数据 ===========")
-
+	inst.Start()           // 获取交易产品信息
 	binanceApi.GetTicker() // 获取币安的 Ticker
 	tickers.GetTicker()    // 获取 okx 的Ticker
 	SetTicker()            // 计算并设置综合榜单 产出 okxInfo.TickerVol 数据

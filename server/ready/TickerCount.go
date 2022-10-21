@@ -49,5 +49,25 @@ func TickerCount(OKXTicker mOKX.TypeOKXTicker, BinanceTicker mOKX.TypeBinanceTic
 	Ticker.OkxVolRose = mCount.PerCent(Ticker.OKXVol24H, Ticker.Volume)
 	Ticker.BinanceVolRose = mCount.PerCent(Ticker.BinanceVol24H, Ticker.Volume)
 	Ticker.Ts = mTime.ToUnixMsec(mTime.MsToTime(OKXTicker.Ts, "0"))
+	Ticker.TimeUnix = mTime.ToUnixMsec(mTime.MsToTime(OKXTicker.Ts, "0"))
+	Ticker.TimeStr = mTime.UnixFormat(Ticker.TimeUnix)
+	Ticker.SWAP = mOKX.TypeInst{}
+	Ticker.SPOT = mOKX.TypeInst{}
+
+	if len(Ticker.InstID) > 3 {
+		for _, SWAP := range okxInfo.SWAP_inst {
+			if SWAP.Uly == Ticker.InstID {
+				Ticker.SWAP = SWAP
+				break
+			}
+		}
+		for _, SPOT := range okxInfo.SPOT_inst {
+			if SPOT.Uly == Ticker.InstID {
+				Ticker.SPOT = SPOT
+				break
+			}
+		}
+	}
+
 	return Ticker
 }

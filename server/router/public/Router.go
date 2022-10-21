@@ -13,7 +13,6 @@ func Router(router fiber.Router) {
 	r := router.Group("/public", MiddleWare)
 
 	r.Post("/GetNowTickerAnaly", api.GetNowTickerAnaly)
-	r.Post("/Inst", api.Inst)
 	r.Post("/GetNowKdata", api.GetNowKdata)
 	r.Post("/GetCoinHistory", api.GetCoinHistory)
 	r.Post("/GetAnalyList", api.GetAnalyList)
