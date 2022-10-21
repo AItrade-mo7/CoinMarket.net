@@ -137,19 +137,24 @@ func FormatTickerVol(TickerVol []mOKX.TypeTicker, CurData map[string]any) []mOKX
 
 	curTickerVol := CurData["TickerVol"]
 	var curTickerVolList []struct {
-		Ts int64
+		Ts       int64
+		TimeUnix int64
 	}
 	jsoniter.Unmarshal(mJson.ToJson(curTickerVol), &curTickerVolList)
 
 	for key, Ticker := range TickerVol {
 		NewTicker := Ticker
 		Ts := curTickerVolList[key].Ts
-
 		if Ts < 987897 {
+			Ts = curTickerVolList[key].TimeUnix
+		}
+
+		if Ts < 1662440205709 {
 			EndEmail("时间错误")
 			global.Run.Println("时间错误", curTickerVolList[key].Ts)
-			panic("时间太小了")
+			panic("时间错误")
 		}
+
 		NewTicker.TimeUnix = mTime.ToUnixMsec(mTime.MsToTime(Ts, "0"))
 		NewTicker.TimeStr = mTime.UnixFormat(NewTicker.TimeUnix)
 		NewTicker.OkxVolRose = mCount.PerCent(NewTicker.OKXVol24H, NewTicker.Volume)
