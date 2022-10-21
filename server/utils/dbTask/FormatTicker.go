@@ -1,6 +1,7 @@
 package dbTask
 
 import (
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -10,11 +11,13 @@ import (
 	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
+	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mStruct"
 	"github.com/EasyGolang/goTools/mTime"
+	jsoniter "github.com/json-iterator/go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -50,8 +53,11 @@ func (_this *FormatTickerObj) TickerDBTraverse() {
 	findFK := bson.D{}
 	cursor, err := db.Table.Find(db.Ctx, findFK, findOpt)
 	for cursor.Next(db.Ctx) {
+		var curData map[string]any
+		cursor.Decode(&curData)
+
 		var Ticker dbType.CoinTickerTable
-		cursor.Decode(&Ticker)
+		jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
 
 		Ticker.Kdata = make(map[string][]mOKX.TypeKd)
 		Ticker.Kdata = FetchKdata(Ticker)
@@ -149,9 +155,11 @@ func FormatTickerVol(TickerVol []mOKX.TypeTicker) []mOKX.TypeTicker {
 				}
 			}
 		}
+
+		fmt.Println(Ticker.SPOT.ListTime, Ticker.SWAP.ListTime)
+
 		// 上架小于36天的不计入榜单
 		diffOnLine := mCount.Sub(mStr.ToStr(Ticker.Ts), Ticker.SPOT.ListTime)
-
 		if mCount.Le(diffOnLine, "32") > 0 {
 			NewTickerVol = append(NewTickerVol, NewTicker)
 			global.Run.Println("榜单填充结束", NewTicker.InstID)
