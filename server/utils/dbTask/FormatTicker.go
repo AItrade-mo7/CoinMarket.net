@@ -1,6 +1,7 @@
 package dbTask
 
 import (
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -8,8 +9,11 @@ import (
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/kdata"
+	"CoinMarket.net/server/okxInfo"
+	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
+	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mStruct"
 	"github.com/EasyGolang/goTools/mTime"
 	"go.mongodb.org/mongo-driver/bson"
@@ -56,6 +60,8 @@ func (_this *FormatTickerObj) TickerDBTraverse() {
 		Ticker.TimeStr = mTime.UnixFormat(Ticker.TimeUnix)
 		Ticker.TimeID = mOKX.GetTimeID(Ticker.TimeUnix)
 
+		Ticker.TickerVol = FormatTickerVol(Ticker.TickerVol)
+
 		FK := bson.D{{
 			Key:   "TimeID",
 			Value: Ticker.TimeID,
@@ -92,7 +98,7 @@ func (_this *FormatTickerObj) TickerDBTraverse() {
 				errArr = append(errArr, len(val))
 			}
 		}
-		global.Run.Println("==结束==", Ticker.TimeID, Ticker.TimeStr, len(Ticker.Kdata), len(BtcList), timeC, errArr)
+		global.Run.Println("==结束==", Ticker.TimeID, Ticker.TimeStr, len(Ticker.TickerVol), len(Ticker.Kdata), len(BtcList), timeC, errArr)
 	}
 
 	if err != nil {
@@ -119,4 +125,42 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 		global.Run.Println("填充结束", val.InstID, len(KdataList[val.InstID]), kdata_list[0].TimeStr, kdata_list[len(kdata_list)-1].TimeStr)
 	}
 	return KdataList
+}
+
+func FormatTickerVol(TickerVol []mOKX.TypeTicker) []mOKX.TypeTicker {
+	NewTickerVol := []mOKX.TypeTicker{}
+
+	for _, Ticker := range TickerVol {
+		NewTicker := Ticker
+		NewTicker.TimeUnix = mTime.ToUnixMsec(mTime.MsToTime(Ticker.Ts, "0"))
+		NewTicker.TimeStr = mTime.UnixFormat(Ticker.TimeUnix)
+		Ticker.SWAP = mOKX.TypeInst{}
+		Ticker.SPOT = mOKX.TypeInst{}
+		if len(Ticker.InstID) > 3 {
+			for _, SWAP := range okxInfo.SWAP_inst {
+				if SWAP.Uly == Ticker.InstID {
+					Ticker.SWAP = SWAP
+					break
+				}
+			}
+			for _, SPOT := range okxInfo.SPOT_inst {
+				if SPOT.InstID == Ticker.InstID {
+					Ticker.SPOT = SPOT
+					break
+				}
+			}
+		}
+		// 上架小于36天的不计入榜单
+		diffOnLine := mCount.Sub(mStr.ToStr(Ticker.Ts), Ticker.SPOT.ListTime)
+
+		fmt.Println()
+		if mCount.Le(diffOnLine, "32") > 0 {
+			NewTickerVol = append(NewTickerVol, NewTicker)
+			global.Run.Println("榜单填充结束", NewTicker.InstID)
+		} else {
+			global.Run.Println("上架时间太短-过滤", diffOnLine)
+		}
+	}
+
+	return NewTickerVol
 }
