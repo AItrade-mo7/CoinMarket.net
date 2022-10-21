@@ -1,7 +1,6 @@
 package dbTask
 
 import (
-	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -119,13 +118,13 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 		kdata_list := dbTicker.Kdata[val.InstID]
 
 		if len(kdata_list) != 100 {
-			time.Sleep(time.Second / 3)
 			kdata_list = kdata.GetHistoryKdata(kdata.HistoryKdataParam{
 				InstID:  val.InstID,
 				Current: 0,
 				Size:    100,
 				After:   val.TimeUnix,
 			})
+			time.Sleep(time.Second / 3)
 		}
 		KdataList[val.InstID] = kdata_list
 		global.Run.Println("填充结束", val.InstID, len(KdataList[val.InstID]), kdata_list[0].TimeStr, kdata_list[len(kdata_list)-1].TimeStr)
@@ -172,16 +171,14 @@ func FormatTickerVol(TickerVol []mOKX.TypeTicker, CurData map[string]any) []mOKX
 			}
 		}
 
-		if len(Ticker.SPOT.ListTime) < 4 || len(Ticker.SWAP.ListTime) < 4 {
+		if len(NewTicker.SPOT.ListTime) < 4 || len(NewTicker.SWAP.ListTime) < 4 {
 			EndEmail("时间错误2")
 			global.Run.Println("时间错误2", curTickerVolList[key].Ts)
 			panic("时间太小了2")
 		}
 
-		fmt.Println(Ticker.SPOT.ListTime, Ticker.SWAP.ListTime, NewTicker.TimeUnix)
-
 		// 上架小于36天的不计入榜单
-		diffOnLine := mCount.Sub(mStr.ToStr(Ticker.TimeUnix), Ticker.SPOT.ListTime)
+		diffOnLine := mCount.Sub(mStr.ToStr(NewTicker.TimeUnix), NewTicker.SPOT.ListTime)
 		if mCount.Le(diffOnLine, "32") > 0 {
 			NewTickerVol = append(NewTickerVol, NewTicker)
 			global.Run.Println("榜单填充结束", NewTicker.InstID)
