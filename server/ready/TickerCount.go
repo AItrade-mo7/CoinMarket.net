@@ -51,7 +51,6 @@ func TickerCount(OKXTicker mOKX.TypeOKXTicker, BinanceTicker mOKX.TypeBinanceTic
 	Ticker.Volume = mCount.Add(OKXTicker.VolCcy24H, BinanceTicker.QuoteVolume)
 	Ticker.OkxVolRose = mCount.PerCent(Ticker.OKXVol24H, Ticker.Volume)
 	Ticker.BinanceVolRose = mCount.PerCent(Ticker.BinanceVol24H, Ticker.Volume)
-	Ticker.Ts = mTime.ToUnixMsec(mTime.MsToTime(OKXTicker.Ts, "0"))
 	Ticker.TimeUnix = mTime.ToUnixMsec(mTime.MsToTime(OKXTicker.Ts, "0"))
 	Ticker.TimeStr = mTime.UnixFormat(Ticker.TimeUnix)
 	Ticker.SWAP = mOKX.TypeInst{}
@@ -72,7 +71,7 @@ func TickerCount(OKXTicker mOKX.TypeOKXTicker, BinanceTicker mOKX.TypeBinanceTic
 	}
 
 	// 上架小于36天的不计入榜单
-	diffOnLine := mCount.Sub(mStr.ToStr(Ticker.Ts), Ticker.SPOT.ListTime)
+	diffOnLine := mCount.Sub(mStr.ToStr(Ticker.TimeUnix), Ticker.SPOT.ListTime)
 	if mCount.Le(diffOnLine, "32") < 0 {
 		return mOKX.TypeTicker{}
 	}

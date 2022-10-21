@@ -169,8 +169,15 @@ func StartEmail() {
 	global.Run.Println("======= 脚本开始 =======")
 }
 
-func EndEmail() {
+func EndEmail(Msg string) {
 	global.Run.Println("======= 脚本结束 =======")
+
+	lMsg := Msg
+
+	if len(lMsg) < 1 {
+		lMsg = "执行完毕"
+	}
+
 	global.Email(global.EmailOpt{
 		To: []string{
 			"meichangliang@mo7.cc",
@@ -178,7 +185,7 @@ func EndEmail() {
 		Subject:  "脚本结束",
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{
-			Message: "AnalyTask 执行完毕",
+			Message: lMsg,
 			SysTime: mTime.IsoTime(false),
 		},
 	}).Send()

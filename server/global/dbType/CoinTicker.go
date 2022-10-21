@@ -38,7 +38,7 @@ func JoinCoinTicker(opt tickerAnaly.TickerAnalyParam) CoinTickerTable {
 		}
 	}
 
-	CoinTicker.TimeUnix = opt.TickerVol[0].Ts
+	CoinTicker.TimeUnix = opt.TickerVol[0].TimeUnix
 	CoinTicker.TimeStr = mTime.UnixFormat(CoinTicker.TimeUnix)
 	CoinTicker.TimeID = mOKX.GetTimeID(CoinTicker.TimeUnix)
 

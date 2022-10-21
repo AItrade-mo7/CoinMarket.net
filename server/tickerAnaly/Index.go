@@ -28,7 +28,7 @@ func GetAnaly(opt TickerAnalyParam) AnalyResult {
 		"== 开始分析 ==",
 		len(opt.TickerVol),
 		len(opt.TickerKdata),
-		mOKX.GetTimeID(opt.TickerVol[0].Ts),
+		mOKX.GetTimeID(opt.TickerVol[0].TimeUnix),
 	)
 
 	TickerAnalySingle := make(map[string][]mOKX.AnalySliceType)
@@ -53,7 +53,7 @@ func GetAnaly(opt TickerAnalyParam) AnalyResult {
 	Analy.AnalyWhole = TickerAnalyWhole
 	Analy.WholeDir = WholeDir
 	Analy.DirIndex = DirIndex
-	Analy.TimeUnix = opt.TickerVol[0].Ts
+	Analy.TimeUnix = opt.TickerVol[0].TimeUnix
 	Analy.TimeStr = mTime.UnixFormat(Analy.TimeUnix)
 	Analy.TimeID = mOKX.GetTimeID(Analy.TimeUnix)
 

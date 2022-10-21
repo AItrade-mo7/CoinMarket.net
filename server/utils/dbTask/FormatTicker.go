@@ -56,23 +56,24 @@ func (_this *FormatTickerObj) TickerDBTraverse() {
 		var curData map[string]any
 		cursor.Decode(&curData)
 
-		var Ticker dbType.CoinTickerTable
-		jsoniter.Unmarshal(mJson.ToJson(curData), &Ticker)
+		var CoinTicker dbType.CoinTickerTable
+		jsoniter.Unmarshal(mJson.ToJson(curData), &CoinTicker)
 
-		Ticker.Kdata = make(map[string][]mOKX.TypeKd)
-		Ticker.Kdata = FetchKdata(Ticker)
-		Ticker.TimeUnix = Ticker.TickerVol[0].Ts
-		Ticker.TimeStr = mTime.UnixFormat(Ticker.TimeUnix)
-		Ticker.TimeID = mOKX.GetTimeID(Ticker.TimeUnix)
+		CoinTicker.TickerVol = FormatTickerVol(CoinTicker.TickerVol, curData)
 
-		Ticker.TickerVol = FormatTickerVol(Ticker.TickerVol)
+		CoinTicker.Kdata = make(map[string][]mOKX.TypeKd)
+		CoinTicker.Kdata = FetchKdata(CoinTicker)
+
+		CoinTicker.TimeUnix = CoinTicker.TickerVol[0].TimeUnix
+		CoinTicker.TimeStr = mTime.UnixFormat(CoinTicker.TimeUnix)
+		CoinTicker.TimeID = mOKX.GetTimeID(CoinTicker.TimeUnix)
 
 		FK := bson.D{{
 			Key:   "TimeID",
-			Value: Ticker.TimeID,
+			Value: CoinTicker.TimeID,
 		}}
 		UK := bson.D{}
-		mStruct.Traverse(Ticker, func(key string, val any) {
+		mStruct.Traverse(CoinTicker, func(key string, val any) {
 			UK = append(UK, bson.E{
 				Key: "$set",
 				Value: bson.D{
@@ -90,20 +91,20 @@ func (_this *FormatTickerObj) TickerDBTraverse() {
 			global.LogErr("数据更插失败", err)
 		}
 
-		BtcList := Ticker.Kdata["BTC-USDT"]
+		BtcList := CoinTicker.Kdata["BTC-USDT"]
 		var timeC int64
 		if len(BtcList) > 0 {
 			BtcNow := BtcList[len(BtcList)-1]
-			timeC = BtcNow.TimeUnix - Ticker.TimeUnix
+			timeC = BtcNow.TimeUnix - CoinTicker.TimeUnix
 		}
 		errArr := []any{}
-		for key, val := range Ticker.Kdata {
+		for key, val := range CoinTicker.Kdata {
 			if len(val) != config.KdataLen {
 				errArr = append(errArr, key)
 				errArr = append(errArr, len(val))
 			}
 		}
-		global.Run.Println("==结束==", Ticker.TimeID, Ticker.TimeStr, len(Ticker.TickerVol), len(Ticker.Kdata), len(BtcList), timeC, errArr)
+		global.Run.Println("==结束==", CoinTicker.TimeID, CoinTicker.TimeStr, len(CoinTicker.TickerVol), len(CoinTicker.Kdata), len(BtcList), timeC, errArr)
 	}
 
 	if err != nil {
@@ -123,7 +124,7 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 				InstID:  val.InstID,
 				Current: 0,
 				Size:    100,
-				After:   val.Ts,
+				After:   val.TimeUnix,
 			})
 		}
 		KdataList[val.InstID] = kdata_list
@@ -132,34 +133,55 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 	return KdataList
 }
 
-func FormatTickerVol(TickerVol []mOKX.TypeTicker) []mOKX.TypeTicker {
+func FormatTickerVol(TickerVol []mOKX.TypeTicker, CurData map[string]any) []mOKX.TypeTicker {
 	NewTickerVol := []mOKX.TypeTicker{}
 
-	for _, Ticker := range TickerVol {
+	curTickerVol := CurData["TickerVol"]
+	var curTickerVolList []struct {
+		Ts int64
+	}
+	jsoniter.Unmarshal(mJson.ToJson(curTickerVol), &curTickerVolList)
+
+	for key, Ticker := range TickerVol {
 		NewTicker := Ticker
-		NewTicker.TimeUnix = mTime.ToUnixMsec(mTime.MsToTime(Ticker.Ts, "0"))
-		NewTicker.TimeStr = mTime.UnixFormat(Ticker.TimeUnix)
-		Ticker.SWAP = mOKX.TypeInst{}
-		Ticker.SPOT = mOKX.TypeInst{}
-		if len(Ticker.InstID) > 3 {
+		Ts := curTickerVolList[key].Ts
+
+		if Ts < 987897 {
+			EndEmail("时间错误")
+			global.Run.Println("时间错误", curTickerVolList[key].Ts)
+			panic("时间太小了")
+		}
+		NewTicker.TimeUnix = mTime.ToUnixMsec(mTime.MsToTime(Ts, "0"))
+		NewTicker.TimeStr = mTime.UnixFormat(NewTicker.TimeUnix)
+		NewTicker.OkxVolRose = mCount.PerCent(NewTicker.OKXVol24H, NewTicker.Volume)
+		NewTicker.BinanceVolRose = mCount.PerCent(NewTicker.BinanceVol24H, NewTicker.Volume)
+		NewTicker.SWAP = mOKX.TypeInst{}
+		NewTicker.SPOT = mOKX.TypeInst{}
+		if len(NewTicker.InstID) > 3 {
 			for _, SWAP := range okxInfo.SWAP_inst {
-				if SWAP.Uly == Ticker.InstID {
-					Ticker.SWAP = SWAP
+				if SWAP.Uly == NewTicker.InstID {
+					NewTicker.SWAP = SWAP
 					break
 				}
 			}
 			for _, SPOT := range okxInfo.SPOT_inst {
-				if SPOT.InstID == Ticker.InstID {
-					Ticker.SPOT = SPOT
+				if SPOT.InstID == NewTicker.InstID {
+					NewTicker.SPOT = SPOT
 					break
 				}
 			}
 		}
 
-		fmt.Println(Ticker.SPOT.ListTime, Ticker.SWAP.ListTime)
+		if len(Ticker.SPOT.ListTime) < 4 || len(Ticker.SWAP.ListTime) < 4 {
+			EndEmail("时间错误2")
+			global.Run.Println("时间错误2", curTickerVolList[key].Ts)
+			panic("时间太小了2")
+		}
+
+		fmt.Println(Ticker.SPOT.ListTime, Ticker.SWAP.ListTime, NewTicker.TimeUnix)
 
 		// 上架小于36天的不计入榜单
-		diffOnLine := mCount.Sub(mStr.ToStr(Ticker.Ts), Ticker.SPOT.ListTime)
+		diffOnLine := mCount.Sub(mStr.ToStr(Ticker.TimeUnix), Ticker.SPOT.ListTime)
 		if mCount.Le(diffOnLine, "32") > 0 {
 			NewTickerVol = append(NewTickerVol, NewTicker)
 			global.Run.Println("榜单填充结束", NewTicker.InstID)
