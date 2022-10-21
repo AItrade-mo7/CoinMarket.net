@@ -183,7 +183,7 @@ func FormatTickerVol(TickerVol []mOKX.TypeTicker, CurData map[string]any) []mOKX
 		}
 
 		// 上架小于36天的不计入榜单
-		diffOnLine := mCount.Sub(mStr.ToStr(NewTicker.TimeUnix), NewTicker.SPOT.ListTime)
+		diffOnLine := mCount.Sub(mStr.ToStr(NewTicker.TimeUnix), NewTicker.SWAP.ListTime)
 		if mCount.Le(diffOnLine, "32") > 0 {
 			NewTickerVol = append(NewTickerVol, NewTicker)
 			global.Run.Println("榜单填充结束", NewTicker.InstID, NewTicker.SPOT.ListTime, NewTicker.SWAP.ListTime, NewTicker.TimeUnix)

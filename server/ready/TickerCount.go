@@ -70,8 +70,8 @@ func TickerCount(OKXTicker mOKX.TypeOKXTicker, BinanceTicker mOKX.TypeBinanceTic
 		}
 	}
 
-	// 上架小于36天的不计入榜单
-	diffOnLine := mCount.Sub(mStr.ToStr(Ticker.TimeUnix), Ticker.SPOT.ListTime)
+	// 上架小于 32 天的不计入榜单
+	diffOnLine := mCount.Sub(mStr.ToStr(Ticker.TimeUnix), Ticker.SWAP.ListTime)
 	if mCount.Le(diffOnLine, "32") < 0 {
 		return mOKX.TypeTicker{}
 	}
