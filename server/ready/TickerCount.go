@@ -8,6 +8,7 @@ import (
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
+	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
 )
 
@@ -22,7 +23,9 @@ func SetTicker() {
 		for _, binance := range okxInfo.BinanceTickerList {
 			if okx.InstID == binance.InstID {
 				ticker := TickerCount(okx, binance)
-				tickerList = append(tickerList, ticker)
+				if len(ticker.InstID) > 4 {
+					tickerList = append(tickerList, ticker)
+				}
 				break
 			}
 		}
@@ -53,7 +56,6 @@ func TickerCount(OKXTicker mOKX.TypeOKXTicker, BinanceTicker mOKX.TypeBinanceTic
 	Ticker.TimeStr = mTime.UnixFormat(Ticker.TimeUnix)
 	Ticker.SWAP = mOKX.TypeInst{}
 	Ticker.SPOT = mOKX.TypeInst{}
-
 	if len(Ticker.InstID) > 3 {
 		for _, SWAP := range okxInfo.SWAP_inst {
 			if SWAP.Uly == Ticker.InstID {
@@ -62,11 +64,17 @@ func TickerCount(OKXTicker mOKX.TypeOKXTicker, BinanceTicker mOKX.TypeBinanceTic
 			}
 		}
 		for _, SPOT := range okxInfo.SPOT_inst {
-			if SPOT.Uly == Ticker.InstID {
+			if SPOT.InstID == Ticker.InstID {
 				Ticker.SPOT = SPOT
 				break
 			}
 		}
+	}
+
+	// 上架小于36天的不计入榜单
+	diffOnLine := mCount.Sub(mStr.ToStr(Ticker.Ts), Ticker.SPOT.ListTime)
+	if mCount.Le(diffOnLine, "36") < 0 {
+		return mOKX.TypeTicker{}
 	}
 
 	return Ticker
