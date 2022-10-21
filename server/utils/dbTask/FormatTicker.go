@@ -1,7 +1,6 @@
 package dbTask
 
 import (
-	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -153,7 +152,6 @@ func FormatTickerVol(TickerVol []mOKX.TypeTicker) []mOKX.TypeTicker {
 		// 上架小于36天的不计入榜单
 		diffOnLine := mCount.Sub(mStr.ToStr(Ticker.Ts), Ticker.SPOT.ListTime)
 
-		fmt.Println()
 		if mCount.Le(diffOnLine, "32") > 0 {
 			NewTickerVol = append(NewTickerVol, NewTicker)
 			global.Run.Println("榜单填充结束", NewTicker.InstID)
