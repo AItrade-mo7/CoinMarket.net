@@ -27,8 +27,9 @@ func Start() {
 
 // 获取榜单数据
 func SetTickerAnaly() {
+	inst.Start() // 获取交易产品信息
+
 	global.Run.Println("========= 开始获取数据 ===========")
-	inst.Start()           // 获取交易产品信息
 	binanceApi.GetTicker() // 获取币安的 Ticker
 	tickers.GetTicker()    // 获取 okx 的Ticker
 	SetTicker()            // 计算并设置综合榜单 产出 okxInfo.TickerVol 数据
