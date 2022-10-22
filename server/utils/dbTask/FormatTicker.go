@@ -122,7 +122,7 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 				InstID:  val.InstID,
 				Current: 0,
 				Size:    100,
-				After:   val.TimeUnix,
+				After:   val.TimeUnix + 5000,
 			})
 			time.Sleep(time.Second / 3)
 		}
@@ -182,13 +182,14 @@ func FormatTickerVol(TickerVol []mOKX.TypeTicker, CurData map[string]any) []mOKX
 			panic("时间太小了2")
 		}
 
-		// 上架小于36天的不计入榜单
-		diffOnLine := mCount.Sub(mStr.ToStr(NewTicker.TimeUnix), NewTicker.SWAP.ListTime)
-		if mCount.Le(diffOnLine, "32") > 0 {
+		// 上架小于 32 天的不计入榜单
+		diffOnLine := mCount.Sub(mStr.ToStr(Ticker.TimeUnix), Ticker.SWAP.ListTime)
+		diffDay := mCount.Div(diffOnLine, mTime.UnixTime.Day)
+		if mCount.Le(diffDay, "32") < 0 {
+			global.Run.Println("上架时间太短-过滤", diffOnLine)
+		} else {
 			NewTickerVol = append(NewTickerVol, NewTicker)
 			global.Run.Println("榜单填充结束", NewTicker.InstID, NewTicker.SPOT.ListTime, NewTicker.SWAP.ListTime, NewTicker.TimeUnix)
-		} else {
-			global.Run.Println("上架时间太短-过滤", diffOnLine)
 		}
 	}
 
