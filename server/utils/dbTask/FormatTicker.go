@@ -1,7 +1,6 @@
 package dbTask
 
 import (
-	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -78,7 +77,7 @@ func (_this *FormatTickerObj) TickerDBTraverse() {
 				Value: CoinTicker.TimeID,
 			}})
 
-			fmt.Println("没有榜单数据,删除", curData["TimeStr"], len(CoinTicker.TickerVol), len(CoinTicker.Kdata))
+			global.Run.Println("没有榜单数据,删除", curData["TimeStr"], len(CoinTicker.TickerVol), len(CoinTicker.Kdata))
 			continue
 		}
 
