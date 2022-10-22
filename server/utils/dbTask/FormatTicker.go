@@ -10,13 +10,11 @@ import (
 	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
-	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mStruct"
 	"github.com/EasyGolang/goTools/mTime"
-	jsoniter "github.com/json-iterator/go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -49,26 +47,13 @@ func (_this *FormatTickerObj) TickerDBTraverse() {
 		"TimeUnix": 1,
 	})
 
-	findFK := bson.D{{
-		Key: "TimeUnix",
-		Value: bson.D{
-			{
-				Key:   "$gte", // 大于或等于
-				Value: 1665702900000,
-			},
-		},
-	}}
+	findFK := bson.D{}
 	cursor, err := db.Table.Find(db.Ctx, findFK, findOpt)
 	for cursor.Next(db.Ctx) {
-		var curData map[string]any
-		cursor.Decode(&curData)
-
 		var CoinTicker dbType.CoinTickerTable
-		jsoniter.Unmarshal(mJson.ToJson(curData), &CoinTicker)
+		cursor.Decode(&CoinTicker)
 
-		CoinTicker.TickerVol = FormatTickerVol(CoinTicker.TickerVol, curData)
-
-		CoinTicker.Kdata = make(map[string][]mOKX.TypeKd)
+		CoinTicker.TickerVol = FormatTickerVol(CoinTicker.TickerVol)
 		CoinTicker.Kdata = FetchKdata(CoinTicker)
 
 		if len(CoinTicker.TickerVol) < 1 {
@@ -77,7 +62,7 @@ func (_this *FormatTickerObj) TickerDBTraverse() {
 				Value: CoinTicker.TimeID,
 			}})
 
-			global.Run.Println("没有榜单数据,删除", curData["TimeStr"], len(CoinTicker.TickerVol), len(CoinTicker.Kdata))
+			global.Run.Println("没有榜单数据,删除", CoinTicker.TimeStr, len(CoinTicker.TickerVol), len(CoinTicker.Kdata))
 			continue
 		}
 
@@ -134,7 +119,6 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 
 	for _, val := range dbTicker.TickerVol {
 		kdata_list := dbTicker.Kdata[val.InstID]
-
 		if len(kdata_list) != 100 {
 			kdata_list = kdata.GetHistoryKdata(kdata.HistoryKdataParam{
 				InstID:  val.InstID,
@@ -150,33 +134,20 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 	return KdataList
 }
 
-func FormatTickerVol(TickerVol []mOKX.TypeTicker, CurData map[string]any) []mOKX.TypeTicker {
+func FormatTickerVol(TickerVol []mOKX.TypeTicker) []mOKX.TypeTicker {
 	NewTickerVol := []mOKX.TypeTicker{}
 
-	curTickerVol := CurData["TickerVol"]
-	var curTickerVolList []struct {
-		Ts       int64
-		TimeUnix int64
-	}
-	jsoniter.Unmarshal(mJson.ToJson(curTickerVol), &curTickerVolList)
-
-	for key, Ticker := range TickerVol {
+	for _, Ticker := range TickerVol {
 		NewTicker := Ticker
-		Ts := curTickerVolList[key].Ts
-		if Ts < 987897 {
-			Ts = curTickerVolList[key].TimeUnix
-		}
 
-		if Ts < 1662440205709 {
-			EndEmail("时间错误")
-			global.Run.Println("时间错误", curTickerVolList[key].Ts)
-			panic("时间错误")
-		}
-
-		NewTicker.TimeUnix = mTime.ToUnixMsec(mTime.MsToTime(Ts, "0"))
+		NewTicker.TimeUnix = Ticker.TimeUnix
 		NewTicker.TimeStr = mTime.UnixFormat(NewTicker.TimeUnix)
-		NewTicker.OkxVolRose = mCount.PerCent(NewTicker.OKXVol24H, NewTicker.Volume)
-		NewTicker.BinanceVolRose = mCount.PerCent(NewTicker.BinanceVol24H, NewTicker.Volume)
+
+		if len(NewTicker.OkxVolRose) < 1 || len(NewTicker.BinanceVolRose) < 1 {
+			NewTicker.OkxVolRose = mCount.PerCent(NewTicker.OKXVol24H, NewTicker.Volume)
+			NewTicker.BinanceVolRose = mCount.PerCent(NewTicker.BinanceVol24H, NewTicker.Volume)
+		}
+
 		NewTicker.SWAP = mOKX.TypeInst{}
 		NewTicker.SPOT = mOKX.TypeInst{}
 		if len(NewTicker.InstID) > 3 {
@@ -196,7 +167,7 @@ func FormatTickerVol(TickerVol []mOKX.TypeTicker, CurData map[string]any) []mOKX
 
 		if len(NewTicker.SPOT.ListTime) < 4 || len(NewTicker.SWAP.ListTime) < 4 {
 			EndEmail("时间错误2")
-			global.Run.Println("时间错误2", curTickerVolList[key].Ts)
+			global.Run.Println("时间错误2", NewTicker.TimeUnix)
 			panic("时间太小了2")
 		}
 
