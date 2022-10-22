@@ -1,6 +1,7 @@
 package dbTask
 
 import (
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -49,7 +50,15 @@ func (_this *FormatTickerObj) TickerDBTraverse() {
 		"TimeUnix": 1,
 	})
 
-	findFK := bson.D{}
+	findFK := bson.D{{
+		Key: "TimeUnix",
+		Value: bson.D{
+			{
+				Key:   "$gte", // 大于或等于
+				Value: 1665702900000,
+			},
+		},
+	}}
 	cursor, err := db.Table.Find(db.Ctx, findFK, findOpt)
 	for cursor.Next(db.Ctx) {
 		var curData map[string]any
@@ -62,6 +71,16 @@ func (_this *FormatTickerObj) TickerDBTraverse() {
 
 		CoinTicker.Kdata = make(map[string][]mOKX.TypeKd)
 		CoinTicker.Kdata = FetchKdata(CoinTicker)
+
+		if len(CoinTicker.TickerVol) < 1 {
+			db.Table.DeleteOne(db.Ctx, bson.D{{
+				Key:   "TimeID",
+				Value: CoinTicker.TimeID,
+			}})
+
+			fmt.Println("没有榜单数据,删除", curData["TimeStr"], len(CoinTicker.TickerVol), len(CoinTicker.Kdata))
+			continue
+		}
 
 		CoinTicker.TimeUnix = CoinTicker.TickerVol[0].TimeUnix
 		CoinTicker.TimeStr = mTime.UnixFormat(CoinTicker.TimeUnix)
