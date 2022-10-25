@@ -163,7 +163,7 @@ func StartEmail() {
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{
 			Message: "开始执行 AnalyTask",
-			SysTime: mTime.IsoTime(false),
+			SysTime: mTime.IsoTime(),
 		},
 	}).Send()
 	global.Run.Println("======= 脚本开始 =======")
@@ -186,7 +186,7 @@ func EndEmail(Msg string) {
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{
 			Message: lMsg,
-			SysTime: mTime.IsoTime(false),
+			SysTime: mTime.IsoTime(),
 		},
 	}).Send()
 }

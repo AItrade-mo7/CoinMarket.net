@@ -32,7 +32,7 @@ func Start() {
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{
 			Message: "服务启动",
-			SysTime: mTime.IsoTime(false),
+			SysTime: mTime.IsoTime(),
 		},
 	}).Send()
 	Log.Println(`系统初始化完成`, mJson.Format(config.SysEnv))

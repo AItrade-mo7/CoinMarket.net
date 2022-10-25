@@ -73,7 +73,7 @@ func LogErr(sum ...any) {
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{
 			Message: str,
-			SysTime: mTime.IsoTime(false),
+			SysTime: mTime.IsoTime(),
 		},
 	})
 	Log.Println(str)
