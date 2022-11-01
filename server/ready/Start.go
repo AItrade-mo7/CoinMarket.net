@@ -27,8 +27,11 @@ func Start() {
 
 // 获取榜单数据
 func SetTickerAnaly() {
-	ReStartMongoDB() // 在这里重启数据库
-	inst.Start()     // 获取交易产品信息
+	if IsMongoDBTimeScale(mTime.GetUnixInt64()) {
+		ReStartMongoDB() // 在这里重启数据库
+	}
+
+	inst.Start() // 获取交易产品信息
 
 	global.Run.Println("========= 开始获取数据 ===========")
 	binanceApi.GetTicker() // 获取币安的 Ticker
@@ -42,7 +45,7 @@ func SetTickerAnaly() {
 		TickerKdata: okxInfo.TickerKdata,
 	})
 
-	if IsTimeScale(mTime.GetUnixInt64()) {
+	if IsOKXDataTimeScale(mTime.GetUnixInt64()) {
 		go SetTickerAnalyDB()
 		go SetCoinTickerDB()
 		go SetCoinKdataDB("BTC")
