@@ -11,6 +11,7 @@ type AnalyTickerType struct {
 	TickerVol   []mOKX.TypeTicker                `bson:"TickerVol"`   // 列表
 	AnalyWhole  []mOKX.TypeWholeTickerAnaly      `bson:"AnalyWhole"`  // 大盘分析结果
 	AnalySingle map[string][]mOKX.AnalySliceType `bson:"AnalySingle"` // 单个币种分析结果
+	Version     int                              `bson:"Version"`
 	Unit        string                           `bson:"Unit"`
 	WholeDir    int                              `bson:"WholeDir"`
 	DirIndex    int                              `bson:"DirIndex"`
@@ -21,6 +22,7 @@ type AnalyTickerType struct {
 
 func GetAnalyTicker(opt tickerAnaly.TickerAnalyParam) (resData AnalyTickerType) {
 	resData = AnalyTickerType{}
+	resData.Version = 2
 
 	if len(opt.TickerVol) > 3 && len(opt.TickerKdata) == len(opt.TickerVol) && len(opt.TickerKdata["BTC-USDT"]) >= config.KdataLen {
 	} else {
