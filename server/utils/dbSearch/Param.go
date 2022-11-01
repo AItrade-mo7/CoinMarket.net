@@ -6,6 +6,7 @@ import (
 
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mStr"
+	"github.com/EasyGolang/goTools/mTime"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -92,7 +93,7 @@ func GetCursor(opt CurOpt) (resCur *CurOpt, resErr error) {
 	}
 
 	// 构建时间范围查询
-	if (json.TimeUnix[0] + json.TimeUnix[1]) > 946656000000 {
+	if json.TimeUnix[1]-json.TimeUnix[0] < mTime.UnixTimeInt64.Day*100 {
 		FK = append(FK, bson.E{
 			Key: "TimeUnix",
 			Value: bson.D{
