@@ -16,10 +16,8 @@ import (
 )
 
 type GetCoinListParam struct {
-	InstID  string            `bson:"InstID"`  // 只能为 BTC 或者 ETH
-	Size    int64             `bson:"Size"`    // 每页多少条
-	Current int64             `bson:"Current"` // 当前页码 0 为第一页
-	Sort    dbSearch.SortType `bson:"Sort"`    // 排序
+	InstID   string   `bson:"InstID"`   // 只能为 BTC 或者 ETH
+	TimeUnix [2]int64 `bson:"TimeUnix"` // 范围查询
 }
 
 // 获取当前页码的币种数据，并进行存储，15分钟为限额
