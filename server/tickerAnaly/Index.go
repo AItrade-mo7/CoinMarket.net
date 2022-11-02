@@ -15,6 +15,7 @@ type TickerAnalyParam struct {
 type AnalyResult struct {
 	AnalySingle map[string][]mOKX.AnalySliceType
 	AnalyWhole  []mOKX.TypeWholeTickerAnaly
+	MillionCoin []string
 	WholeDir    int
 	DirIndex    int
 	TimeUnix    int64
@@ -43,7 +44,7 @@ func GetAnaly(opt TickerAnalyParam) AnalyResult {
 	}
 
 	TickerAnalyWhole := WholeAnaly(TickerAnalySingle)
-	WholeDir, DirIndex := AnalyDir(AnalyDirParam{
+	MillionCoin, DirIndex := AnalyDir(AnalyDirParam{
 		TickerVol:  opt.TickerVol,
 		AnalyWhole: TickerAnalyWhole,
 	})
@@ -51,7 +52,8 @@ func GetAnaly(opt TickerAnalyParam) AnalyResult {
 	var Analy AnalyResult
 	Analy.AnalySingle = TickerAnalySingle
 	Analy.AnalyWhole = TickerAnalyWhole
-	Analy.WholeDir = WholeDir
+	Analy.WholeDir = 0
+	Analy.MillionCoin = MillionCoin // 过亿
 	Analy.DirIndex = DirIndex
 	Analy.TimeUnix = opt.TickerVol[0].TimeUnix
 	Analy.TimeStr = mTime.UnixFormat(Analy.TimeUnix)

@@ -12,28 +12,18 @@ type AnalyDirParam struct {
 	AnalyWhole []mOKX.TypeWholeTickerAnaly
 }
 
-func AnalyDir(opt AnalyDirParam) (WholeDir, DirIndex int) {
+func AnalyDir(opt AnalyDirParam) (MillionCoin []string, DirIndex int) {
 	// 初始化为空值
 	DirIndex = 0
-	WholeDir = 0
 	if len(opt.AnalyWhole) > 0 {
 		DirIndex = opt.AnalyWhole[0].DirIndex
-		WholeDir = opt.AnalyWhole[0].DirIndex
 	}
 
 	// 筛选出过亿的币种
-	millionCoin := []string{}
+	MillionCoin = []string{}
 	for _, ticker := range opt.TickerVol {
 		if mCount.Le(ticker.Volume, million) >= 0 {
-			millionCoin = append(millionCoin, ticker.InstID)
-		}
-	}
-
-	// 过亿币种数量小于4 ， 交易量小的上涨不作数的
-	if len(millionCoin) < 4 {
-		// 如果此时判断为涨，修订为0
-		if WholeDir > 0 {
-			WholeDir = 0
+			MillionCoin = append(MillionCoin, ticker.InstID)
 		}
 	}
 

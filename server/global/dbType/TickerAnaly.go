@@ -11,6 +11,7 @@ type AnalyTickerType struct {
 	TickerVol   []mOKX.TypeTicker                `bson:"TickerVol"`   // 列表
 	AnalyWhole  []mOKX.TypeWholeTickerAnaly      `bson:"AnalyWhole"`  // 大盘分析结果
 	AnalySingle map[string][]mOKX.AnalySliceType `bson:"AnalySingle"` // 单个币种分析结果
+	MillionCoin []string                         `bson:"MillionCoin"`
 	Version     int                              `bson:"Version"`
 	Unit        string                           `bson:"Unit"`
 	WholeDir    int                              `bson:"WholeDir"`
@@ -38,6 +39,7 @@ func GetAnalyTicker(opt tickerAnaly.TickerAnalyParam) (resData AnalyTickerType) 
 	resData.WholeDir = AnalyResult.WholeDir
 	resData.DirIndex = AnalyResult.DirIndex
 	resData.Unit = config.Unit
+	resData.MillionCoin = AnalyResult.MillionCoin
 	resData.TimeUnix = AnalyResult.TimeUnix
 	resData.TimeStr = AnalyResult.TimeStr
 	resData.TimeID = AnalyResult.TimeID
