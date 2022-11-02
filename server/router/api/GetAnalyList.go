@@ -1,8 +1,6 @@
 package api
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/global/apiType"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
@@ -37,8 +35,6 @@ func GetTickerAnaly(opt dbSearch.FindParam) (resData dbSearch.PagingType, resErr
 	}).Connect().Collection("TickerAnaly")
 	defer db.Close()
 	// 构建搜索参数
-
-	fmt.Println("GetTickerAnaly")
 
 	resCur, err := dbSearch.GetCursor(dbSearch.CurOpt{
 		Param: opt,
