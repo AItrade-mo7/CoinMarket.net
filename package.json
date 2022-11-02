@@ -1,6 +1,6 @@
 {
   "name": "coin-market",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "port": 8998,
   "scripts": {
     "git": "./_shell/gitSet.sh",
