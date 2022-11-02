@@ -1,6 +1,7 @@
 package apiType
 
 type ClientAnalyType struct {
+	Version         int    `bson:"Version"`
 	MaxUP           string `bson:"MaxUP"`
 	MaxUP_RosePer   string `bson:"MaxUP_RosePer"`
 	MaxDown         string `bson:"MaxDown"`

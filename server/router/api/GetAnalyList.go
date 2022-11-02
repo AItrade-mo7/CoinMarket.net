@@ -65,6 +65,8 @@ func GetTickerAnaly(opt dbSearch.FindParam) (resData dbSearch.PagingType, resErr
 			ClientAnaly.TimeUnix = Analy.TimeUnix
 			ClientAnaly.TimeStr = Analy.TimeStr
 			ClientAnaly.TimeID = Analy.TimeID
+			ClientAnaly.TimeID = Analy.TimeID
+			ClientAnaly.Version = Analy.Version
 			if len(Analy.AnalyWhole) > 0 {
 				ClientAnaly.MaxUP = Analy.AnalyWhole[0].MaxUP.CcyName
 				ClientAnaly.MaxUP_RosePer = Analy.AnalyWhole[0].MaxUP.RosePer
