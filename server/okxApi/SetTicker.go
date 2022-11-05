@@ -1,4 +1,4 @@
-package ready
+package okxApi
 
 import (
 	"strings"
