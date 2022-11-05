@@ -58,6 +58,7 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 		global.LogErr("kdata.GetHistoryKdata Err", opt.InstID, err)
 		return nil
 	}
+
 	var result mOKX.TypeReq
 	jsoniter.Unmarshal(resData, &result)
 	if result.Code != "0" {

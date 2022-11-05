@@ -16,7 +16,7 @@ import (
 
 func FormatKdata() {
 	okxApi.SetInst() // 获取并设置交易产品信息
-	SetKdata("BTC")
+
 	SetKdata("ETH")
 }
 
@@ -45,6 +45,17 @@ func SetKdata(CcyName string) {
 		} else {
 			global.Run.Println("请求数据出错", len(List), InstID, i)
 		}
+	}
+
+	// 数据检查
+	for key := range AllList {
+		preIndex := key - 1
+		if preIndex < 0 {
+			preIndex = 0
+		}
+		preItem := AllList[preIndex]
+		nowItem := AllList[key]
+		global.Run.Println(nowItem.TimeUnix - preItem.TimeUnix)
 	}
 
 	// 链接数据库

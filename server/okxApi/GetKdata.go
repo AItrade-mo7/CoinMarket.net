@@ -64,6 +64,7 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 		OKXList:     OKXList,
 		BinanceList: BinanceList,
 	})
+
 	if err != nil {
 		global.LogErr(err)
 		return
@@ -87,11 +88,6 @@ func KdataMerge(opt KdataMergeOpt) (Kdata []mOKX.TypeKd, resErr error) {
 
 	if len(OKXList) != len(BinanceList) {
 		resErr = fmt.Errorf("okxApi.KdataMerge len %+v %+v", len(OKXList), len(BinanceList))
-		return
-	}
-
-	if OKXList[0].TimeStr != BinanceList[0].TimeStr {
-		resErr = fmt.Errorf("okxApi.KdataMerge [0] %+v %+v", OKXList[0].TimeStr, BinanceList[0].TimeStr)
 		return
 	}
 
