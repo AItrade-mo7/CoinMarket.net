@@ -21,7 +21,7 @@ type AnalyTickerType struct {
 
 func GetAnalyTicker(opt tickerAnaly.TickerAnalyParam) (resData AnalyTickerType) {
 	resData = AnalyTickerType{}
-	resData.Version = 2
+	resData.Version = 3
 
 	if len(opt.TickerVol) > 3 && len(opt.TickerKdata) == len(opt.TickerVol) && len(opt.TickerKdata["BTC-USDT"]) >= config.KdataLen {
 	} else {
