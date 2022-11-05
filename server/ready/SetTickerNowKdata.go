@@ -1,7 +1,6 @@
 package ready
 
 import (
-	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global/config"
@@ -21,8 +20,6 @@ func SetTickerNowKdata() {
 			InstID: item.InstID,
 			Size:   config.KdataLen,
 		})
-
-		fmt.Println(item.InstID, len(List))
 
 		if len(List) >= config.KdataLen {
 			TickerList = append(TickerList, item)
