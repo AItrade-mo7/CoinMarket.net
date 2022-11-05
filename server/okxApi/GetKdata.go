@@ -15,13 +15,7 @@ type GetKdataOpt struct {
 }
 
 func GetKdata(opt GetKdataOpt) {
-	Symbol := GetSymbol(opt.InstID)
-
-	fmt.Println(Symbol)
-}
-
-func GetSymbol(InstID string) string {
-	return ""
+	fmt.Println(opt)
 }
 
 type KdataMergeOpt struct {
