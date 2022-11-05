@@ -28,7 +28,7 @@ func Start() {
 // 获取榜单数据
 func SetTickerAnaly() {
 	ReStartShell()   // 在这里 清理Linux 缓存
-	okxApi.GetInst() // 获取并设置交易产品信息
+	okxApi.SetInst() // 获取并设置交易产品信息
 
 	global.Run.Println("========= 开始获取数据 ===========")
 	binanceApi.GetTicker() // 获取币安的 Ticker

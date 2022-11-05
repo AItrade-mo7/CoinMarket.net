@@ -8,7 +8,7 @@ import (
 	"github.com/EasyGolang/goTools/mStr"
 )
 
-func GetInst() {
+func SetInst() {
 	binanceInstList := binanceApi.GetInst()
 	InstList := inst.GetInst()
 
