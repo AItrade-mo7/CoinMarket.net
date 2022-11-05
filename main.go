@@ -5,6 +5,7 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/okxApi"
 	"CoinMarket.net/server/ready"
 	jsoniter "github.com/json-iterator/go"
 )
@@ -19,6 +20,11 @@ func main() {
 	global.Start()
 
 	ready.Start()
+
+	okxApi.GetKdata(okxApi.GetKdataOpt{
+		InstID: "ETH-USDT",
+	})
+
 	// router.Start()
 
 	// ==== 开始整理算法结果 ====
