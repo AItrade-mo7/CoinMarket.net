@@ -48,10 +48,6 @@ func GetKdata(opt GetKdataParam) (KdataList []mOKX.TypeKd) {
 		size = opt.Size
 	}
 
-	if opt.After == 0 {
-		after = ""
-	}
-
 	resData, err := mOKX.FetchBinance(mOKX.FetchBinanceOpt{
 		Path:   "/api/v3/klines",
 		Method: "get",

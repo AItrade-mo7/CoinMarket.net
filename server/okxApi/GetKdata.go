@@ -49,7 +49,7 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 	})
 
 	var OKXList []mOKX.TypeKd
-	if (opt.After) > 0 {
+	if (opt.After) > 0 || opt.Current > 0 {
 		OKXList = kdata.GetHistoryKdata(kdata.HistoryKdataParam{
 			InstID:  SPOT.InstID,
 			Current: opt.Current,
@@ -64,6 +64,8 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 		OKXList:     OKXList,
 		BinanceList: BinanceList,
 	})
+
+	fmt.Println(err)
 	if err != nil {
 		global.LogErr(err)
 		return
