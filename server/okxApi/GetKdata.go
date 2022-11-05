@@ -64,8 +64,6 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 		OKXList:     OKXList,
 		BinanceList: BinanceList,
 	})
-
-	fmt.Println(err)
 	if err != nil {
 		global.LogErr(err)
 		return
