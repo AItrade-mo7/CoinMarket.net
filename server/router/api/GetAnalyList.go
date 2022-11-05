@@ -56,8 +56,6 @@ func GetTickerAnaly(opt dbSearch.FindParam) (resData dbSearch.PagingType, resErr
 		} else {
 			var ClientAnaly apiType.ClientAnalyType
 			ClientAnaly.Unit = Analy.Unit
-			ClientAnaly.WholeDir = Analy.WholeDir
-			ClientAnaly.DirIndex = Analy.DirIndex
 			ClientAnaly.TimeUnix = Analy.TimeUnix
 			ClientAnaly.TimeStr = Analy.TimeStr
 			ClientAnaly.TimeID = Analy.TimeID

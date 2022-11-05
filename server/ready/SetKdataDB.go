@@ -161,6 +161,5 @@ func SetTickerAnalyDB() {
 		TickerAnaly.TimeStr,
 		len(TickerAnaly.TickerVol),
 		TickerAnaly.TickerVol[0].CcyName,
-		TickerAnaly.WholeDir,
 	)
 }

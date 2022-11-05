@@ -12,12 +12,8 @@ type AnalyDirParam struct {
 	AnalyWhole []mOKX.TypeWholeTickerAnaly
 }
 
-func AnalyDir(opt AnalyDirParam) (MillionCoin []string, DirIndex int) {
+func AnalyDir(opt AnalyDirParam) (MillionCoin []string) {
 	// 初始化为空值
-	DirIndex = 0
-	if len(opt.AnalyWhole) > 0 {
-		DirIndex = opt.AnalyWhole[0].DirIndex
-	}
 
 	// 筛选出过亿的币种
 	MillionCoin = []string{}

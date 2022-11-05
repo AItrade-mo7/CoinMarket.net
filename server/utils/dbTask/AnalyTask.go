@@ -115,8 +115,6 @@ func (_this *AnalyTaskObj) AnalyStart(Ticker dbType.CoinTickerTable) {
 			len(BtcList),
 		)
 		AnalyResult.Unit = config.Unit
-		AnalyResult.WholeDir = 0
-		AnalyResult.DirIndex = 0
 		AnalyResult.TimeUnix = Ticker.TimeUnix
 		AnalyResult.TimeStr = Ticker.TimeStr
 		AnalyResult.TimeID = Ticker.TimeID
@@ -150,7 +148,6 @@ func (_this *AnalyTaskObj) AnalyStart(Ticker dbType.CoinTickerTable) {
 		"更插完毕",
 		AnalyResult.TimeID,
 		len(AnalyResult.TickerVol),
-		AnalyResult.WholeDir,
 	)
 }
 

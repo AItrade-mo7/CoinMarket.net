@@ -14,8 +14,6 @@ type AnalyTickerType struct {
 	MillionCoin []string                         `bson:"MillionCoin"`
 	Version     int                              `bson:"Version"`
 	Unit        string                           `bson:"Unit"`
-	WholeDir    int                              `bson:"WholeDir"`
-	DirIndex    int                              `bson:"DirIndex"`
 	TimeUnix    int64                            `bson:"TimeUnix"`
 	TimeStr     string                           `bson:"TimeStr"`
 	TimeID      string                           `bson:"TimeID"`
@@ -36,8 +34,6 @@ func GetAnalyTicker(opt tickerAnaly.TickerAnalyParam) (resData AnalyTickerType) 
 	resData.TickerVol = opt.TickerVol
 	resData.AnalyWhole = AnalyResult.AnalyWhole
 	resData.AnalySingle = AnalyResult.AnalySingle
-	resData.WholeDir = AnalyResult.WholeDir
-	resData.DirIndex = AnalyResult.DirIndex
 	resData.Unit = config.Unit
 	resData.MillionCoin = AnalyResult.MillionCoin
 	resData.TimeUnix = AnalyResult.TimeUnix
