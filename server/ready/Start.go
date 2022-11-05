@@ -6,8 +6,8 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
+	"CoinMarket.net/server/okxApi"
 	"CoinMarket.net/server/okxApi/binanceApi"
-	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/tickers"
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
@@ -29,7 +29,7 @@ func Start() {
 func SetTickerAnaly() {
 	ReStartShell() // 在这里 清理Linux 缓存
 
-	inst.Start() // 获取交易产品信息
+	okxApi.GetInst() // 获取交易产品信息
 
 	global.Run.Println("========= 开始获取数据 ===========")
 	binanceApi.GetTicker() // 获取币安的 Ticker

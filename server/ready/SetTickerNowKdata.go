@@ -1,6 +1,7 @@
 package ready
 
 import (
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global/config"
@@ -16,6 +17,8 @@ func SetTickerNowKdata() {
 	TickerList := []mOKX.TypeTicker{}
 	for _, item := range okxInfo.TickerVol {
 		time.Sleep(time.Second / 2) // 1秒最多 2 次
+
+		fmt.Println(item.Symbol,item.InstID)
 
 		BinanceList := binanceApi.GetKdata(binanceApi.GetKdataParam{
 			Symbol: item.Symbol,

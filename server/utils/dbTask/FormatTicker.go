@@ -6,7 +6,6 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
-	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
@@ -24,8 +23,6 @@ type FormatTickerObj struct {
 }
 
 func NewFormat() *FormatTickerObj {
-	inst.Start()
-
 	var NewFormatObj FormatTickerObj
 	Timeout := 4000 * 60
 	NewFormatObj.TickerDB = mMongo.New(mMongo.Opt{

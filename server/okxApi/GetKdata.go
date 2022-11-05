@@ -1,6 +1,8 @@
 package okxApi
 
 import (
+	"fmt"
+
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
 )
@@ -13,6 +15,13 @@ type GetKdataOpt struct {
 }
 
 func GetKdata(opt GetKdataOpt) {
+	Symbol := GetSymbol(opt.InstID)
+
+	fmt.Println(Symbol)
+}
+
+func GetSymbol(InstID string) string {
+	return ""
 }
 
 type KdataMergeOpt struct {
