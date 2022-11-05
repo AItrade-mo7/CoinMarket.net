@@ -20,11 +20,9 @@ type GetKdataParam struct {
 	Size    int    `bson:"Size"`    // 数量 默认为100
 }
 
-var KdataList []mOKX.TypeKd
-
-func GetKdata(opt GetKdataParam) []mOKX.TypeKd {
+func GetKdata(opt GetKdataParam) (KdataList []mOKX.TypeKd) {
 	InstInfo := okxInfo.Inst[opt.Symbol]
-	KdataList := []mOKX.TypeKd{}
+	KdataList = []mOKX.TypeKd{}
 
 	if len(InstInfo.Symbol) < 3 {
 		return KdataList
@@ -71,17 +69,21 @@ func GetKdata(opt GetKdataParam) []mOKX.TypeKd {
 		return KdataList
 	}
 
-	FormatKdata(resData, opt.Symbol)
+	rList := FormatKdata(resData, opt.Symbol)
 
-	if len(KdataList) < limit {
+	if len(rList) < limit {
 		global.KdataLog.Println("binanceApi.GetKdata resData", opt.Symbol, mStr.ToStr(resData))
 	}
 
+	KdataList = rList
+
 	mFile.Write(Kdata_file, mStr.ToStr(resData))
+
 	return KdataList
 }
 
-func FormatKdata(data []byte, Symbol string) {
+func FormatKdata(data []byte, Symbol string) (rList []mOKX.TypeKd) {
+	rList = []mOKX.TypeKd{}
 	var listStr [][12]any
 	jsoniter.Unmarshal(data, &listStr)
 
@@ -107,11 +109,9 @@ func FormatKdata(data []byte, Symbol string) {
 			VolCcy:   mStr.ToStr(item[7]),
 			DataType: "BinanceKdata",
 		}
-		Storage(kdata)
+		new_Kdata := mOKX.NewKD(kdata, rList)
+		rList = append(rList, new_Kdata)
 	}
-}
 
-func Storage(kdata mOKX.TypeKd) {
-	new_Kdata := mOKX.NewKD(kdata, KdataList)
-	KdataList = append(KdataList, new_Kdata)
+	return rList
 }
