@@ -27,9 +27,7 @@ func Start() {
 
 // 获取榜单数据
 func SetTickerAnaly() {
-	if IsMongoDBTimeScale(mTime.GetUnixInt64()) {
-		ReStartMongoDB() // 在这里重启数据库
-	}
+	ReStartShell() // 在这里 清理Linux 缓存
 
 	inst.Start() // 获取交易产品信息
 
@@ -53,7 +51,7 @@ func SetTickerAnaly() {
 	}
 }
 
-func ReStartMongoDB() {
+func ReStartShell() {
 	isShellPath := mPath.Exists(config.File.ReStartShell)
 	if !isShellPath {
 		global.Log.Println("未找到 ReStartShell 脚本")

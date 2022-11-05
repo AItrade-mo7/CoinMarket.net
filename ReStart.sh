@@ -1,3 +1,5 @@
 #!/bin/bash
 
-sudo systemctl restart mongod
+sync
+
+swapoff -a && swapon -a
