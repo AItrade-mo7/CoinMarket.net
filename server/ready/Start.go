@@ -7,8 +7,6 @@ import (
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi"
-	"CoinMarket.net/server/okxApi/binanceApi"
-	"CoinMarket.net/server/okxApi/restApi/tickers"
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
 	"github.com/EasyGolang/goTools/mClock"
@@ -31,9 +29,8 @@ func SetTickerAnaly() {
 	okxApi.SetInst() // 获取并设置交易产品信息
 
 	global.Run.Println("========= 开始获取数据 ===========")
-	binanceApi.GetTicker() // 获取 okxInfo.BinanceTickerList
-	tickers.GetTicker()    // 获取 okxInfo.OKXTickerList
-	okxApi.SetTicker()     // 计算并设置综合榜单 产出 okxInfo.TickerVol 数据
+
+	okxApi.SetTicker() // 计算并设置综合榜单 产出 okxInfo.TickerVol 数据
 
 	SetTickerNowKdata() // 产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 数据
 

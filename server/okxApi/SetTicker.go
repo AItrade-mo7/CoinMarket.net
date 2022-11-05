@@ -5,6 +5,8 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/okxApi/binanceApi"
+	"CoinMarket.net/server/okxApi/restApi/tickers"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -13,6 +15,9 @@ import (
 )
 
 func SetTicker() {
+	binanceApi.GetTicker() // 获取 okxInfo.BinanceTickerList
+	tickers.GetTicker()    // 获取 okxInfo.OKXTickerList
+
 	if len(okxInfo.Inst) < 10 {
 		global.LogErr("ready.SetTicker okxInfo.Inst 数据条目不正确", len(okxInfo.Inst))
 	}
