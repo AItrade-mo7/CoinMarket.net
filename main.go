@@ -5,7 +5,8 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/utils/dbTask"
+	"CoinMarket.net/server/ready"
+	"CoinMarket.net/server/router"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -18,17 +19,17 @@ func main() {
 	// 初始化系统参数
 	global.Start()
 
-	// ready.Start()
+	ready.Start()
 
-	// router.Start()
+	router.Start()
 
 	// ==== 开始整理算法结果 ====
 	// Task := dbTask.NewAnalyTask()
 	// Task.CoinDBTraverse()
 
 	// ==== 开始填充榜单历史 ====
-	FormatDB := dbTask.NewFormat()
-	FormatDB.TickerDBTraverse()
+	// FormatDB := dbTask.NewFormat()
+	// FormatDB.TickerDBTraverse()
 
 	// ==== 整理Kdata ====
 	// dbTask.FormatKdata()
