@@ -59,7 +59,6 @@ func GetTickerAnaly(opt dbSearch.FindParam) (resData dbSearch.PagingType, resErr
 			ClientAnaly.TimeUnix = Analy.TimeUnix
 			ClientAnaly.TimeStr = Analy.TimeStr
 			ClientAnaly.TimeID = Analy.TimeID
-			ClientAnaly.TimeID = Analy.TimeID
 			ClientAnaly.Version = Analy.Version
 			ClientAnaly.MillionCoin = Analy.MillionCoin
 			if len(Analy.AnalyWhole) > 0 {
