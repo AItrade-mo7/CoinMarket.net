@@ -3,6 +3,7 @@ package okxApi
 import (
 	"fmt"
 
+	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/kdata"
@@ -28,8 +29,9 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 
 	nowUnix := mTime.GetUnixInt64() - mTime.UnixTimeInt64.Minute*15
 	if opt.After > nowUnix {
-		opt.After = 0
+		opt.After = 0 // 当前
 	} else {
+		// 历史
 		if opt.Size > 100 {
 			opt.Size = 100
 		}
@@ -58,12 +60,16 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 		OKXList = kdata.GetKdata(SPOT.InstID, 100)
 	}
 
-	List := KdataMerge(KdataMergeOpt{
+	List, err := KdataMerge(KdataMergeOpt{
 		OKXList:     OKXList,
 		BinanceList: BinanceList,
 	})
+	if err != nil {
+		global.LogErr(err)
+		return
+	}
 
-	fmt.Println(len(List))
+	KdataList = List
 
 	return
 }
@@ -73,16 +79,31 @@ type KdataMergeOpt struct {
 	BinanceList []mOKX.TypeKd
 }
 
-func KdataMerge(opt KdataMergeOpt) []mOKX.TypeKd {
+func KdataMerge(opt KdataMergeOpt) (Kdata []mOKX.TypeKd, resErr error) {
 	OKXList := opt.OKXList
 	BinanceList := opt.BinanceList
-	Kdata := []mOKX.TypeKd{}
+	Kdata = []mOKX.TypeKd{}
+	resErr = nil
 
-	fmt.Println(len(OKXList), len(BinanceList))
-	fmt.Println(OKXList[0].TimeStr, BinanceList[0].TimeStr)
-	fmt.Println(OKXList[48].TimeStr, BinanceList[48].TimeStr)
-	fmt.Println(OKXList[86].TimeStr, BinanceList[86].TimeStr)
-	fmt.Println(OKXList[config.KdataLen-1].TimeStr, BinanceList[config.KdataLen-1].TimeStr)
+	if len(OKXList) != len(BinanceList) {
+		resErr = fmt.Errorf("okxApi.KdataMerge len %+v %+v", len(OKXList), len(BinanceList))
+		return
+	}
+
+	if OKXList[0].TimeStr != BinanceList[0].TimeStr {
+		resErr = fmt.Errorf("okxApi.KdataMerge [0] %+v %+v", OKXList[0].TimeStr, BinanceList[0].TimeStr)
+		return
+	}
+
+	if OKXList[48].TimeStr != BinanceList[48].TimeStr {
+		resErr = fmt.Errorf("okxApi.KdataMerge [48] %+v %+v", OKXList[48].TimeStr, BinanceList[48].TimeStr)
+		return
+	}
+
+	if OKXList[len(OKXList)-1].TimeStr != BinanceList[len(BinanceList)-1].TimeStr {
+		resErr = fmt.Errorf("okxApi.KdataMerge [last] %+v %+v", OKXList[len(OKXList)-1].TimeStr, BinanceList[len(BinanceList)-1].TimeStr)
+		return
+	}
 
 	for _, item := range OKXList {
 		OkxItem := item
@@ -99,5 +120,6 @@ func KdataMerge(opt KdataMergeOpt) []mOKX.TypeKd {
 
 		Kdata = append(Kdata, OkxItem)
 	}
-	return Kdata
+
+	return
 }

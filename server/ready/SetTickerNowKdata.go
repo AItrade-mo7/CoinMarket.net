@@ -5,8 +5,6 @@ import (
 
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi"
-	"CoinMarket.net/server/okxApi/binanceApi"
-	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mOKX"
 )
@@ -17,15 +15,9 @@ func SetTickerNowKdata() {
 	for _, item := range okxInfo.TickerVol {
 		time.Sleep(time.Second / 2) // 1秒最多 2 次
 
-		BinanceList := binanceApi.GetKdata(binanceApi.GetKdataParam{
-			Symbol: item.Symbol,
+		List := okxApi.GetKdata(okxApi.GetKdataOpt{
+			InstID: item.InstID,
 			Size:   config.KdataLen,
-		})
-		OKXList := kdata.GetKdata(item.InstID, config.KdataLen)
-
-		List := okxApi.KdataMerge(okxApi.KdataMergeOpt{
-			OKXList:     OKXList,
-			BinanceList: BinanceList,
 		})
 
 		if len(List) >= config.KdataLen {
