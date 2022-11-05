@@ -11,7 +11,7 @@ type AnalyTickerType struct {
 	TickerVol   []mOKX.TypeTicker                `bson:"TickerVol"`   // 列表
 	AnalyWhole  []mOKX.TypeWholeTickerAnaly      `bson:"AnalyWhole"`  // 大盘分析结果
 	AnalySingle map[string][]mOKX.AnalySliceType `bson:"AnalySingle"` // 单个币种分析结果
-	MillionCoin []string                         `bson:"MillionCoin"`
+	MillionCoin []mOKX.AnalySliceType            `bson:"MillionCoin"`
 	Version     int                              `bson:"Version"`
 	Unit        string                           `bson:"Unit"`
 	TimeUnix    int64                            `bson:"TimeUnix"`
