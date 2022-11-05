@@ -4,6 +4,7 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
+	"CoinMarket.net/server/okxApi"
 	"CoinMarket.net/server/tickerAnaly"
 	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mMongo"
@@ -21,6 +22,8 @@ type AnalyTaskObj struct {
 }
 
 func NewAnalyTask() *AnalyTaskObj {
+	okxApi.SetInst() // 获取并设置交易产品信息
+
 	var NewTask AnalyTaskObj
 
 	Timeout := 4000 * 60

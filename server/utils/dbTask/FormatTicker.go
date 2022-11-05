@@ -1,12 +1,14 @@
 package dbTask
 
 import (
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
-	"CoinMarket.net/server/okxApi/restApi/kdata"
+	"CoinMarket.net/server/okxApi"
+	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -22,6 +24,8 @@ type FormatTickerObj struct {
 }
 
 func NewFormat() *FormatTickerObj {
+	okxApi.SetInst() // 获取并设置交易产品信息
+
 	var NewFormatObj FormatTickerObj
 	Timeout := 4000 * 60
 	NewFormatObj.TickerDB = mMongo.New(mMongo.Opt{
@@ -53,12 +57,7 @@ func (_this *FormatTickerObj) TickerDBTraverse() {
 		CoinTicker.Kdata = FetchKdata(CoinTicker)
 
 		if len(CoinTicker.TickerVol) < 1 {
-			db.Table.DeleteOne(db.Ctx, bson.D{{
-				Key:   "TimeID",
-				Value: CoinTicker.TimeID,
-			}})
-
-			global.Run.Println("没有榜单数据,删除", CoinTicker.TimeStr, len(CoinTicker.TickerVol), len(CoinTicker.Kdata))
+			global.Run.Println("没有榜单数据", CoinTicker.TimeStr, len(CoinTicker.TickerVol), len(CoinTicker.Kdata))
 			continue
 		}
 
@@ -114,13 +113,16 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 	KdataList := make(map[string][]mOKX.TypeKd)
 
 	for _, val := range dbTicker.TickerVol {
-		// kdata_list := dbTicker.Kdata[val.InstID]
-		kdata_list := kdata.GetHistoryKdata(kdata.HistoryKdataParam{
-			InstID:  val.InstID,
-			Current: 0,
-			Size:    100,
-			After:   val.TimeUnix + 5000,
-		})
+		kdata_list := dbTicker.Kdata[val.InstID]
+		fmt.Println()
+		if kdata_list[0].DataType != "Merge" {
+			kdata_list = okxApi.GetKdata(okxApi.GetKdataOpt{
+				InstID:  val.InstID,
+				Current: 0,
+				Size:    100,
+				After:   val.TimeUnix + 5000,
+			})
+		}
 		time.Sleep(time.Second / 3)
 		KdataList[val.InstID] = kdata_list
 		global.Run.Println("填充结束", val.InstID, len(KdataList[val.InstID]), kdata_list[0].TimeStr, kdata_list[len(kdata_list)-1].TimeStr)
@@ -142,22 +144,10 @@ func FormatTickerVol(TickerVol []mOKX.TypeTicker) []mOKX.TypeTicker {
 			NewTicker.BinanceVolRose = mCount.PerCent(NewTicker.BinanceVol24H, NewTicker.Volume)
 		}
 		// 标记
-		// NewTicker.SWAP = mOKX.TypeInst{}
-		// NewTicker.SPOT = mOKX.TypeInst{}
-		// if len(NewTicker.InstID) > 3 {
-		// 	for _, SWAP := range okxInfo.SWAP_inst {
-		// 		if SWAP.Uly == NewTicker.InstID {
-		// 			NewTicker.SWAP = SWAP
-		// 			break
-		// 		}
-		// 	}
-		// 	for _, SPOT := range okxInfo.SPOT_inst {
-		// 		if SPOT.InstID == NewTicker.InstID {
-		// 			NewTicker.SPOT = SPOT
-		// 			break
-		// 		}
-		// 	}
-		// }
+		if len(Ticker.InstID) > 3 {
+			NewTicker.SWAP = okxInfo.Inst[mStr.Join(Ticker.CcyName, config.SWAP_suffix)]
+			NewTicker.SPOT = okxInfo.Inst[Ticker.InstID]
+		}
 
 		if len(NewTicker.SPOT.ListTime) < 4 || len(NewTicker.SWAP.ListTime) < 4 {
 			EndEmail("时间错误2")
