@@ -62,6 +62,7 @@ func KdataMerge(opt DataMergeOpt) []mOKX.TypeKd {
 	OKXList := opt.OKXList
 	BinanceList := opt.BinanceList
 	Kdata := []mOKX.TypeKd{}
+
 	for _, item := range OKXList {
 		OkxItem := item
 
