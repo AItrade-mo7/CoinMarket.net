@@ -14,7 +14,7 @@ import (
 )
 
 // 币安的 ticker 数据
-func GetTicker() {
+func GetTicker() (TickerList []mOKX.TypeBinanceTicker) {
 	Ticker_file := mStr.Join(config.Dir.JsonData, "/BinanceTicker.json")
 	resData, err := mOKX.FetchBinance(mOKX.FetchBinanceOpt{
 		Path:          "/api/v3/ticker/24hr",
@@ -34,12 +34,17 @@ func GetTicker() {
 		return
 	}
 
-	SetInstID(result)
+	TickerList = SetInstID(result)
+
+	okxInfo.BinanceTickerList = []mOKX.TypeBinanceTicker{}
+	okxInfo.BinanceTickerList = TickerList
 
 	mFile.Write(Ticker_file, mStr.ToStr(resData))
+
+	return
 }
 
-func SetInstID(data []mOKX.TypeBinanceTicker) {
+func SetInstID(data []mOKX.TypeBinanceTicker) (TickerList []mOKX.TypeBinanceTicker) {
 	var list []mOKX.TypeBinanceTicker
 
 	global.BinanceKdataLog.Println("binanceApi.SetInstID", len(data), "GetTicker")
@@ -47,9 +52,8 @@ func SetInstID(data []mOKX.TypeBinanceTicker) {
 	for _, val := range data {
 		find := strings.Contains(val.Symbol, config.Unit)
 		if find {
-			val.InstID = strings.Replace(val.Symbol, config.Unit, config.SPOT_suffix, -1)
-			SPOT := okxInfo.SPOT_inst[val.InstID]
-			if SPOT.State == "live" {
+			SPOT := okxInfo.Inst[val.Symbol]
+			if len(SPOT.Symbol) > 3 {
 				list = append(list, val)
 			}
 		}
@@ -62,8 +66,8 @@ func SetInstID(data []mOKX.TypeBinanceTicker) {
 		VolumeList = VolumeList[tLen-15:] // 取出最后 15 个
 	}
 
-	okxInfo.BinanceTickerList = []mOKX.TypeBinanceTicker{}
-	okxInfo.BinanceTickerList = Reverse(VolumeList) // 翻转数组大的排在前面
+	TickerList = Reverse(VolumeList) // 翻转数组大的排在前面
+	return
 }
 
 // 成交量排序

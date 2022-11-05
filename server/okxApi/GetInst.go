@@ -3,15 +3,16 @@ package okxApi
 import (
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
+	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
 )
 
-func GetInst() (MergeInstList map[string]mOKX.TypeInst) {
+func GetInst() {
 	binanceInstList := binanceApi.GetInst()
 	InstList := inst.GetInst()
 
-	MergeInstList = make(map[string]mOKX.TypeInst)
+	MergeInstList := make(map[string]mOKX.TypeInst)
 
 	// 整理现货
 	for _, okxItem := range InstList {
@@ -20,6 +21,7 @@ func GetInst() (MergeInstList map[string]mOKX.TypeInst) {
 			if binanceItem.Symbol == Symbol {
 				okxItem.Symbol = binanceItem.Symbol
 				MergeInstList[okxItem.InstID] = okxItem
+				MergeInstList[binanceItem.Symbol] = okxItem
 				break
 			}
 		}
@@ -34,6 +36,9 @@ func GetInst() (MergeInstList map[string]mOKX.TypeInst) {
 			}
 		}
 	}
+
+	okxInfo.Inst = make(map[string]mOKX.TypeInst) // 清理产品信息
+	okxInfo.Inst = MergeInstList                  // 获取并设置交易产品信息
 
 	return
 }

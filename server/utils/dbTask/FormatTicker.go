@@ -7,7 +7,6 @@ import (
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi/restApi/kdata"
-	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -142,23 +141,23 @@ func FormatTickerVol(TickerVol []mOKX.TypeTicker) []mOKX.TypeTicker {
 			NewTicker.OkxVolRose = mCount.PerCent(NewTicker.OKXVol24H, NewTicker.Volume)
 			NewTicker.BinanceVolRose = mCount.PerCent(NewTicker.BinanceVol24H, NewTicker.Volume)
 		}
-
-		NewTicker.SWAP = mOKX.TypeInst{}
-		NewTicker.SPOT = mOKX.TypeInst{}
-		if len(NewTicker.InstID) > 3 {
-			for _, SWAP := range okxInfo.SWAP_inst {
-				if SWAP.Uly == NewTicker.InstID {
-					NewTicker.SWAP = SWAP
-					break
-				}
-			}
-			for _, SPOT := range okxInfo.SPOT_inst {
-				if SPOT.InstID == NewTicker.InstID {
-					NewTicker.SPOT = SPOT
-					break
-				}
-			}
-		}
+		// 标记
+		// NewTicker.SWAP = mOKX.TypeInst{}
+		// NewTicker.SPOT = mOKX.TypeInst{}
+		// if len(NewTicker.InstID) > 3 {
+		// 	for _, SWAP := range okxInfo.SWAP_inst {
+		// 		if SWAP.Uly == NewTicker.InstID {
+		// 			NewTicker.SWAP = SWAP
+		// 			break
+		// 		}
+		// 	}
+		// 	for _, SPOT := range okxInfo.SPOT_inst {
+		// 		if SPOT.InstID == NewTicker.InstID {
+		// 			NewTicker.SPOT = SPOT
+		// 			break
+		// 		}
+		// 	}
+		// }
 
 		if len(NewTicker.SPOT.ListTime) < 4 || len(NewTicker.SWAP.ListTime) < 4 {
 			EndEmail("时间错误2")

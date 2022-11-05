@@ -23,7 +23,13 @@ type GetKdataParam struct {
 var KdataList []mOKX.TypeKd
 
 func GetKdata(opt GetKdataParam) []mOKX.TypeKd {
-	KdataList = []mOKX.TypeKd{}
+	InstInfo := okxInfo.Inst[opt.Symbol]
+	KdataList := []mOKX.TypeKd{}
+
+	if len(InstInfo.Symbol) < 3 {
+		return KdataList
+	}
+
 	Kdata_file := mStr.Join(config.Dir.JsonData, "/B-", opt.Symbol, ".json")
 
 	limit := opt.Size
@@ -62,7 +68,7 @@ func GetKdata(opt GetKdataParam) []mOKX.TypeKd {
 	})
 	if err != nil {
 		global.LogErr("binanceApi.GetKdata Err", err)
-		return nil
+		return KdataList
 	}
 
 	FormatKdata(resData, opt.Symbol)
@@ -81,20 +87,16 @@ func FormatKdata(data []byte, Symbol string) {
 
 	global.BinanceKdataLog.Println("binanceApi.FormatKdata", len(listStr), Symbol)
 
-	InstID := Symbol
-
-	for _, item := range okxInfo.TickerVol {
-		if item.Symbol == Symbol {
-			InstID = item.InstID
-			break
-		}
+	SPOT := okxInfo.Inst[Symbol]
+	if len(SPOT.InstID) < 3 {
+		return
 	}
 
 	for _, item := range listStr {
 		TimeStr := mStr.ToStr(mJson.ToJson(item[0]))
 
 		kdata := mOKX.TypeKd{
-			InstID:   InstID,
+			InstID:   SPOT.InstID,
 			TimeUnix: mTime.ToUnixMsec(mTime.MsToTime(TimeStr, "0")),
 			TimeStr:  mTime.UnixFormat(TimeStr),
 			O:        mStr.ToStr(item[1]),

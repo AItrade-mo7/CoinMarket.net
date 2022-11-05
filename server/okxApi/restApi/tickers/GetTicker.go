@@ -50,8 +50,8 @@ func setTicker(data any) {
 
 	var tickerList []mOKX.TypeOKXTicker
 	for _, val := range list {
-		SPOT := okxInfo.SPOT_inst[val.InstID]
-		if SPOT.State == "live" {
+		SPOT := okxInfo.Inst[val.InstID]
+		if len(SPOT.InstID) > 3 {
 			tickerList = append(tickerList, val)
 		}
 	}

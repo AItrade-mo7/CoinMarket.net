@@ -12,10 +12,10 @@ import (
 )
 
 func GetKdata(InstID string, Size int) []mOKX.TypeKd {
-	InstInfo := GetInstInfo(InstID)
+	InstInfo := okxInfo.Inst[InstID]
 	KdataList := []mOKX.TypeKd{}
 
-	if InstInfo.InstID != InstID {
+	if len(InstInfo.InstID) < 3 {
 		return KdataList
 	}
 
@@ -60,22 +60,4 @@ func GetKdata(InstID string, Size int) []mOKX.TypeKd {
 	// 写入数据文件
 	mFile.Write(Kdata_file, mStr.ToStr(resData))
 	return KdataList
-}
-
-func GetInstInfo(InstID string) (resData mOKX.TypeInst) {
-	resData = mOKX.TypeInst{}
-
-	for _, item := range okxInfo.SPOT_inst {
-		if item.InstID == InstID {
-			resData = item
-		}
-	}
-
-	for _, item := range okxInfo.SWAP_inst {
-		if item.InstID == InstID {
-			resData = item
-		}
-	}
-
-	return resData
 }

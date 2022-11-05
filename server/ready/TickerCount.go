@@ -13,8 +13,8 @@ import (
 )
 
 func SetTicker() {
-	if len(okxInfo.SWAP_inst) < 10 || len(okxInfo.SPOT_inst) < 10 {
-		global.LogErr("ready.SetTicker okxInfo.SWAP_inst 数据条目不正确", len(okxInfo.SWAP_inst), len(okxInfo.SPOT_inst))
+	if len(okxInfo.Inst) < 10 {
+		global.LogErr("ready.SetTicker okxInfo.Inst 数据条目不正确", len(okxInfo.Inst))
 	}
 
 	if len(okxInfo.BinanceTickerList) != 15 || len(okxInfo.OKXTickerList) != 15 {
@@ -59,19 +59,15 @@ func TickerCount(OKXTicker mOKX.TypeOKXTicker, BinanceTicker mOKX.TypeBinanceTic
 	Ticker.TimeStr = mTime.UnixFormat(Ticker.TimeUnix)
 	Ticker.SWAP = mOKX.TypeInst{}
 	Ticker.SPOT = mOKX.TypeInst{}
+
 	if len(Ticker.InstID) > 3 {
-		for _, SWAP := range okxInfo.SWAP_inst {
-			if SWAP.Uly == Ticker.InstID {
-				Ticker.SWAP = SWAP
-				break
-			}
-		}
-		for _, SPOT := range okxInfo.SPOT_inst {
-			if SPOT.InstID == Ticker.InstID {
-				Ticker.SPOT = SPOT
-				break
-			}
-		}
+		Ticker.SWAP = okxInfo.Inst[mStr.Join(Ticker.InstID, config.SWAP_suffix)]
+		Ticker.SPOT = okxInfo.Inst[Ticker.InstID]
+	}
+
+	if len(Ticker.SWAP.InstID) < 3 || len(Ticker.SPOT.InstID) < 3 {
+		global.LogErr("ready.TickerCount 数量不足", len(Ticker.SWAP.InstID), len(Ticker.SPOT.InstID))
+		return mOKX.TypeTicker{}
 	}
 
 	// 上架小于 32 天的不计入榜单

@@ -3,6 +3,7 @@ package kdata
 import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -19,12 +20,13 @@ type HistoryKdataParam struct {
 }
 
 func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
-	InstInfo := GetInstInfo(opt.InstID)
+	InstInfo := okxInfo.Inst[opt.InstID]
 	HistoryKdataKdataList := []mOKX.TypeKd{}
 
-	if InstInfo.InstID != opt.InstID {
+	if len(InstInfo.InstID) < 3 {
 		return HistoryKdataKdataList
 	}
+
 	Kdata_file := mStr.Join(config.Dir.JsonData, "/", opt.InstID, "-", opt.Current, "_History.json")
 
 	now := mTime.GetUnix()
