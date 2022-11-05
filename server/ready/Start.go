@@ -35,7 +35,7 @@ func SetTickerAnaly() {
 	binanceApi.GetTicker() // 获取币安的 Ticker
 	tickers.GetTicker()    // 获取 okx 的Ticker
 	SetTicker()            // 计算并设置综合榜单 产出 okxInfo.TickerVol 数据
-	SetTickerKdata()       // 产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 数据
+	SetTickerNowKdata()    // 产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 数据
 
 	okxInfo.TickerAnaly = dbType.AnalyTickerType{}
 	okxInfo.TickerAnaly = dbType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{

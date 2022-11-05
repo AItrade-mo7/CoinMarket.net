@@ -11,7 +11,7 @@ import (
 	"github.com/EasyGolang/goTools/mOKX"
 )
 
-func SetTickerKdata() {
+func SetTickerNowKdata() {
 	TickerKdata := make(map[string][]mOKX.TypeKd)
 	TickerList := []mOKX.TypeTicker{}
 	for _, item := range okxInfo.TickerVol {
