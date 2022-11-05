@@ -16,7 +16,7 @@ import (
 
 func FormatKdata() {
 	okxApi.SetInst() // 获取并设置交易产品信息
-	go SetKdata("BTC")
+	SetKdata("BTC")
 	SetKdata("ETH")
 }
 
@@ -40,7 +40,11 @@ func SetKdata(CcyName string) {
 		for i := len(List) - 1; i >= 0; i-- {
 			AllList = append(AllList, List[i])
 		}
-		global.Run.Println(List[0].TimeStr, List[len(List)-1].TimeStr)
+		if len(List) > 0 {
+			global.Run.Println(InstID, List[0].TimeStr, List[len(List)-1].TimeStr)
+		} else {
+			global.Run.Println("请求数据出错", len(List), InstID, i)
+		}
 	}
 
 	// 链接数据库
@@ -80,7 +84,7 @@ func SetKdata(CcyName string) {
 		upOpt.SetUpsert(true)
 		_, err := db.Table.UpdateOne(db.Ctx, FK, UK, upOpt)
 		if err != nil {
-			global.LogErr(tableName+"数据更插失败  %+v", err)
+			global.Run.Println(tableName+"数据更插失败  %+v", err)
 		}
 		global.Run.Println("数据更插成功", tableName, Kd.TimeStr)
 	}
