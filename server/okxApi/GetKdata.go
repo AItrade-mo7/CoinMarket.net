@@ -9,6 +9,7 @@ import (
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
+	"github.com/EasyGolang/goTools/mTime"
 )
 
 type GetKdataOpt struct {
@@ -25,15 +26,36 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 		return
 	}
 
+	nowUnix := mTime.GetUnixInt64() - mTime.UnixTimeInt64.Minute*15
+	if opt.After > nowUnix {
+		opt.After = 0
+	} else {
+		if opt.Size > 100 {
+			opt.Size = 100
+		}
+	}
+
+	if opt.Size < config.KdataLen {
+		opt.Size = config.KdataLen
+	}
+
 	BinanceList := binanceApi.GetKdata(binanceApi.GetKdataParam{
 		Symbol:  SPOT.Symbol,
 		Current: opt.Current,
 		After:   opt.After,
-		Size:    config.KdataLen,
+		Size:    opt.Size,
 	})
-	OKXList := []mOKX.TypeKd{}
-	if opt.After == 0 {
-		OKXList = kdata.GetKdata(SPOT.InstID, config.KdataLen)
+
+	var OKXList []mOKX.TypeKd
+	if (opt.After) > 0 {
+		OKXList = kdata.GetHistoryKdata(kdata.HistoryKdataParam{
+			InstID:  SPOT.InstID,
+			Current: opt.Current,
+			After:   opt.After,
+			Size:    opt.Size,
+		})
+	} else {
+		OKXList = kdata.GetKdata(SPOT.InstID, 100)
 	}
 
 	List := KdataMerge(KdataMergeOpt{
@@ -57,10 +79,10 @@ func KdataMerge(opt KdataMergeOpt) []mOKX.TypeKd {
 	Kdata := []mOKX.TypeKd{}
 
 	fmt.Println(len(OKXList), len(BinanceList))
-	fmt.Println(OKXList[0].TimeStr, OKXList[0].TimeStr == BinanceList[0].TimeStr)
-	fmt.Println(OKXList[48].TimeStr, OKXList[48].TimeStr == BinanceList[48].TimeStr)
-	fmt.Println(OKXList[86].TimeStr, OKXList[86].TimeStr == BinanceList[86].TimeStr)
-	fmt.Println(OKXList[config.KdataLen-1].TimeStr, OKXList[config.KdataLen-1].TimeStr == BinanceList[config.KdataLen-1].TimeStr)
+	fmt.Println(OKXList[0].TimeStr, BinanceList[0].TimeStr)
+	fmt.Println(OKXList[48].TimeStr, BinanceList[48].TimeStr)
+	fmt.Println(OKXList[86].TimeStr, BinanceList[86].TimeStr)
+	fmt.Println(OKXList[config.KdataLen-1].TimeStr, BinanceList[config.KdataLen-1].TimeStr)
 
 	for _, item := range OKXList {
 		OkxItem := item
