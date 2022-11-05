@@ -1,7 +1,6 @@
 package dbTask
 
 import (
-	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -114,7 +113,6 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 
 	for _, val := range dbTicker.TickerVol {
 		kdata_list := dbTicker.Kdata[val.InstID]
-		fmt.Println()
 		if kdata_list[0].DataType != "Merge" {
 			kdata_list = okxApi.GetKdata(okxApi.GetKdataOpt{
 				InstID:  val.InstID,
