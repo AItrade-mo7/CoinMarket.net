@@ -25,9 +25,7 @@ func Start() {
 
 	// 发送启动邮件
 	go Email(EmailOpt{
-		To: []string{
-			"meichangliang@mo7.cc",
-		},
+		To:       config.Email.To,
 		Subject:  "ServeStart",
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{

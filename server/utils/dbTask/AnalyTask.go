@@ -156,9 +156,7 @@ func (_this *AnalyTaskObj) AnalyStart(Ticker dbType.CoinTickerTable) {
 
 func StartEmail() {
 	go global.Email(global.EmailOpt{
-		To: []string{
-			"meichangliang@mo7.cc",
-		},
+		To:       config.Email.To,
 		Subject:  "脚本执行",
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{
@@ -179,9 +177,7 @@ func EndEmail(Msg string) {
 	}
 
 	global.Email(global.EmailOpt{
-		To: []string{
-			"meichangliang@mo7.cc",
-		},
+		To:       config.Email.To,
 		Subject:  "脚本结束",
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{
