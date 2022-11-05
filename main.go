@@ -5,7 +5,6 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/utils/dbTask"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -31,5 +30,5 @@ func main() {
 	// FormatDB.TickerDBTraverse()
 
 	// ==== 整理Kdata ====
-	dbTask.FormatKdata()
+	// dbTask.FormatKdata()
 }
