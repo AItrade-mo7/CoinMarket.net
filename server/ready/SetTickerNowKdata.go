@@ -1,6 +1,7 @@
 package ready
 
 import (
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global/config"
@@ -12,6 +13,7 @@ import (
 func SetTickerNowKdata() {
 	TickerKdata := make(map[string][]mOKX.TypeKd)
 	TickerList := []mOKX.TypeTicker{}
+
 	for _, item := range okxInfo.TickerVol {
 		time.Sleep(time.Second / 2) // 1秒最多 2 次
 
@@ -19,6 +21,8 @@ func SetTickerNowKdata() {
 			InstID: item.InstID,
 			Size:   config.KdataLen,
 		})
+
+		fmt.Println(item.InstID, len(List))
 
 		if len(List) >= config.KdataLen {
 			TickerList = append(TickerList, item)

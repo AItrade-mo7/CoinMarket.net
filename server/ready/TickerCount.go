@@ -17,7 +17,7 @@ func SetTicker() {
 		global.LogErr("ready.SetTicker okxInfo.Inst 数据条目不正确", len(okxInfo.Inst))
 	}
 
-	if len(okxInfo.BinanceTickerList) != 15 || len(okxInfo.OKXTickerList) != 15 {
+	if len(okxInfo.BinanceTickerList) < 6 || len(okxInfo.OKXTickerList) < 6 {
 		global.LogErr("ready.SetTicker TickerList 数据条目不正确", len(okxInfo.BinanceTickerList), len(okxInfo.OKXTickerList))
 	}
 
@@ -61,7 +61,7 @@ func TickerCount(OKXTicker mOKX.TypeOKXTicker, BinanceTicker mOKX.TypeBinanceTic
 	Ticker.SPOT = mOKX.TypeInst{}
 
 	if len(Ticker.InstID) > 3 {
-		Ticker.SWAP = okxInfo.Inst[mStr.Join(Ticker.InstID, config.SWAP_suffix)]
+		Ticker.SWAP = okxInfo.Inst[mStr.Join(Ticker.CcyName, config.SWAP_suffix)]
 		Ticker.SPOT = okxInfo.Inst[Ticker.InstID]
 	}
 

@@ -31,8 +31,8 @@ func SetTickerAnaly() {
 	okxApi.SetInst() // 获取并设置交易产品信息
 
 	global.Run.Println("========= 开始获取数据 ===========")
-	binanceApi.GetTicker() // 获取币安的 Ticker
-	tickers.GetTicker()    // 获取 okx 的Ticker
+	binanceApi.GetTicker() // 获取 okxInfo.BinanceTickerList
+	tickers.GetTicker()    // 获取 okxInfo.OKXTickerList
 	SetTicker()            // 计算并设置综合榜单 产出 okxInfo.TickerVol 数据
 	SetTickerNowKdata()    // 产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 数据
 
