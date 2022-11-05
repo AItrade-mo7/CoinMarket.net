@@ -114,6 +114,7 @@ func KdataMerge(opt KdataMergeOpt) (Kdata []mOKX.TypeKd, resErr error) {
 				OkxItem.VolCcy = VolCcy
 				Vol := mCount.Add(BinanceItem.Vol, OkxItem.Vol)
 				OkxItem.Vol = Vol
+				OkxItem.DataType = "Merge"
 				break
 			}
 		}

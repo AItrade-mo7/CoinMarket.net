@@ -68,7 +68,7 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 	HistoryKdataKdataList = mOKX.FormatKdata(mOKX.FormatKdataParam{
 		Data:     result.Data,
 		Inst:     InstInfo,
-		DataType: "HistoryKdata",
+		DataType: "OKXKdata",
 	})
 
 	global.KdataLog.Println("kdata.GetHistoryKdata", len(HistoryKdataKdataList), opt.InstID)

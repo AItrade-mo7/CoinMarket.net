@@ -52,7 +52,7 @@ func GetKdata(InstID string, Size int) []mOKX.TypeKd {
 	KdataList = mOKX.FormatKdata(mOKX.FormatKdataParam{
 		Data:     result.Data,
 		Inst:     InstInfo,
-		DataType: "GetKdata",
+		DataType: "OKXKdata",
 	})
 
 	global.KdataLog.Println("kdata.GetKdata", len(KdataList), InstID)
