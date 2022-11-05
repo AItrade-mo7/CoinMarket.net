@@ -20,7 +20,7 @@ func FormatKdata() {
 	SetKdata("ETH")
 }
 
-var Page = 5
+var Page = 60
 
 func SetKdata(CcyName string) {
 	tableName := CcyName + "USDT"
@@ -82,5 +82,6 @@ func SetKdata(CcyName string) {
 		if err != nil {
 			global.LogErr(tableName+"数据更插失败  %+v", err)
 		}
+		global.Run.Println("数据更插成功", tableName, Kd.TimeStr)
 	}
 }
