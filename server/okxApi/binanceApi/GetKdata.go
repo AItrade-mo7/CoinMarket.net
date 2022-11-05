@@ -4,6 +4,7 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
+	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -12,24 +13,49 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
+type GetKdataParam struct {
+	Symbol  string `bson:"Symbol"`
+	Current int    `bson:"Current"` // 当前页码 0 为
+	After   int64  `bson:"After"`   // 时间 默认为当前时间
+	Size    int    `bson:"Size"`    // 数量 默认为100
+}
+
 var KdataList []mOKX.TypeKd
 
-func GetKdata(Symbol string, Size int) []mOKX.TypeKd {
-	Kdata_file := mStr.Join(config.Dir.JsonData, "/B-", Symbol, ".json")
+func GetKdata(opt GetKdataParam) []mOKX.TypeKd {
+	KdataList = []mOKX.TypeKd{}
+	Kdata_file := mStr.Join(config.Dir.JsonData, "/B-", opt.Symbol, ".json")
 
-	limit := Size
+	limit := opt.Size
 	if limit < 100 {
 		limit = 100
 	}
 
-	KdataList = []mOKX.TypeKd{}
+	now := mTime.GetUnix()
+	if opt.After > 0 {
+		now = mStr.ToStr(opt.After)
+	}
+	m100 := mCount.Mul(mStr.ToStr(mTime.UnixTimeInt64.Minute*15), mStr.ToStr(opt.Size))
+	mAfter := mCount.Mul(m100, mStr.ToStr(opt.Current))
+	after := mCount.Sub(now, mAfter)
+
+	size := 100
+	if opt.Size > 0 {
+		size = opt.Size
+	}
+
+	if opt.After == 0 {
+		after = ""
+	}
+
 	resData, err := mOKX.FetchBinance(mOKX.FetchBinanceOpt{
 		Path:   "/api/v3/klines",
 		Method: "get",
 		Data: map[string]any{
-			"symbol":   Symbol,
+			"symbol":   opt.Symbol,
 			"interval": "15m",
-			"limit":    limit,
+			"endTime":  after,
+			"limit":    size,
 		},
 		LocalJsonPath: Kdata_file,
 		IsLocalJson:   config.SysEnv.RunMod == 1,
@@ -39,10 +65,10 @@ func GetKdata(Symbol string, Size int) []mOKX.TypeKd {
 		return nil
 	}
 
-	FormatKdata(resData, Symbol)
+	FormatKdata(resData, opt.Symbol)
 
 	if len(KdataList) < limit {
-		global.KdataLog.Println("binanceApi.GetKdata resData", Symbol, mStr.ToStr(resData))
+		global.KdataLog.Println("binanceApi.GetKdata resData", opt.Symbol, mStr.ToStr(resData))
 	}
 
 	mFile.Write(Kdata_file, mStr.ToStr(resData))

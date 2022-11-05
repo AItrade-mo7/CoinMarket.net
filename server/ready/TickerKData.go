@@ -28,7 +28,10 @@ func SetTickerKdata() {
 			continue
 		}
 
-		BinanceList := binanceApi.GetKdata(item.Symbol, config.KdataLen)
+		BinanceList := binanceApi.GetKdata(binanceApi.GetKdataParam{
+			Symbol: item.Symbol,
+			Size:   config.KdataLen,
+		})
 		OKXList := kdata.GetKdata(item.InstID, config.KdataLen)
 
 		List := KdataMerge(DataMergeOpt{

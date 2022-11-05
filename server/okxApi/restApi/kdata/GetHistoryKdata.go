@@ -11,62 +11,6 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-type History300Param struct {
-	InstID  string `bson:"InstID"`
-	Current int    `bson:"Current"` // 以当前时间为基点往前几页
-	After   int64  `bson:"After"`   // 时间 默认为当前时间
-}
-
-func GetHistory300List(opt History300Param) []mOKX.TypeKd {
-	InstInfo := GetInstInfo(opt.InstID)
-	History300List := []mOKX.TypeKd{}
-	if InstInfo.InstID != opt.InstID {
-		return History300List
-	}
-
-	now := mTime.GetUnix()
-	if opt.After > 0 {
-		now = mStr.ToStr(opt.After)
-	}
-	m300 := mCount.Mul(mStr.ToStr(mTime.UnixTimeInt64.Minute*15), "300")
-	mAfter := mCount.Mul(m300, mStr.ToStr(opt.Current))
-	after := mCount.Sub(now, mAfter)
-	timeObj := mTime.MsToTime(after, "0")
-
-	kdata_list := []mOKX.TypeKd{}
-
-	kdata_3 := GetHistoryKdata(HistoryKdataParam{
-		InstID:  opt.InstID,
-		Current: 2,
-		After:   mTime.ToUnixMsec(timeObj),
-		Size:    100,
-	})
-	kdata_list = append(kdata_list, kdata_3...)
-
-	kdata_2 := GetHistoryKdata(HistoryKdataParam{
-		InstID:  opt.InstID,
-		Current: 1,
-		After:   mTime.ToUnixMsec(timeObj),
-		Size:    100,
-	})
-	kdata_list = append(kdata_list, kdata_2...)
-
-	kdata_1 := GetHistoryKdata(HistoryKdataParam{
-		InstID:  opt.InstID,
-		Current: 0,
-		After:   mTime.ToUnixMsec(timeObj),
-		Size:    100,
-	})
-	kdata_list = append(kdata_list, kdata_1...)
-
-	for _, val := range kdata_list {
-		new_Kdata := mOKX.NewKD(val, History300List)
-		History300List = append(History300List, new_Kdata)
-	}
-
-	return History300List
-}
-
 type HistoryKdataParam struct {
 	InstID  string `bson:"InstID"`
 	Current int    `bson:"Current"` // 当前页码 0 为
