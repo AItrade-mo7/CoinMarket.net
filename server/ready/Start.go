@@ -1,6 +1,7 @@
 package ready
 
 import (
+	"fmt"
 	"os/exec"
 
 	"CoinMarket.net/server/global"
@@ -29,7 +30,11 @@ func Start() {
 func SetTickerAnaly() {
 	ReStartShell() // 在这里 清理Linux 缓存
 
-	okxApi.GetInst() // 获取交易产品信息
+	InstList := okxApi.GetInst() // 获取交易产品信息
+
+	for _, Inst := range InstList {
+		fmt.Println(Inst.InstID, Inst.Symbol)
+	}
 
 	global.Run.Println("========= 开始获取数据 ===========")
 	binanceApi.GetTicker() // 获取币安的 Ticker

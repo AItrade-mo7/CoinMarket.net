@@ -1,8 +1,6 @@
 package binanceApi
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"github.com/EasyGolang/goTools/mFile"
@@ -92,7 +90,6 @@ func GetInst() (InstList []SymbolType) {
 			InstList = append(InstList, val)
 		}
 	}
-	fmt.Println(len(InstList))
 
 	mFile.Write(Kdata_file, mStr.ToStr(resData))
 	return
