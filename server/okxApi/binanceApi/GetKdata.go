@@ -35,13 +35,14 @@ func GetKdata(opt GetKdataParam) (KdataList []mOKX.TypeKd) {
 		limit = 100
 	}
 
-	now := mTime.GetUnix()
+	after := ""
+
 	if opt.After > 0 {
-		now = mStr.ToStr(opt.After)
+		now := mStr.ToStr(opt.After)
+		m100 := mCount.Mul(mStr.ToStr(mTime.UnixTimeInt64.Minute*15), mStr.ToStr(opt.Size))
+		mAfter := mCount.Mul(m100, mStr.ToStr(opt.Current))
+		after = mCount.Sub(now, mAfter)
 	}
-	m100 := mCount.Mul(mStr.ToStr(mTime.UnixTimeInt64.Minute*15), mStr.ToStr(opt.Size))
-	mAfter := mCount.Mul(m100, mStr.ToStr(opt.Current))
-	after := mCount.Sub(now, mAfter)
 
 	size := 100
 	if opt.Size > 0 {
