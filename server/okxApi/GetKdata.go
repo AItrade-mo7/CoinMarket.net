@@ -27,7 +27,7 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 		return
 	}
 
-	nowUnix := mTime.GetUnixInt64() - mTime.UnixTimeInt64.Minute*15
+	nowUnix := mTime.GetUnixInt64() - mTime.UnixTimeInt64.Minute*16
 	if opt.After > nowUnix {
 		opt.After = 0 // 当前
 	} else {
