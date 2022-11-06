@@ -113,7 +113,7 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 
 	for _, val := range dbTicker.TickerVol {
 		kdata_list := dbTicker.Kdata[val.InstID]
-		if len(kdata_list) < 50 || kdata_list[0].DataType != "Merge" {
+		if len(kdata_list) < 50 || kdata_list[len(kdata_list)-1].DataType != "Merge" {
 			kdata_list = okxApi.GetKdata(okxApi.GetKdataOpt{
 				InstID:  val.InstID,
 				Current: 0,
