@@ -2,9 +2,11 @@ package main
 
 import (
 	_ "embed"
+	"fmt"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/okxApi"
 	"CoinMarket.net/server/ready"
 	"CoinMarket.net/server/router"
 	jsoniter "github.com/json-iterator/go"
@@ -18,6 +20,8 @@ func main() {
 
 	// 初始化系统参数
 	global.Start()
+
+	// TestMain()
 
 	ready.Start()
 
@@ -33,4 +37,15 @@ func main() {
 
 	// ==== 整理Kdata ====
 	// dbTask.FormatKdata()
+}
+
+func TestMain() {
+	okxApi.SetInst() // 获取并设置交易产品信息
+
+	List := okxApi.GetKdata(okxApi.GetKdataOpt{
+		InstID: "ETH-USDT",
+		Size:   config.KdataLen,
+	})
+
+	fmt.Println("List", len(List))
 }
