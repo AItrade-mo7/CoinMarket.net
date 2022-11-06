@@ -9,6 +9,7 @@ import (
 	"CoinMarket.net/server/okxApi/restApi/kdata"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
+	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mTime"
 )
@@ -65,7 +66,7 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 		BinanceList: BinanceList,
 	})
 	if err != nil {
-		global.LogErr(err)
+		global.LogErr(err, mJson.Format(opt))
 		return
 	}
 
@@ -91,7 +92,7 @@ func KdataMerge(opt KdataMergeOpt) (Kdata []mOKX.TypeKd, resErr error) {
 	}
 
 	if OKXList[len(OKXList)-1].TimeStr != BinanceList[len(BinanceList)-1].TimeStr {
-		resErr = fmt.Errorf("okxApi.KdataMerge [last] %+v %+v %+v", OKXList[len(OKXList)-1].TimeStr, BinanceList[len(BinanceList)-1].TimeStr, opt)
+		resErr = fmt.Errorf("okxApi.KdataMerge [last] %+v %+v", OKXList[len(OKXList)-1].TimeStr, BinanceList[len(BinanceList)-1].TimeStr)
 		return
 	}
 
