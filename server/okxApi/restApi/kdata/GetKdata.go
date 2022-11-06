@@ -55,7 +55,11 @@ func GetKdata(InstID string, Size int) []mOKX.TypeKd {
 		DataType: "OKXKdata",
 	})
 
-	global.KdataLog.Println("kdata.GetKdata", len(KdataList), InstID)
+	if len(KdataList) > 3 {
+		global.KdataLog.Println("kdata.GetKdata", len(KdataList), InstID, KdataList[0].TimeStr, KdataList[len(KdataList)-1].TimeStr)
+	} else {
+		global.KdataLog.Println("kdata.GetKdata Err", len(KdataList), InstID)
+	}
 
 	// 写入数据文件
 	mFile.Write(Kdata_file, mStr.ToStr(resData))

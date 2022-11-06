@@ -74,6 +74,12 @@ func GetKdata(opt GetKdataParam) (KdataList []mOKX.TypeKd) {
 
 	KdataList = rList
 
+	if len(KdataList) > 3 {
+		global.KdataLog.Println("binanceApi.GetKdata", len(KdataList), InstInfo.Symbol, KdataList[0].TimeStr, KdataList[len(KdataList)-1].TimeStr)
+	} else {
+		global.KdataLog.Println("binanceApi.GetKdata Err", len(KdataList), InstInfo.Symbol)
+	}
+
 	mFile.Write(Kdata_file, mStr.ToStr(resData))
 
 	return KdataList

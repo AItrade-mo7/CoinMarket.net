@@ -72,7 +72,11 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 		DataType: "OKXKdata",
 	})
 
-	global.KdataLog.Println("kdata.GetHistoryKdata", len(HistoryKdataKdataList), opt.InstID)
+	if len(HistoryKdataKdataList) > 3 {
+		global.KdataLog.Println("kdata.GetHistoryKdata", len(HistoryKdataKdataList), InstInfo.InstID, HistoryKdataKdataList[0].TimeStr, HistoryKdataKdataList[len(HistoryKdataKdataList)-1].TimeStr)
+	} else {
+		global.KdataLog.Println("kdata.GetHistoryKdata Err", len(HistoryKdataKdataList), InstInfo.InstID)
+	}
 
 	// 写入数据文件
 	mFile.Write(Kdata_file, mStr.ToStr(resData))
