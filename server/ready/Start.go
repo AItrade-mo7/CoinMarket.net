@@ -31,7 +31,7 @@ func Start() {
 	SetTickerAnaly() // 默认执行一次
 	go mClock.New(mClock.OptType{
 		Func: SetTickerAnaly,
-		Spec: "59 0,5,10,15,20,25,30,35,40,45,50,55 * * * ? ", // 5 分的整数过 59 秒
+		Spec: "20 0,5,10,15,20,25,30,35,40,45,50,55 * * * ? ", // 5 分的整数过 10 秒
 	})
 }
 
