@@ -21,11 +21,11 @@ func main() {
 	// 初始化系统参数
 	global.Start()
 
-	// MainTest()
-
 	ready.Start()
 
 	router.Start()
+
+	// MainTest()
 
 	// ==== 开始整理算法结果 ====
 	// Task := dbTask.NewAnalyTask()
