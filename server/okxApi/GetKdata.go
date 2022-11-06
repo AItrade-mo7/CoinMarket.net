@@ -66,7 +66,7 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 	}
 
 	if len(OKXList) != opt.Size {
-		global.LogErr("OKXList 未获取到数据",len(OKXList), mJson.Format(opt))
+		global.LogErr("OKXList 未获取到数据", len(OKXList), mJson.Format(opt))
 		return
 	}
 
