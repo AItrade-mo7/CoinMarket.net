@@ -9,12 +9,24 @@ import (
 	"CoinMarket.net/server/okxApi"
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
+	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mPath"
 	"github.com/EasyGolang/goTools/mTime"
 )
 
 func Start() {
+	// 发送启动邮件
+	go global.Email(global.EmailOpt{
+		To:       config.Email.To,
+		Subject:  "ServeStart",
+		Template: tmpl.SysEmail,
+		SendData: tmpl.SysParam{
+			Message: "服务启动",
+			SysTime: mTime.IsoTime(),
+		},
+	}).Send()
+
 	// 数据榜单并进行数据库存储
 	SetTickerAnaly() // 默认执行一次
 	go mClock.New(mClock.OptType{

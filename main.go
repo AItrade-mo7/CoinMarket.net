@@ -21,7 +21,7 @@ func main() {
 	// 初始化系统参数
 	global.Start()
 
-	// TestMain()
+	// MainTest()
 
 	ready.Start()
 
@@ -39,13 +39,14 @@ func main() {
 	// dbTask.FormatKdata()
 }
 
-func TestMain() {
+func MainTest() {
 	okxApi.SetInst() // 获取并设置交易产品信息
 
 	List := okxApi.GetKdata(okxApi.GetKdataOpt{
 		InstID: "ETH-USDT",
 		Size:   config.KdataLen,
+		After:  1667740500000,
 	})
 
-	fmt.Println("List", len(List))
+	fmt.Println("List", len(List), List[len(List)-1].TimeStr)
 }
