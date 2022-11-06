@@ -48,6 +48,10 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 		After:   opt.After,
 		Size:    opt.Size,
 	})
+	if len(BinanceList) != opt.Size {
+		global.LogErr("BinanceList 长度不正确", len(BinanceList), mJson.Format(opt))
+		return
+	}
 
 	var OKXList []mOKX.TypeKd
 	if (opt.After) > 0 || opt.Current > 0 {
@@ -58,7 +62,12 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 			Size:    opt.Size,
 		})
 	} else {
-		OKXList = kdata.GetKdata(SPOT.InstID, 100)
+		OKXList = kdata.GetKdata(SPOT.InstID, opt.Size)
+	}
+
+	if len(OKXList) != opt.Size {
+		global.LogErr("OKXList 未获取到数据",len(OKXList), mJson.Format(opt))
+		return
 	}
 
 	List, err := KdataMerge(KdataMergeOpt{
@@ -90,6 +99,15 @@ func KdataMerge(opt KdataMergeOpt) (Kdata []mOKX.TypeKd, resErr error) {
 		resErr = fmt.Errorf("okxApi.KdataMerge len %+v %+v %+v", len(OKXList), len(BinanceList), opt)
 		return
 	}
+
+	global.KdataLog.Println(
+		"Merge [last]",
+		OKXList[len(OKXList)-1].TimeStr,
+		BinanceList[len(BinanceList)-1].TimeStr,
+		"Merge [0]",
+		OKXList[0].TimeStr,
+		BinanceList[0].TimeStr,
+	)
 
 	if OKXList[len(OKXList)-1].TimeStr != BinanceList[len(BinanceList)-1].TimeStr {
 		resErr = fmt.Errorf("okxApi.KdataMerge [last] %+v %+v", OKXList[len(OKXList)-1].TimeStr, BinanceList[len(BinanceList)-1].TimeStr)
