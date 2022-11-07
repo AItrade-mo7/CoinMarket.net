@@ -25,11 +25,14 @@ func main() {
 
 	router.Start()
 
+	// ==== 测试 ====
 	// MainTest()
 
 	// ==== 开始整理算法结果 ====
+	// dbTask.StartEmail()
 	// Task := dbTask.NewAnalyTask()
 	// Task.CoinDBTraverse()
+	// dbTask.EndEmail("整理算法结果")
 
 	// ==== 开始填充榜单历史 ====
 	// FormatDB := dbTask.NewFormat()

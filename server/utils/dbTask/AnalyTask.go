@@ -60,7 +60,7 @@ func (_this *AnalyTaskObj) CoinDBTraverse() {
 	findOpt := options.Find()
 	findOpt.SetAllowDiskUse(true)
 	findOpt.SetSort(map[string]int{
-		"TimeUnix": -1,
+		"TimeUnix": 1,
 	})
 
 	findFK := bson.D{}

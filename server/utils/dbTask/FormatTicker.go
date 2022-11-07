@@ -43,7 +43,7 @@ func (_this *FormatTickerObj) TickerDBTraverse() {
 	findOpt := options.Find()
 	findOpt.SetAllowDiskUse(true)
 	findOpt.SetSort(map[string]int{
-		"TimeUnix": 1,
+		"TimeUnix": -1,
 	})
 
 	findFK := bson.D{}
