@@ -2,13 +2,11 @@ package main
 
 import (
 	_ "embed"
-	"fmt"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi"
-	"CoinMarket.net/server/ready"
-	"CoinMarket.net/server/router"
+	"github.com/EasyGolang/goTools/mClock"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -21,12 +19,16 @@ func main() {
 	// 初始化系统参数
 	global.Start()
 
-	ready.Start()
+	// ready.Start()
 
-	router.Start()
+	// router.Start()
 
 	// ==== 测试 ====
-	// MainTest()
+
+	mClock.New(mClock.OptType{
+		Func: MainTest,
+		Spec: "10 0,5,10,15,20,25,30,35,40,45,50,55 * * * ? ", // 5 分的整数过 10 秒
+	})
 
 	// ==== 开始整理算法结果 ====
 	// dbTask.StartEmail()
@@ -48,8 +50,7 @@ func MainTest() {
 	List := okxApi.GetKdata(okxApi.GetKdataOpt{
 		InstID: "ETH-USDT",
 		Size:   config.KdataLen,
-		After:  1667740500000,
 	})
 
-	fmt.Println("List", len(List), List[len(List)-1].TimeStr)
+	global.Run.Println("List", len(List), List[len(List)-1].TimeStr)
 }
