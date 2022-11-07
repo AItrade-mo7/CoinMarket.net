@@ -100,18 +100,15 @@ func KdataMerge(opt KdataMergeOpt) (Kdata []mOKX.TypeKd, resErr error) {
 		return
 	}
 
-	global.KdataLog.Println(
-		"Merge [last]",
-		OKXList[len(OKXList)-1].TimeStr,
-		BinanceList[len(BinanceList)-1].TimeStr,
-		"Merge [0]",
-		OKXList[0].TimeStr,
-		BinanceList[0].TimeStr,
-	)
-
 	if OKXList[len(OKXList)-1].TimeStr != BinanceList[len(BinanceList)-1].TimeStr {
-		resErr = fmt.Errorf("okxApi.KdataMerge [last] %+v %+v", OKXList[len(OKXList)-1].TimeStr, BinanceList[len(BinanceList)-1].TimeStr)
-		return
+		global.Log.Println(
+			"Merge [last]",
+			OKXList[len(OKXList)-1].TimeStr,
+			BinanceList[len(BinanceList)-1].TimeStr,
+			"Merge [0]",
+			OKXList[0].TimeStr,
+			BinanceList[0].TimeStr,
+		)
 	}
 
 	for _, item := range OKXList {
