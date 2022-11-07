@@ -6,7 +6,8 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi"
-	"github.com/EasyGolang/goTools/mClock"
+	"CoinMarket.net/server/ready"
+	"CoinMarket.net/server/router"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -19,16 +20,15 @@ func main() {
 	// 初始化系统参数
 	global.Start()
 
-	// ready.Start()
+	ready.Start()
 
-	// router.Start()
+	router.Start()
 
 	// ==== 测试 ====
-
-	mClock.New(mClock.OptType{
-		Func: MainTest,
-		Spec: "10 0,5,10,15,20,25,30,35,40,45,50,55 * * * ? ", // 5 分的整数过 10 秒
-	})
+	// mClock.New(mClock.OptType{
+	// 	Func: MainTest,
+	// 	Spec: "10 0,5,10,15,20,25,30,35,40,45,50,55 * * * ? ", // 5 分的整数过 10 秒
+	// })
 
 	// ==== 开始整理算法结果 ====
 	// dbTask.StartEmail()
