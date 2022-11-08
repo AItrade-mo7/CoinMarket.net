@@ -42,8 +42,6 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 		opt.Size = config.KdataLen
 	}
 
-	global.Run.Println("okxApi.GetKdata", mJson.Format(opt), (opt.After) > 0 || opt.Current > 0)
-
 	BinanceList := binanceApi.GetKdata(binanceApi.GetKdataParam{
 		Symbol:  SPOT.Symbol,
 		Current: opt.Current,
@@ -82,6 +80,8 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 	}
 
 	KdataList = List
+
+	global.KdataLog.Println("okxApi.GetKdata", mJson.Format(opt), (opt.After) > 0 || opt.Current > 0)
 
 	return
 }

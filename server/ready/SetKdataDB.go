@@ -73,7 +73,6 @@ func SetCoinTickerDB() {
 	if Timeout < 100 {
 		Timeout = 100
 	}
-	global.Run.Println("开始存储 CoinTicker")
 	db := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
