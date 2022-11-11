@@ -1,4 +1,4 @@
-var capital = 1; // 本金
+var capital = 1000; // 本金
 var target = 10000000; // 目标金钱
 // var rate = 0.03; // 每次的利润 3%
 var rate = 1; // 每次的利润 100%
