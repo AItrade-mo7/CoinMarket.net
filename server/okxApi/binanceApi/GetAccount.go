@@ -1,0 +1,4 @@
+package binanceApi
+
+func GetAccount() {
+}
