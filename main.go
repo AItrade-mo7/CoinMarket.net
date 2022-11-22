@@ -20,6 +20,8 @@ func main() {
 	// 初始化系统参数
 	global.Start()
 
+	// binanceApi.GetAccount()
+
 	ready.Start()
 
 	router.Start()
