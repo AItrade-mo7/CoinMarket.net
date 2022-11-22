@@ -10,7 +10,7 @@ func IsOKXDataTimeScale(KTime int64) bool {
 	Minute := nowTimeObj.Minute()
 
 	isIn := false
-	timeScale := []int{0, 15, 30, 45}
+	timeScale := []int{1, 16, 31, 46}
 	for _, val := range timeScale {
 		if Minute-val == 0 {
 			isIn = true

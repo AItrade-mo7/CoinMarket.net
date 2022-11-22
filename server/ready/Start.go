@@ -15,6 +15,7 @@ import (
 	"github.com/EasyGolang/goTools/mTime"
 )
 
+// 这里只是榜单数据的爬取和搜集。
 func Start() {
 	// 发送启动邮件
 	go global.Email(global.EmailOpt{
@@ -31,7 +32,7 @@ func Start() {
 	SetTickerAnaly() // 默认执行一次
 	go mClock.New(mClock.OptType{
 		Func: SetTickerAnaly,
-		Spec: "10 0,5,10,15,20,25,30,35,40,45,50,55 * * * ? ", // 5 分的整数过 10 秒
+		Spec: "0 1,6,11,16,21,26,31,36,41,46,51,56 * * * ? ", // 每隔5分钟比标准时间晚一分钟 执行查询
 	})
 }
 
@@ -46,7 +47,7 @@ func SetTickerAnaly() {
 
 	SetTickerNowKdata() // 产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 数据
 
-	okxInfo.TickerAnaly = dbType.AnalyTickerType{}
+	okxInfo.TickerAnaly = dbType.AnalyTickerType{} // 这里只是数据的搜集与格式化
 	okxInfo.TickerAnaly = dbType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
 		TickerVol:   okxInfo.TickerVol,
 		TickerKdata: okxInfo.TickerKdata,
