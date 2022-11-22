@@ -3,8 +3,8 @@ package binanceApi
 import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/utils"
 	"github.com/EasyGolang/goTools/mFile"
-	"github.com/EasyGolang/goTools/mOKX"
 	"github.com/EasyGolang/goTools/mStr"
 	jsoniter "github.com/json-iterator/go"
 )
@@ -67,7 +67,7 @@ type InstType struct {
 func GetInst() (InstList []SymbolType) {
 	Kdata_file := mStr.Join(config.Dir.JsonData, "/B-Inst", ".json")
 
-	resData, err := mOKX.FetchBinance(mOKX.FetchBinanceOpt{
+	resData, err := utils.FetchBinance(utils.FetchBinanceOpt{
 		Path:          "/api/v3/exchangeInfo",
 		Method:        "get",
 		LocalJsonPath: Kdata_file,

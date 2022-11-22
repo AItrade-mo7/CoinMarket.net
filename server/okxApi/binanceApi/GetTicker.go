@@ -6,6 +6,7 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
+	"CoinMarket.net/server/utils"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -16,7 +17,7 @@ import (
 // 币安的 ticker 数据
 func GetTicker() (TickerList []mOKX.TypeBinanceTicker) {
 	Ticker_file := mStr.Join(config.Dir.JsonData, "/BinanceTicker.json")
-	resData, err := mOKX.FetchBinance(mOKX.FetchBinanceOpt{
+	resData, err := utils.FetchBinance(utils.FetchBinanceOpt{
 		Path:          "/api/v3/ticker/24hr",
 		Method:        "get",
 		LocalJsonPath: Ticker_file,

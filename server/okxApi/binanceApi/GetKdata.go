@@ -4,6 +4,7 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
+	"CoinMarket.net/server/utils"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mJson"
@@ -49,7 +50,7 @@ func GetKdata(opt GetKdataParam) (KdataList []mOKX.TypeKd) {
 		size = opt.Size
 	}
 
-	resData, err := mOKX.FetchBinance(mOKX.FetchBinanceOpt{
+	resData, err := utils.FetchBinance(utils.FetchBinanceOpt{
 		Path:   "/api/v3/klines",
 		Method: "get",
 		Data: map[string]any{
