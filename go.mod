@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/EasyGolang/goTools v0.28.1
+	github.com/adshao/go-binance/v2 v2.3.10
 	github.com/gofiber/fiber/v2 v2.40.0
 	github.com/gofiber/websocket/v2 v2.1.0
 	github.com/json-iterator/go v1.1.12
@@ -13,7 +14,6 @@ require (
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.0 // indirect
-	github.com/adshao/go-binance/v2 v2.3.10 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/antchfx/htmlquery v1.2.5 // indirect
