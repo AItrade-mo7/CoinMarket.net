@@ -25,4 +25,4 @@ var TickerKdata map[string][]mOKX.TypeKd
 var TickerAnaly dbType.AnalyTickerType
 
 // 当前币安的持仓
-var BinancePositionNow mBinance.PositionType
+var BinancePositionList []mBinance.PositionType
