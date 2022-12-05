@@ -1,8 +1,6 @@
 package binanceApi
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
@@ -94,7 +92,6 @@ func GetAccount() (resultData mBinance.PositionType) {
 
 	for _, val := range result.Positions {
 		if mCount.Le(val.PositionAmt, "0") != 0 {
-			fmt.Println(val.PositionAmt)
 			PositionAmt = mCount.Le(val.PositionAmt, "0")
 			PositionSymbol = val.Symbol
 			Profit = val.UnrealizedProfit
