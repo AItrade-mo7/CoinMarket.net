@@ -70,15 +70,7 @@ type TypeAccount struct {
 	} `json:"positions"`
 }
 
-type BinancePosition struct {
-	InstID        string `bson:"InstID"`
-	Dir           int    `bson:"Dir"`
-	Profit        string `bson:"Profit"`
-	CreateTime    int64  `bson:"CreateTime"`
-	CreateTimeStr string `bson:"CreateTimeStr"`
-}
-
-func GetAccount() (resultData BinancePosition) {
+func GetAccount() (resultData mBinance.PositionType) {
 	Kdata_file := mStr.Join(config.Dir.JsonData, "/阔盈-Account.json")
 
 	resData, err := mBinance.FetchBinance(mBinance.OptFetchBinance{
@@ -114,7 +106,7 @@ func GetAccount() (resultData BinancePosition) {
 		PositionInst = PositionInst + config.SWAP_suffix
 	}
 
-	resultData = BinancePosition{
+	resultData = mBinance.PositionType{
 		InstID: PositionInst,
 		Dir:    PositionAmt,
 		Profit: Profit,
