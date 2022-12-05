@@ -159,13 +159,13 @@ func ReadBinancePosition10(db *mMongo.DB) (PositList []mBinance.PositionType) {
 func NotificationChange(nowData mBinance.PositionType) {
 	inst := okxInfo.Inst[nowData.InstID]
 
-	dir := `<span style="color: #A69B9B;"> 错误 <span>`
+	dir := `<span style='color: #A69B9B;'> 错误 </span>`
 
 	if nowData.Dir > 0 {
-		dir = `<span style="color: #116F19;"> 上涨 <span>`
+		dir = `<span style='color: #116F19;'> 上涨 </span>`
 	}
 	if nowData.Dir < 0 {
-		dir = `<span style="color: #D93424;"> 下跌 <span>`
+		dir = `<span style='color: #D93424;'> 下跌 </span>`
 	}
 
 	msg := mStr.Join(
@@ -173,13 +173,12 @@ func NotificationChange(nowData mBinance.PositionType) {
 		"趋势方向: ", dir, "<br />",
 		"数据时间: ", nowData.CreateTimeStr, "<br />",
 	)
-
 	Email := global.Email(global.EmailOpt{
 		To:       config.Email.To,
 		Subject:  "市场方向变更",
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{
-			Message: mJson.JsonFormat(mJson.ToJson(msg)),
+			Message: msg,
 			SysTime: mTime.IsoTime(),
 		},
 	})
