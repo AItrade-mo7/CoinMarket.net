@@ -1,12 +1,14 @@
 package ready
 
 import (
+	"fmt"
 	"os/exec"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi"
+	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
 	"CoinMarket.net/server/tmpl"
@@ -42,6 +44,10 @@ func SetTickerAnaly() {
 	okxApi.SetInst() // 获取并设置交易产品信息
 
 	global.Run.Println("========= 开始获取数据 ===========")
+
+	BinancePosition := binanceApi.GetAccount()
+
+	fmt.Println(BinancePosition)
 
 	okxApi.SetTicker() // 计算并设置综合榜单 产出 okxInfo.TickerVol 数据
 

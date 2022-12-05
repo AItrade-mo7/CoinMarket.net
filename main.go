@@ -2,12 +2,9 @@ package main
 
 import (
 	_ "embed"
-	"fmt"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/okxApi"
-	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/ready"
 	jsoniter "github.com/json-iterator/go"
 )
@@ -23,9 +20,8 @@ func main() {
 
 	ready.Start()
 
-	BinancePosition := binanceApi.GetAccount()
 
-	fmt.Println(BinancePosition)
+
 
 	// router.Start()
 
@@ -47,15 +43,4 @@ func main() {
 
 	// ==== 整理Kdata ====
 	// dbTask.FormatKdata()
-}
-
-func MainTest() {
-	okxApi.SetInst() // 获取并设置交易产品信息
-
-	List := okxApi.GetKdata(okxApi.GetKdataOpt{
-		InstID: "ETH-USDT",
-		Size:   config.KdataLen,
-	})
-
-	global.Run.Println("List", len(List), List[len(List)-1].TimeStr)
 }
