@@ -7,12 +7,10 @@ import (
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi"
-	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
 	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mClock"
-	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mPath"
 	"github.com/EasyGolang/goTools/mTime"
 )
@@ -40,14 +38,13 @@ func Start() {
 
 // 获取榜单数据
 func SetTickerAnaly() {
-	// ReStartShell()   // 在这里 清理Linux 缓存
+	// ReStartShell()   // 在这里 清理 Linux 缓存 或重启数据库
+	
 	okxApi.SetInst() // 获取并设置交易产品信息
 
 	global.Run.Println("========= 开始获取数据 ===========")
 
-	BinancePosition := binanceApi.GetAccount() // 存储到数据库 BinancePosition
-
-	mJson.Println(BinancePosition)
+	go SetBinancePosition()
 
 	okxApi.SetTicker() // 计算并设置综合榜单 产出 okxInfo.TickerVol 数据
 
