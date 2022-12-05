@@ -7,7 +7,6 @@ import (
 	"github.com/EasyGolang/goTools/mBinance"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mFile"
-	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
 	jsoniter "github.com/json-iterator/go"
@@ -113,8 +112,6 @@ func GetAccount() (resultData mBinance.PositionType) {
 	resultData.CreateTimeStr = mTime.UnixFormat(resultData.CreateTime)
 
 	mFile.Write(Kdata_file, mStr.ToStr(resData))
-
-	mFile.Write(Kdata_file, mJson.ToStr(okxInfo.Inst))
 
 	return
 }

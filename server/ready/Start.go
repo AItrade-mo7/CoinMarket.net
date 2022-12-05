@@ -39,11 +39,10 @@ func Start() {
 // 获取榜单数据
 func SetTickerAnaly() {
 	// ReStartShell()   // 在这里 清理 Linux 缓存 或重启数据库
-	
+
 	okxApi.SetInst() // 获取并设置交易产品信息
 
 	global.Run.Println("========= 开始获取数据 ===========")
-
 	go SetBinancePosition()
 
 	okxApi.SetTicker() // 计算并设置综合榜单 产出 okxInfo.TickerVol 数据
