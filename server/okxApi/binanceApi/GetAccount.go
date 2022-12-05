@@ -1,27 +1,27 @@
 package binanceApi
 
 import (
-	"context"
-	"fmt"
-
+	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"github.com/EasyGolang/goTools/mBinance"
 	"github.com/EasyGolang/goTools/mFile"
-	"github.com/EasyGolang/goTools/mJson"
-	"github.com/adshao/go-binance/v2"
+	"github.com/EasyGolang/goTools/mStr"
 )
 
 func GetAccount() {
-	var (
-		apiKey    = config.BinanceKey.ApiKey
-		secretKey = config.BinanceKey.SecretKey
-	)
-	client := binance.NewClient(apiKey, secretKey)
+	Kdata_file := mStr.Join(config.Dir.JsonData, "/B-Account.json")
 
-	res, err := client.NewGetAccountService().Do(context.Background())
+	resData, err := mBinance.FetchBinance(mBinance.OptFetchBinance{
+		Path:   "/fapi/v2/account",
+		Method: "get",
+		BinanceKey: mBinance.TypeBinanceKey{
+			ApiKey:    config.BinanceKey.ApiKey,
+			SecretKey: config.BinanceKey.SecretKey,
+		},
+	})
 	if err != nil {
-		fmt.Println(err)
-		return
+		global.LogErr("binanceApi.GetAccount Err", err)
 	}
 
-	mFile.Write(config.Dir.JsonData+"/Account.json", mJson.ToStr(res))
+	mFile.Write(Kdata_file, mStr.ToStr(resData))
 }

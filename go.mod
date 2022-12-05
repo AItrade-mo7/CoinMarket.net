@@ -3,8 +3,7 @@ module CoinMarket.net
 go 1.18
 
 require (
-	github.com/EasyGolang/goTools v0.28.1
-	github.com/adshao/go-binance/v2 v2.3.10
+	github.com/EasyGolang/goTools v0.28.4
 	github.com/gofiber/fiber/v2 v2.40.0
 	github.com/gofiber/websocket/v2 v2.1.0
 	github.com/json-iterator/go v1.1.12
@@ -29,7 +28,6 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/uuid v1.3.0 // indirect
-	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible // indirect
 	github.com/kennygrant/sanitize v1.2.4 // indirect
