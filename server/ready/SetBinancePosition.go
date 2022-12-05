@@ -40,6 +40,7 @@ func SetBinancePosition() {
 		dbLast = dbPositionList[0]
 	}
 	// 用当前数据比对最新数据
+
 	isChange := false                         // 是否存在改变
 	if nowBinancePosition.Dir != dbLast.Dir { // 方向不同则改变
 		isChange = true
@@ -60,8 +61,14 @@ func SetBinancePosition() {
 	// 如果数据小于 1 则报错
 	if len(nowPositionList) < 1 {
 		db.Close()
-		resErr := fmt.Errorf("nowPositionList 读取失败 %+v", len(nowPositionList))
-		global.LogErr(resErr)
+		if nowBinancePosition.Dir == 0 {
+			sendMsg := fmt.Sprintf("程序还未持仓 %+v", len(nowPositionList))
+			global.BinanceKdataLog.Println(sendMsg)
+		} else {
+			resErr := fmt.Errorf("nowPositionList 读取失败 %+v", len(nowPositionList))
+			global.LogErr(resErr)
+		}
+		return
 	}
 	dbNow := nowPositionList[0]
 	isAlike := true                          // 是否相同
