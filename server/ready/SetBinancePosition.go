@@ -125,7 +125,7 @@ func UpdateBinancePosition(db *mMongo.DB, nowData, dbLast mBinance.PositionType)
 		})
 	})
 	_, err := db.Table.UpdateOne(db.Ctx, FK, UK)
-	global.Run.Println("更新币安持仓")
+	global.Run.Println("更新币安持仓", mJson.Format(nowData))
 	if err != nil {
 		db.Close()
 		resErr := fmt.Errorf("币安数据,更新数据失败 %+v", err)
