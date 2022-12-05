@@ -63,7 +63,7 @@ func SetBinancePosition() {
 		db.Close()
 		if nowBinancePosition.Dir == 0 {
 			sendMsg := fmt.Sprintf("程序还未持仓 %+v", len(nowPositionList))
-			global.BinanceKdataLog.Println(sendMsg)
+			global.Run.Println(sendMsg)
 		} else {
 			resErr := fmt.Errorf("nowPositionList 读取失败 %+v", len(nowPositionList))
 			global.LogErr(resErr)
