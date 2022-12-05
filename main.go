@@ -2,12 +2,13 @@ package main
 
 import (
 	_ "embed"
+	"fmt"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi"
+	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/ready"
-	"CoinMarket.net/server/router"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -20,11 +21,13 @@ func main() {
 	// 初始化系统参数
 	global.Start()
 
-	// binanceApi.GetAccount()
-
 	ready.Start()
 
-	router.Start()
+	BinancePosition := binanceApi.GetAccount()
+
+	fmt.Println(BinancePosition)
+
+	// router.Start()
 
 	// ==== 测试 ====
 	// mClock.New(mClock.OptType{
