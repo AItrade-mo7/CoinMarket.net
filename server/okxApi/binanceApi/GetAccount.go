@@ -1,12 +1,15 @@
 package binanceApi
 
 import (
+	"fmt"
+
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mBinance"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mFile"
+	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
 	jsoniter "github.com/json-iterator/go"
@@ -68,10 +71,11 @@ type TypeAccount struct {
 }
 
 type BinancePosition struct {
-	InstID  string `bson:"InstID"`
-	Dir     int    `bson:"Dir"`
-	Time    int64  `bson:"Time"`
-	TimeStr string `bson:"TimeStr"`
+	InstID        string `bson:"InstID"`
+	Dir           int    `bson:"Dir"`
+	Profit        string `bson:"Profit"`
+	CreateTime    int64  `bson:"CreateTime"`
+	CreateTimeStr string `bson:"CreateTimeStr"`
 }
 
 func GetAccount() (resultData BinancePosition) {
@@ -94,33 +98,34 @@ func GetAccount() (resultData BinancePosition) {
 
 	PositionAmt := 0
 	PositionSymbol := ""
-	var updateTime int64
+	Profit := ""
 
 	for _, val := range result.Positions {
 		if mCount.Le(val.PositionAmt, "0") != 0 {
+			fmt.Println(val.PositionAmt)
 			PositionAmt = mCount.Le(val.PositionAmt, "0")
 			PositionSymbol = val.Symbol
-
-			updateTime = int64(val.UpdateTime)
+			Profit = val.UnrealizedProfit
 		}
 	}
 
-	PositionInst := ""
-
-	for _, val := range okxInfo.Inst {
-		if val.Symbol == PositionSymbol {
-			PositionInst = val.InstID
-		}
+	PositionInst := okxInfo.Inst[PositionSymbol].BaseCcy
+	if len(PositionInst) > 1 {
+		PositionInst = PositionInst + config.SWAP_suffix
 	}
 
 	resultData = BinancePosition{
 		InstID: PositionInst,
 		Dir:    PositionAmt,
-		Time:   updateTime,
+		Profit: Profit,
 	}
 
-	resultData.TimeStr = mTime.UnixFormat(resultData.Time)
+	resultData.CreateTime = mTime.GetUnixInt64()
+	resultData.CreateTimeStr = mTime.UnixFormat(resultData.CreateTime)
 
 	mFile.Write(Kdata_file, mStr.ToStr(resData))
+
+	mFile.Write(Kdata_file, mJson.ToStr(okxInfo.Inst))
+
 	return
 }

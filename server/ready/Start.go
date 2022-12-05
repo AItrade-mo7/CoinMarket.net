@@ -1,7 +1,6 @@
 package ready
 
 import (
-	"fmt"
 	"os/exec"
 
 	"CoinMarket.net/server/global"
@@ -13,6 +12,7 @@ import (
 	"CoinMarket.net/server/tickerAnaly"
 	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mClock"
+	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mPath"
 	"github.com/EasyGolang/goTools/mTime"
 )
@@ -45,9 +45,9 @@ func SetTickerAnaly() {
 
 	global.Run.Println("========= 开始获取数据 ===========")
 
-	BinancePosition := binanceApi.GetAccount()
+	BinancePosition := binanceApi.GetAccount() // 存储到数据库 BinancePosition
 
-	fmt.Println(BinancePosition)
+	mJson.Println(BinancePosition)
 
 	okxApi.SetTicker() // 计算并设置综合榜单 产出 okxInfo.TickerVol 数据
 
