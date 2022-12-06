@@ -24,7 +24,7 @@ func Start() {
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{
 			Message: "服务启动",
-			SysTime: mTime.IsoTime(),
+			SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
 		},
 	}).Send()
 

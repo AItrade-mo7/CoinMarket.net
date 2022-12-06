@@ -186,7 +186,7 @@ func NotificationChange(nowData mBinance.PositionType) {
 		Template: tmpl.SysEmail,
 		SendData: tmpl.SysParam{
 			Message: msg,
-			SysTime: mTime.IsoTime(),
+			SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
 		},
 	})
 	Email.Send()
