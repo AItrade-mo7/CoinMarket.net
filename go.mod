@@ -3,12 +3,12 @@ module CoinMarket.net
 go 1.18
 
 require (
-	github.com/EasyGolang/goTools v0.30.4
+	github.com/EasyGolang/goTools v1.0.4
 	github.com/gofiber/fiber/v2 v2.40.1
 	github.com/gofiber/websocket/v2 v2.1.0
 	github.com/json-iterator/go v1.1.12
 	github.com/spf13/viper v1.14.0
-	go.mongodb.org/mongo-driver v1.11.0
+	go.mongodb.org/mongo-driver v1.11.1
 )
 
 require (
@@ -23,7 +23,8 @@ require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gocolly/colly v1.2.0 // indirect
-	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+	github.com/gocolly/colly/v2 v2.1.0 // indirect
+	github.com/golang-jwt/jwt/v4 v4.4.3 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
