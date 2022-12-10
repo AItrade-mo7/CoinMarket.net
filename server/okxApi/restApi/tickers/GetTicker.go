@@ -20,9 +20,7 @@ func GetTicker() {
 		Data: map[string]any{
 			"instType": "SPOT",
 		},
-		Method:        "get",
-		LocalJsonPath: Ticker_file,
-		IsLocalJson:   config.SysEnv.RunMod == 1,
+		Method: "get",
 	})
 	if err != nil {
 		global.LogErr("tickers.GetTicker OKXTicker", err)
