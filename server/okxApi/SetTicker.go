@@ -32,7 +32,7 @@ func SetTicker() {
 		for _, binance := range okxInfo.BinanceTickerList {
 			if okx.InstID == binance.InstID {
 				ticker := TickerCount(okx, binance)
-				if len(ticker.InstID) > 4 {
+				if len(ticker.InstID) > 2 {
 					tickerList = append(tickerList, ticker)
 				}
 				break
@@ -62,23 +62,24 @@ func TickerCount(OKXTicker mOKX.TypeOKXTicker, BinanceTicker mOKX.TypeBinanceTic
 	Ticker.BinanceVolRose = mCount.PerCent(Ticker.BinanceVol24H, Ticker.Volume)
 	Ticker.TimeUnix = mTime.ToUnixMsec(mTime.MsToTime(OKXTicker.Ts, "0"))
 	Ticker.TimeStr = mTime.UnixFormat(Ticker.TimeUnix)
-	Ticker.SWAP = mOKX.TypeInst{}
-	Ticker.SPOT = mOKX.TypeInst{}
+
+	SWAP := mOKX.TypeInst{}
+	SPOT := mOKX.TypeInst{}
 
 	if len(Ticker.InstID) > 3 {
-		Ticker.SWAP = okxInfo.Inst[mStr.Join(Ticker.CcyName, config.SWAP_suffix)]
-		Ticker.SPOT = okxInfo.Inst[Ticker.InstID]
+		SWAP = okxInfo.Inst[mStr.Join(Ticker.CcyName, config.SWAP_suffix)]
+		SPOT = okxInfo.Inst[Ticker.InstID]
 	}
 
-	if len(Ticker.SWAP.InstID) < 3 || len(Ticker.SPOT.InstID) < 3 {
-		global.LogErr("ready.TickerCount 数量不足", len(Ticker.SWAP.InstID), len(Ticker.SPOT.InstID))
+	if len(SWAP.InstID) < 3 || len(SPOT.InstID) < 3 {
+		global.LogErr("ready.TickerCount 数量不足", len(SWAP.InstID), len(SPOT.InstID))
 		return mOKX.TypeTicker{}
 	}
 
-	// 上架小于 32 天的不计入榜单
-	diffOnLine := mCount.Sub(mStr.ToStr(Ticker.TimeUnix), Ticker.SWAP.ListTime)
+	// 合约 上架小于 36 天的不计入榜单
+	diffOnLine := mCount.Sub(mStr.ToStr(Ticker.TimeUnix), SWAP.ListTime)
 	diffDay := mCount.Div(diffOnLine, mTime.UnixTime.Day)
-	if mCount.Le(diffDay, "32") < 0 {
+	if mCount.Le(diffDay, "36") < 0 {
 		return mOKX.TypeTicker{}
 	}
 

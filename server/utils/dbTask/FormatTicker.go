@@ -7,11 +7,9 @@ import (
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi"
-	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX"
-	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mStruct"
 	"github.com/EasyGolang/goTools/mTime"
 	"go.mongodb.org/mongo-driver/bson"
@@ -140,27 +138,7 @@ func FormatTickerVol(TickerVol []mOKX.TypeTicker) []mOKX.TypeTicker {
 			NewTicker.OkxVolRose = mCount.PerCent(NewTicker.OKXVol24H, NewTicker.Volume)
 			NewTicker.BinanceVolRose = mCount.PerCent(NewTicker.BinanceVol24H, NewTicker.Volume)
 		}
-		// 标记
-		if len(Ticker.InstID) > 3 {
-			NewTicker.SWAP = okxInfo.Inst[mStr.Join(Ticker.CcyName, config.SWAP_suffix)]
-			NewTicker.SPOT = okxInfo.Inst[Ticker.InstID]
-		}
 
-		if len(NewTicker.SPOT.ListTime) < 4 || len(NewTicker.SWAP.ListTime) < 4 {
-			EndEmail("时间错误2")
-			global.Run.Println("时间错误2", NewTicker.TimeUnix)
-			panic("时间太小了2")
-		}
-
-		// 上架小于 32 天的不计入榜单
-		diffOnLine := mCount.Sub(mStr.ToStr(Ticker.TimeUnix), Ticker.SWAP.ListTime)
-		diffDay := mCount.Div(diffOnLine, mTime.UnixTime.Day)
-		if mCount.Le(diffDay, "32") < 0 {
-			global.Run.Println("上架时间太短-过滤", diffOnLine)
-		} else {
-			NewTickerVol = append(NewTickerVol, NewTicker)
-			global.Run.Println("榜单填充结束", NewTicker.InstID, NewTicker.SPOT.ListTime, NewTicker.SWAP.ListTime, NewTicker.TimeUnix)
-		}
 	}
 
 	return NewTickerVol
