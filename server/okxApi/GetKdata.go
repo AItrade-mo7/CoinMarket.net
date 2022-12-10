@@ -109,8 +109,8 @@ func KdataMerge(opt KdataMergeOpt) (Kdata []mOKX.TypeKd, resErr error) {
 
 		for _, BinanceItem := range BinanceList {
 			if OkxItem.TimeUnix == BinanceItem.TimeUnix {
-				VolCcy := mCount.Add(BinanceItem.VolCcy, OkxItem.VolCcy)
-				OkxItem.VolCcy = VolCcy
+				VolCcy := mCount.Add(BinanceItem.Vol, OkxItem.Vol)
+				OkxItem.Vol = VolCcy
 				Vol := mCount.Add(BinanceItem.Vol, OkxItem.Vol)
 				OkxItem.Vol = Vol
 				OkxItem.DataType = "Merge"

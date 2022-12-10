@@ -132,14 +132,14 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 	HLPer := []string{}
 	for _, item := range list {
 
-		Volume = mCount.Add(Volume, item.VolCcy)
+		Volume = mCount.Add(Volume, item.Vol)
 
 		U_shade = append(U_shade, item.U_shade)
 		D_shade = append(D_shade, item.D_shade)
 		HLPer = append(HLPer, item.HLPer)
 
 		TimeKey := mTime.MsToTime(item.TimeUnix, "0").Format("2006-01-02_15")
-		VolumeHour[TimeKey] = append(VolumeHour[TimeKey], item.VolCcy)
+		VolumeHour[TimeKey] = append(VolumeHour[TimeKey], item.Vol)
 	}
 
 	VolumeHourArr := []string{}
