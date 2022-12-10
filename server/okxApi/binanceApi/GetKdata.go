@@ -102,7 +102,6 @@ func FormatKdata(data []byte, Symbol string) (rList []mOKX.TypeKd) {
 			L:        mStr.ToStr(item[3]),
 			C:        mStr.ToStr(item[4]),
 			Vol:      mStr.ToStr(item[5]),
-			VolCcy:   mStr.ToStr(item[7]),
 			DataType: "BinanceKdata",
 		}
 		new_Kdata := mOKX.NewKD(kdata, rList)
