@@ -29,7 +29,7 @@ func WholeAnaly(TickerAnalySingle map[string][]mOKX.AnalySliceType) []mOKX.TypeW
 		}
 	}
 
-	if len(TickerSingle) < len(config.SliceHour) {
+	if len(TickerSingle) != len(config.SliceHour) {
 		global.LogErr("tickerAnaly.WholeAnaly  config.SliceHour 长度不正确", len(TickerSingle), len(config.SliceHour))
 		return nil
 	}
