@@ -2,7 +2,7 @@ package binanceApi
 
 import (
 	"CoinMarket.net/server/global"
-	"CoinMarket.net/server/utils"
+	"github.com/EasyGolang/goTools/mOKX/binance"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -62,7 +62,7 @@ type InstType struct {
 }
 
 func GetInst() (InstList []SymbolType) {
-	resData, err := utils.FetchBinance(utils.FetchBinanceOpt{
+	resData, err := binance.FetchBinanceKdata(binance.FetchBinanceKdataOpt{
 		Path:   "/api/v3/exchangeInfo",
 		Method: "get",
 	})

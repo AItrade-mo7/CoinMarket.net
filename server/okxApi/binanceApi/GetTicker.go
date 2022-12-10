@@ -6,22 +6,20 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
-	"CoinMarket.net/server/utils"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mOKX"
+	"github.com/EasyGolang/goTools/mOKX/binance"
 	"github.com/EasyGolang/goTools/mStr"
 	jsoniter "github.com/json-iterator/go"
 )
 
 // 币安的 ticker 数据
 func GetTicker() (TickerList []mOKX.TypeBinanceTicker) {
-	Ticker_file := mStr.Join(config.Dir.JsonData, "/BinanceTicker.json")
-	resData, err := utils.FetchBinance(utils.FetchBinanceOpt{
-		Path:          "/api/v3/ticker/24hr",
-		Method:        "get",
-		LocalJsonPath: Ticker_file,
-		IsLocalJson:   config.SysEnv.RunMod == 1,
+	Ticker_file := mStr.Join(config.Dir.JsonData, "/Bnb_Ticker.json")
+	resData, err := binance.FetchBinanceKdata(binance.FetchBinanceKdataOpt{
+		Path:   "/api/v3/ticker/24hr",
+		Method: "get",
 	})
 	if err != nil {
 		global.LogErr("binanceApi.GetTicker BinanceTicker", err)
