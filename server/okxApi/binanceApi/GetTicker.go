@@ -51,7 +51,8 @@ func SetInstID(data []mOKX.TypeBinanceTicker) (TickerList []mOKX.TypeBinanceTick
 	for _, val := range data {
 		find := strings.Contains(val.Symbol, config.Unit)
 		if find {
-			SPOT := okxInfo.Inst[val.Symbol]
+			InstID := strings.Replace(val.Symbol, "USDT", "-USDT", 1)
+			SPOT := okxInfo.Inst[InstID]
 			val.InstID = SPOT.InstID
 			if len(SPOT.Symbol) > 3 {
 				list = append(list, val)
