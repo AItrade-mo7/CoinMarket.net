@@ -1,31 +1,16 @@
 package okxApi
 
 import (
-	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mOKX"
-	"github.com/EasyGolang/goTools/mStr"
 )
 
 func SetInst() {
-	binanceInstList := binanceApi.GetInst()
 	InstList := inst.GetInst()
 
 	MergeInstList := make(map[string]mOKX.TypeInst)
 
-	// 整理现货
-	for _, okxItem := range InstList {
-		Symbol := mStr.Join(okxItem.BaseCcy, okxItem.QuoteCcy)
-		for _, binanceItem := range binanceInstList {
-			if binanceItem.Symbol == Symbol {
-				okxItem.Symbol = binanceItem.Symbol
-				MergeInstList[okxItem.InstID] = okxItem
-				MergeInstList[binanceItem.Symbol] = okxItem
-				break
-			}
-		}
-	}
 	// 添加合约
 	for _, val := range InstList {
 		if val.InstType == "SWAP" {

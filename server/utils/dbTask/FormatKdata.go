@@ -30,10 +30,11 @@ func SetKdata(CcyName string) {
 
 	for i := 0; i < Page; i++ {
 		time.Sleep(time.Second / 3)
-		List := okxApi.GetKdata(okxApi.GetKdataOpt{
-			InstID:  InstID,
-			Current: i, // 当前页码 0 为
-			After:   mTime.GetUnixInt64(),
+
+		List := mOKX.GetKdata(mOKX.GetKdataOpt{
+			InstID: InstID,
+			Page:   i,
+			After:  mTime.GetUnixInt64(),
 		})
 
 		for i := len(List) - 1; i >= 0; i-- {

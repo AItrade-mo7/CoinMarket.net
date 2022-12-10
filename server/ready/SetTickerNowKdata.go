@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/okxApi"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mOKX"
 )
@@ -16,7 +15,7 @@ func SetTickerNowKdata() {
 	for _, item := range okxInfo.TickerVol {
 		time.Sleep(time.Second / 2) // 1秒最多 2 次
 
-		List := okxApi.GetKdata(okxApi.GetKdataOpt{
+		List := mOKX.GetKdata(mOKX.GetKdataOpt{
 			InstID: item.InstID,
 		})
 
