@@ -10,6 +10,7 @@ import (
 
 func SetInst() {
 	binanceInstList := binanceApi.GetInst()
+
 	InstList := inst.GetInst()
 
 	MergeInstList := make(map[string]mOKX.TypeInst)
@@ -21,13 +22,12 @@ func SetInst() {
 			if binanceItem.Symbol == Symbol {
 				okxItem.Symbol = binanceItem.Symbol
 				MergeInstList[okxItem.InstID] = okxItem
-				MergeInstList[binanceItem.Symbol] = okxItem
 				break
 			}
 		}
 	}
 
-	// 添加合约
+	// 给合约 添加 Symbol
 	for _, val := range InstList {
 		if val.InstType == "SWAP" {
 			SPOT := MergeInstList[val.Uly]

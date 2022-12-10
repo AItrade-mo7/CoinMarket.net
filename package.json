@@ -8,6 +8,7 @@
     "serve": "./_shell/serve_start.sh",
     "build": "./_shell/build.sh",
     "deploy": "./_shell/deploy.sh",
-    "task": "./_shell/task.sh"
+    "task": "./_shell/task.sh",
+    "crun": "rm -rf ./logs/ && rm -rf ./jsonData/ && go run main.go"
   }
 }
