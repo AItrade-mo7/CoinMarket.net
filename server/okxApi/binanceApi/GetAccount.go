@@ -1,9 +1,10 @@
 package binanceApi
 
 import (
+	"strings"
+
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mOKX/binance"
@@ -97,13 +98,13 @@ func GetAccount() (resultData binance.PositionType) {
 		}
 	}
 
-	PositionInst := okxInfo.Inst[PositionSymbol].BaseCcy
-	if len(PositionInst) > 1 {
-		PositionInst = PositionInst + config.SWAP_suffix
+	PositionInstID := strings.Replace(PositionSymbol, "USDT", "", 1)
+	if len(PositionInstID) > 1 {
+		PositionInstID = PositionInstID + config.SPOT_suffix
 	}
 
 	resultData = binance.PositionType{
-		InstID: PositionInst,
+		InstID: PositionInstID,
 		Dir:    PositionAmt,
 		Profit: Profit,
 	}
