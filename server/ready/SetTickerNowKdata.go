@@ -18,7 +18,6 @@ func SetTickerNowKdata() {
 
 		List := okxApi.GetKdata(okxApi.GetKdataOpt{
 			InstID: item.InstID,
-			Size:   config.KdataLen,
 		})
 
 		if len(List) >= config.KdataLen {

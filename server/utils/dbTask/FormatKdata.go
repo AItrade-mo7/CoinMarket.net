@@ -34,7 +34,6 @@ func SetKdata(CcyName string) {
 			InstID:  InstID,
 			Current: i, // 当前页码 0 为
 			After:   mTime.GetUnixInt64(),
-			Size:    100,
 		})
 
 		for i := len(List) - 1; i >= 0; i-- {

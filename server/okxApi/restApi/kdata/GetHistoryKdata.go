@@ -16,7 +16,6 @@ type HistoryKdataParam struct {
 	InstID  string `bson:"InstID"`
 	Current int    `bson:"Current"` // 当前页码 0 为
 	After   int64  `bson:"After"`   // 时间 默认为当前时间
-	Size    int    `bson:"Size"`    // 数量 默认为100
 }
 
 func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
@@ -29,18 +28,15 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 
 	Kdata_file := mStr.Join(config.Dir.JsonData, "/", opt.InstID, "-", opt.Current, "_History.json")
 
+	Size := config.KdataLen
+
 	now := mTime.GetUnix()
 	if opt.After > 0 {
 		now = mStr.ToStr(opt.After)
 	}
-	m100 := mCount.Mul(mStr.ToStr(mTime.UnixTimeInt64.Minute*15), mStr.ToStr(opt.Size))
+	m100 := mCount.Mul(mStr.ToStr(mTime.UnixTimeInt64.Minute*15), mStr.ToStr(Size))
 	mAfter := mCount.Mul(m100, mStr.ToStr(opt.Current))
 	after := mCount.Sub(now, mAfter)
-
-	size := 100
-	if opt.Size > 0 {
-		size = opt.Size
-	}
 
 	resData, err := mOKX.FetchOKX(mOKX.OptFetchOKX{
 		Path: "/api/v5/market/history-candles",
@@ -48,7 +44,7 @@ func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {
 			"instId": opt.InstID,
 			"bar":    "15m",
 			"after":  after,
-			"limit":  size,
+			"limit":  Size,
 		},
 		Method:        "get",
 		LocalJsonPath: Kdata_file,

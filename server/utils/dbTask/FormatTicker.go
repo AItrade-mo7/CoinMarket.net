@@ -117,7 +117,6 @@ func FetchKdata(dbTicker dbType.CoinTickerTable) map[string][]mOKX.TypeKd {
 			kdata_list = okxApi.GetKdata(okxApi.GetKdataOpt{
 				InstID:  val.InstID,
 				Current: 0,
-				Size:    100,
 				After:   val.TimeUnix + 5000,
 			})
 		}

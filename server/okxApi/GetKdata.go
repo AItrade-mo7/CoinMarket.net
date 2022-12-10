@@ -18,7 +18,6 @@ type GetKdataOpt struct {
 	InstID  string `bson:"InstID"`
 	Current int    `bson:"Current"` // 当前页码 0 为
 	After   int64  `bson:"After"`   // 时间 默认为当前时间
-	Size    int    `bson:"Size"`    // 数量 默认为100
 }
 
 func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
@@ -31,24 +30,14 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 	nowUnix := mTime.GetUnixInt64() - mTime.UnixTimeInt64.Minute*16
 	if opt.After > nowUnix {
 		opt.After = 0 // 当前
-	} else {
-		// 历史
-		if opt.Size > 100 {
-			opt.Size = 100
-		}
-	}
-
-	if opt.Size < config.KdataLen {
-		opt.Size = config.KdataLen
 	}
 
 	BinanceList := binanceApi.GetKdata(binanceApi.GetKdataParam{
 		Symbol:  SPOT.Symbol,
 		Current: opt.Current,
 		After:   opt.After,
-		Size:    opt.Size,
 	})
-	if len(BinanceList) != opt.Size {
+	if len(BinanceList) != config.KdataLen {
 		global.LogErr("BinanceList 长度不正确", len(BinanceList), mJson.Format(opt))
 		return
 	}
@@ -59,13 +48,12 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 			InstID:  SPOT.InstID,
 			Current: opt.Current,
 			After:   opt.After,
-			Size:    opt.Size,
 		})
 	} else {
-		OKXList = kdata.GetKdata(SPOT.InstID, opt.Size)
+		OKXList = kdata.GetKdata(SPOT.InstID)
 	}
 
-	if len(OKXList) != opt.Size {
+	if len(OKXList) != config.KdataLen {
 		global.LogErr("OKXList 未获取到数据", len(OKXList), mJson.Format(opt))
 		return
 	}
