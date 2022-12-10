@@ -173,7 +173,6 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 
 	VolumeAvg := mCount.Average(VolumeHourArr)
 	slice.VolumeAvg = mCount.Cent(VolumeAvg, 3)
-	slice.CcyName = firstElm.CcyName
 
 	_this.Slice[Index] = slice
 
