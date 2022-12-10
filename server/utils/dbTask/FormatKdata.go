@@ -1,6 +1,7 @@
 package dbTask
 
 import (
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -20,7 +21,7 @@ func FormatKdata() {
 	SetKdata("ETH")
 }
 
-var Page = 60
+var Page = 3
 
 func SetKdata(CcyName string) {
 	tableName := CcyName + "USDT"
@@ -30,13 +31,13 @@ func SetKdata(CcyName string) {
 
 	for i := 0; i < Page; i++ {
 		time.Sleep(time.Second / 3)
-
 		List := mOKX.GetKdata(mOKX.GetKdataOpt{
 			InstID: InstID,
 			Page:   i,
 			After:  mTime.GetUnixInt64(),
 		})
 
+		fmt.Println(i)
 		for i := len(List) - 1; i >= 0; i-- {
 			AllList = append(AllList, List[i])
 		}
@@ -46,6 +47,8 @@ func SetKdata(CcyName string) {
 			global.Run.Println("请求数据出错", len(List), InstID, i)
 		}
 	}
+
+	return
 
 	// 数据检查
 	for key := range AllList {
