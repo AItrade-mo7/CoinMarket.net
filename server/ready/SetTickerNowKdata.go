@@ -3,6 +3,7 @@ package ready
 import (
 	"time"
 
+	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
 	"github.com/EasyGolang/goTools/mOKX"
@@ -13,15 +14,17 @@ func SetTickerNowKdata() {
 	TickerList := []mOKX.TypeTicker{}
 
 	for _, item := range okxInfo.TickerVol {
-		time.Sleep(time.Second / 2) // 1秒最多 2 次
+		time.Sleep(time.Second / 3) // 1秒最多 3 次
 
 		List := mOKX.GetKdata(mOKX.GetKdataOpt{
 			InstID: item.InstID,
 		})
 
-		if len(List) >= config.KdataLen {
+		if len(List) == config.KdataLen {
 			TickerList = append(TickerList, item)
 			TickerKdata[item.InstID] = List
+		} else {
+			global.LogErr("ready.SetTickerNowKdata Kdata 长度不足", item.InstID, len(List))
 		}
 
 	}
