@@ -5,7 +5,6 @@ import (
 	"CoinMarket.net/server/global/config"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mOKX"
-	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
 )
 
@@ -32,7 +31,7 @@ func NewSingle(list []mOKX.TypeKd) (_this *SingleType) {
 
 	_this.Slice = make(map[int]mOKX.AnalySliceType)
 
-	_this.SetTime()
+	_this.SetInfo()
 	AnalySliceList := []mOKX.AnalySliceType{}
 	for _, item := range config.SliceHour {
 		_this.Slice[item] = _this.SliceKdata(item)
@@ -46,13 +45,13 @@ func NewSingle(list []mOKX.TypeKd) (_this *SingleType) {
 }
 
 // 设置大数据的起止时间
-func (_this *SingleType) SetTime() *SingleType {
+func (_this *SingleType) SetInfo() *SingleType {
 	list := _this.List
 	Len := len(_this.List)
 
-	_this.Info.StartTimeStr = mTime.UnixFormat(list[0].TimeUnix)
+	_this.Info.StartTimeStr = list[0].TimeStr
 	_this.Info.StartTimeUnix = list[0].TimeUnix
-	_this.Info.EndTimeStr = mTime.UnixFormat(list[Len-1].TimeUnix)
+	_this.Info.EndTimeStr = list[Len-1].TimeStr
 	_this.Info.EndTimeUnix = list[Len-1].TimeUnix
 	_this.Info.DiffHour = (_this.Info.EndTimeUnix - _this.Info.StartTimeUnix) / mTime.UnixTimeInt64.Hour
 
@@ -65,34 +64,17 @@ func (_this *SingleType) SliceKdata(hour int) (resData mOKX.AnalySliceType) {
 	list := _this.List
 	Len := len(_this.List)
 
-	backward := int64(hour)
-	backwardUnix := backward * mTime.UnixTimeInt64.Hour // 这个是，时间差 ~
+	startItem := list[Len-1-hour]
+	lastItem := list[Len-1]
 
-	nowTimeUnix := list[Len-1].TimeUnix
-
-	nowTime := mTime.MsToTime(nowTimeUnix, "0")                        // 当前时间戳
-	diffMinute := int64(nowTime.Minute()) * mTime.UnixTimeInt64.Minute // 分钟数
-	backwardUnix = backwardUnix + diffMinute                           // 额外减去分钟数
-
-	startTime := mTime.MsToTime(nowTimeUnix, mStr.Join("-", backwardUnix)) // 当前时间戳 - 小时切片 = 起始时间
-
-	tarTimeUnix := mTime.ToUnixMsec(startTime)
-
-	diffLen := (nowTimeUnix - tarTimeUnix) / (mTime.UnixTimeInt64.Minute * 15)
-	backLen := int(diffLen) + 1
-
-	cList := _this.List[Len-backLen : Len]
-
-	cLen := len(cList)
-
-	resData.StartTimeStr = mTime.UnixFormat(cList[0].TimeUnix)
-	resData.StartTimeUnix = cList[0].TimeUnix
-	resData.EndTimeStr = mTime.UnixFormat(cList[cLen-1].TimeUnix)
-	resData.EndTimeUnix = cList[cLen-1].TimeUnix
+	resData.StartTimeStr = startItem.TimeStr
+	resData.StartTimeUnix = startItem.TimeUnix
+	resData.EndTimeStr = lastItem.TimeStr
+	resData.EndTimeUnix = lastItem.TimeUnix
 	DiffHour := (resData.EndTimeUnix - resData.StartTimeUnix) / mTime.UnixTimeInt64.Hour
 	resData.DiffHour = int(DiffHour)
 
-	resData.Len = len(cList)
+	resData.Len = hour + 1
 
 	return
 }
@@ -124,7 +106,6 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 	lastElm := list[len(list)-1]
 
 	Volume := "0" // 成交量总和
-
 	VolumeHour := make(map[string][]string)
 
 	U_shade := []string{}
