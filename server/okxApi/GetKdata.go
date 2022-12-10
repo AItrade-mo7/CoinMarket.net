@@ -14,10 +14,15 @@ import (
 	"github.com/EasyGolang/goTools/mTime"
 )
 
+/*
+
+ */
+
 type GetKdataOpt struct {
 	InstID  string `bson:"InstID"`
 	Current int    `bson:"Current"` // 当前页码 0 为
 	After   int64  `bson:"After"`   // 时间 默认为当前时间
+	Bar     string `bson:"Bar"`
 }
 
 func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
@@ -50,7 +55,7 @@ func GetKdata(opt GetKdataOpt) (KdataList []mOKX.TypeKd) {
 			After:   opt.After,
 		})
 	} else {
-		OKXList = kdata.GetKdata(SPOT.InstID)
+		OKXList = kdata.GetKdata(SPOT.InstID, opt.Bar)
 	}
 
 	if len(OKXList) != config.KdataLen {

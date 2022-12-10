@@ -16,6 +16,7 @@ type HistoryKdataParam struct {
 	InstID  string `bson:"InstID"`
 	Current int    `bson:"Current"` // 当前页码 0 为
 	After   int64  `bson:"After"`   // 时间 默认为当前时间
+	Bar     string `bson:"Bar"`
 }
 
 func GetHistoryKdata(opt HistoryKdataParam) []mOKX.TypeKd {

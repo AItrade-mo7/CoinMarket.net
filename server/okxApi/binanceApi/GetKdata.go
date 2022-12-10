@@ -18,6 +18,7 @@ type GetKdataParam struct {
 	Symbol  string `bson:"Symbol"`
 	Current int    `bson:"Current"` // 当前页码 0 为
 	After   int64  `bson:"After"`   // 时间 默认为当前时间
+	Bar     string `bson:"Bar"`
 }
 
 func GetKdata(opt GetKdataParam) (KdataList []mOKX.TypeKd) {
@@ -46,7 +47,7 @@ func GetKdata(opt GetKdataParam) (KdataList []mOKX.TypeKd) {
 		Method: "get",
 		Data: map[string]any{
 			"symbol":   opt.Symbol,
-			"interval": "15m",
+			"interval": opt.Bar,
 			"endTime":  after,
 			"limit":    Size,
 		},

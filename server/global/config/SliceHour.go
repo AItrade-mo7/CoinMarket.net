@@ -5,3 +5,20 @@ package config
 var SliceHour = []int{3, 5, 8}
 
 var KdataLen = 100
+
+/*
+ [1m/3m/5m/15m/30m/1H/2H/4H]
+*/
+
+var KdataBarOpt = []string{
+	"1m",
+	"3m",
+	"5m",
+	"15m",
+	"30m",
+	"1h",
+	"2h",
+	"4h",
+}
+
+var KdataBar = KdataBarOpt[5]

@@ -11,7 +11,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-func GetKdata(InstID string) []mOKX.TypeKd {
+func GetKdata(InstID string, Bar string) []mOKX.TypeKd {
 	InstInfo := okxInfo.Inst[InstID]
 	KdataList := []mOKX.TypeKd{}
 
@@ -27,7 +27,7 @@ func GetKdata(InstID string) []mOKX.TypeKd {
 		Path: "/api/v5/market/candles",
 		Data: map[string]any{
 			"instId": InstID,
-			"bar":    "15m",
+			"bar":    Bar,
 			"after":  mTime.GetUnix(),
 			"limit":  limit,
 		},
