@@ -17,7 +17,7 @@ import (
 // 币安的 ticker 数据
 func GetTicker() (TickerList []mOKX.TypeBinanceTicker) {
 	Ticker_file := mStr.Join(config.Dir.JsonData, "/Bnb_Ticker.json")
-	resData, err := binance.FetchBinanceKdata(binance.FetchBinanceKdataOpt{
+	resData, err := binance.FetchBinancePublic(binance.FetchBinancePublicOpt{
 		Path:   "/api/v3/ticker/24hr",
 		Method: "get",
 	})

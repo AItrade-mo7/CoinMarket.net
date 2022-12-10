@@ -62,7 +62,7 @@ type InstType struct {
 }
 
 func GetInst() (InstList []SymbolType) {
-	resData, err := binance.FetchBinanceKdata(binance.FetchBinanceKdataOpt{
+	resData, err := binance.FetchBinancePublic(binance.FetchBinancePublicOpt{
 		Path:   "/api/v3/exchangeInfo",
 		Method: "get",
 	})
