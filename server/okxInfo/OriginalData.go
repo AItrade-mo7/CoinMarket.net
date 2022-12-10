@@ -2,8 +2,8 @@ package okxInfo
 
 import (
 	"CoinMarket.net/server/global/dbType"
-	"github.com/EasyGolang/goTools/mBinance"
 	"github.com/EasyGolang/goTools/mOKX"
+	"github.com/EasyGolang/goTools/mOKX/binance"
 )
 
 // 产品信息
@@ -25,4 +25,4 @@ var TickerKdata map[string][]mOKX.TypeKd
 var TickerAnaly dbType.AnalyTickerType
 
 // 当前币安的持仓
-var BinancePositionList []mBinance.PositionType
+var BinancePositionList []binance.PositionType

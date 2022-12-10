@@ -8,9 +8,9 @@ import (
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tmpl"
-	"github.com/EasyGolang/goTools/mBinance"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
+	"github.com/EasyGolang/goTools/mOKX/binance"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mStruct"
 	"github.com/EasyGolang/goTools/mTime"
@@ -35,7 +35,7 @@ func SetBinancePosition() {
 	dbPositionList := ReadBinancePosition10(db)
 
 	// 获取数据库最新数据
-	var dbLast mBinance.PositionType
+	var dbLast binance.PositionType
 	if len(dbPositionList) > 0 {
 		dbLast = dbPositionList[0]
 	}
@@ -83,7 +83,7 @@ func SetBinancePosition() {
 	}
 
 	if isAlike { // 对比一致则插入内存
-		okxInfo.BinancePositionList = []mBinance.PositionType{}
+		okxInfo.BinancePositionList = []binance.PositionType{}
 		okxInfo.BinancePositionList = nowPositionList
 	} else { // 对比不一致则报错
 		db.Close()
@@ -93,7 +93,7 @@ func SetBinancePosition() {
 }
 
 // 插入一条
-func InsertNowBinancePosition(db *mMongo.DB, BinancePosition mBinance.PositionType) {
+func InsertNowBinancePosition(db *mMongo.DB, BinancePosition binance.PositionType) {
 	_, err := db.Table.InsertOne(db.Ctx, BinancePosition)
 	global.Run.Println("插入币安持仓")
 	if err != nil {
@@ -105,7 +105,7 @@ func InsertNowBinancePosition(db *mMongo.DB, BinancePosition mBinance.PositionTy
 }
 
 // 更新当前
-func UpdateBinancePosition(db *mMongo.DB, nowData, dbLast mBinance.PositionType) {
+func UpdateBinancePosition(db *mMongo.DB, nowData, dbLast binance.PositionType) {
 	FK := bson.D{{
 		Key:   "CreateTime",
 		Value: dbLast.CreateTime,
@@ -135,7 +135,7 @@ func UpdateBinancePosition(db *mMongo.DB, nowData, dbLast mBinance.PositionType)
 }
 
 // 读取最近10条
-func ReadBinancePosition10(db *mMongo.DB) (PositList []mBinance.PositionType) {
+func ReadBinancePosition10(db *mMongo.DB) (PositList []binance.PositionType) {
 	findOpt := options.Find()
 	findOpt.SetAllowDiskUse(true)
 	findOpt.SetLimit(10)
@@ -145,9 +145,9 @@ func ReadBinancePosition10(db *mMongo.DB) (PositList []mBinance.PositionType) {
 	findFK := bson.D{}
 	cursor, err := db.Table.Find(db.Ctx, findFK, findOpt)
 
-	var nowList []mBinance.PositionType
+	var nowList []binance.PositionType
 	for cursor.Next(db.Ctx) {
-		var Posit mBinance.PositionType
+		var Posit binance.PositionType
 		cursor.Decode(&Posit)
 		nowList = append(nowList, Posit)
 	}
@@ -163,7 +163,7 @@ func ReadBinancePosition10(db *mMongo.DB) (PositList []mBinance.PositionType) {
 	return
 }
 
-func NotificationChange(nowData mBinance.PositionType) {
+func NotificationChange(nowData binance.PositionType) {
 	inst := okxInfo.Inst[nowData.InstID]
 
 	dir := `<span style='color: #A69B9B;'> 错误 </span>`

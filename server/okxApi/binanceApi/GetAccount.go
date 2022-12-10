@@ -4,9 +4,9 @@ import (
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
-	"github.com/EasyGolang/goTools/mBinance"
 	"github.com/EasyGolang/goTools/mCount"
 	"github.com/EasyGolang/goTools/mFile"
+	"github.com/EasyGolang/goTools/mOKX/binance"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
 	jsoniter "github.com/json-iterator/go"
@@ -67,13 +67,13 @@ type TypeAccount struct {
 	} `json:"positions"`
 }
 
-func GetAccount() (resultData mBinance.PositionType) {
+func GetAccount() (resultData binance.PositionType) {
 	Kdata_file := mStr.Join(config.Dir.JsonData, "/阔盈-Account.json")
 
-	resData, err := mBinance.FetchBinance(mBinance.OptFetchBinance{
+	resData, err := binance.FetchBinance(binance.OptFetchBinance{
 		Path:   "/fapi/v2/account",
 		Method: "get",
-		BinanceKey: mBinance.TypeBinanceKey{
+		BinanceKey: binance.TypeBinanceKey{
 			ApiKey:    config.BinanceKey.ApiKey,
 			SecretKey: config.BinanceKey.SecretKey,
 		},
@@ -102,7 +102,7 @@ func GetAccount() (resultData mBinance.PositionType) {
 		PositionInst = PositionInst + config.SWAP_suffix
 	}
 
-	resultData = mBinance.PositionType{
+	resultData = binance.PositionType{
 		InstID: PositionInst,
 		Dir:    PositionAmt,
 		Profit: Profit,
