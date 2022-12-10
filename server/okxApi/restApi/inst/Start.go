@@ -1,6 +1,7 @@
 package inst
 
 import (
+	"fmt"
 	"strings"
 
 	"CoinMarket.net/server/global"
@@ -22,6 +23,7 @@ func GetInst() (InstList map[string]mOKX.TypeInst) {
 	SPOT()
 
 	for key, val := range SWAP_list {
+		fmt.Println(key, val)
 		SPOT_key := strings.Replace(key, "-SWAP", "", -1)
 		SPOT := SPOT_list[SPOT_key]
 		if len(SPOT.InstID) > 2 {

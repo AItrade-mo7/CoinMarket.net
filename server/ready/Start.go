@@ -32,7 +32,7 @@ func Start() {
 	SetTickerAnaly() // 默认执行一次
 	go mClock.New(mClock.OptType{
 		Func: SetTickerAnaly,
-		Spec: "1 1,6,11,16,21,26,31,36,41,46,51,56 * * * ? ", // 每隔5分钟比标准时间晚一分钟 执行查询
+		Spec: "1 1,6,11,16,21,26,31,36,41,46,51,56 * * * ? ", // 每隔5分钟比标准时间晚一分钟 过1秒 执行查询
 	})
 }
 
