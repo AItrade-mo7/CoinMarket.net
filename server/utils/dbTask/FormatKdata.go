@@ -1,7 +1,6 @@
 package dbTask
 
 import (
-	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global"
@@ -18,10 +17,10 @@ import (
 func FormatKdata() {
 	okxApi.SetInst() // 获取并设置交易产品信息
 
-	SetKdata("ETH")
+	SetKdata("BTC")
 }
 
-var Page = 3
+var Page = 263
 
 func SetKdata(CcyName string) {
 	tableName := CcyName + "USDT"
@@ -37,7 +36,6 @@ func SetKdata(CcyName string) {
 			After:  mTime.GetUnixInt64(),
 		})
 
-		fmt.Println(i)
 		for i := len(List) - 1; i >= 0; i-- {
 			AllList = append(AllList, List[i])
 		}
@@ -48,18 +46,16 @@ func SetKdata(CcyName string) {
 		}
 	}
 
-	return
-
 	// 数据检查
-	for key := range AllList {
-		preIndex := key - 1
-		if preIndex < 0 {
-			preIndex = 0
-		}
-		preItem := AllList[preIndex]
-		nowItem := AllList[key]
-		global.Run.Println(nowItem.TimeUnix - preItem.TimeUnix)
-	}
+	// for key := range AllList {
+	// 	preIndex := key - 1
+	// 	if preIndex < 0 {
+	// 		preIndex = 0
+	// 	}
+	// 	preItem := AllList[preIndex]
+	// 	nowItem := AllList[key]
+	// 	global.Run.Println(nowItem.TimeUnix - preItem.TimeUnix)
+	// }
 
 	// 链接数据库
 	Timeout := len(AllList) * 10
