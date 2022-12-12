@@ -164,8 +164,6 @@ func ReadBinancePosition10(db *mMongo.DB) (PositList []binance.PositionType) {
 }
 
 func NotificationChange(nowData binance.PositionType) {
-	inst := okxInfo.Inst[nowData.InstID]
-
 	dir := `<span style='color: #A69B9B;'> 错误 </span>`
 
 	if nowData.Dir > 0 {
@@ -176,7 +174,7 @@ func NotificationChange(nowData binance.PositionType) {
 	}
 
 	msg := mStr.Join(
-		"侦测币种: ", inst.Uly, "<br />",
+		"侦测币种: ", nowData.InstID, "<br />",
 		"趋势方向: ", dir, "<br />",
 		"数据时间: ", nowData.CreateTimeStr, "<br />",
 	)
