@@ -5,7 +5,6 @@ import (
 
 	"CoinMarket.net/server/global/config"
 	"github.com/EasyGolang/goTools/mCycle"
-	"github.com/EasyGolang/goTools/mJson"
 )
 
 func Start() {
@@ -21,5 +20,5 @@ func Start() {
 	// 加载 SysEnv
 	ServerEnvInit()
 
-	Log.Println(`系统初始化完成`, mJson.Format(config.SysEnv))
+	// Log.Println(`系统初始化完成`, mJson.Format(config.SysEnv))
 }
