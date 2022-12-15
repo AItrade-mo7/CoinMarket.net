@@ -1,8 +1,6 @@
 package ready
 
 import (
-	"time"
-
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
@@ -13,9 +11,8 @@ func SetTickerNowKdata() {
 	TickerKdata := make(map[string][]mOKX.TypeKd)
 	TickerList := []mOKX.TypeTicker{}
 
+	// 一个列表最多 15 条， 一条请求结束才会是下一条
 	for _, item := range okxInfo.TickerVol {
-		time.Sleep(time.Second / 3) // 1秒最多 3 次
-
 		List := mOKX.GetKdata(mOKX.GetKdataOpt{
 			InstID: item.InstID,
 		})
