@@ -22,7 +22,14 @@ func AnalyDir(opt AnalyDirParam) (MillionCoin []mOKX.AnalySliceType) {
 		if mCount.Le(ticker.Volume, million) >= 0 {
 			Single := opt.AnalySingle[ticker.InstID]
 			if len(Single) > 0 {
-				MillionCoin = append(MillionCoin, Single[0])
+				slices := Single[0]
+				for _, SingleItem := range Single {
+					if SingleItem.DiffHour > 6 {
+						slices = SingleItem
+						break
+					}
+				}
+				MillionCoin = append(MillionCoin, slices)
 			}
 		}
 	}
