@@ -20,10 +20,12 @@ func SetTicker() {
 
 	if len(okxInfo.Inst) < 10 {
 		global.LogErr("ready.SetTicker okxInfo.Inst 数据条目不正确", len(okxInfo.Inst))
+		return
 	}
 
 	if len(okxInfo.BinanceTickerList) < 6 || len(okxInfo.OKXTickerList) < 6 {
 		global.LogErr("ready.SetTicker TickerList 数据条目不正确", len(okxInfo.BinanceTickerList), len(okxInfo.OKXTickerList))
+		return
 	}
 
 	tickerList := []mOKX.TypeTicker{}

@@ -22,6 +22,11 @@ func SetBinancePosition() {
 	nowBinancePosition := binanceApi.GetAccount() // 存储到数据库 BinancePosition
 	global.Run.Println("读取一次 币安持仓", mJson.ToStr(nowBinancePosition))
 
+	if len(nowBinancePosition.InstID) < 2 {
+		global.LogErr("币安持仓读取失败", mJson.ToStr(nowBinancePosition))
+		return
+	}
+
 	db := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,

@@ -37,7 +37,8 @@ func SetInst() {
 			}
 		}
 	}
-
 	okxInfo.Inst = make(map[string]mOKX.TypeInst) // 清理产品信息
-	okxInfo.Inst = MergeInstList                  // 获取并设置交易产品信息
+	if len(MergeInstList) > 10 {
+		okxInfo.Inst = MergeInstList // 获取并设置交易产品信息
+	}
 }
