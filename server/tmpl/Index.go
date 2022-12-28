@@ -12,3 +12,9 @@ type SysParam struct {
 	SysTime      string
 	SecurityCode string
 }
+
+//go:embed ReClear.sh
+var ReClear string
+
+//go:embed SysReStart.sh
+var SysReStart string
