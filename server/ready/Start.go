@@ -38,7 +38,9 @@ func Start() {
 
 // 获取榜单数据
 func SetTickerAnaly() {
-	// ReStartShell()   // 在这里 清理 Linux 缓存 或重启数据库
+	if IsRestartShellTimeScale(mTime.GetUnixInt64()) {
+		ReStartShell() // 在这里 清理 Linux 缓存 和 重启数据库
+	}
 
 	okxApi.SetInst() // 获取并设置交易产品信息
 
