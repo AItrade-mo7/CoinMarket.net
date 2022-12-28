@@ -19,7 +19,7 @@ var Dir DirType
 type FileType struct {
 	SysEnv       string // /root/sys_env.yaml
 	LocalSysEnv  string // ./sys_env.yaml
-	ReStartShell string // 启动时需要执行的脚本
+	ReClearShell string // 清理系统缓存的脚本
 }
 
 var File FileType
@@ -52,9 +52,9 @@ func DirInit() {
 		"sys_env.yaml",
 	)
 
-	File.ReStartShell = mStr.Join(
+	File.ReClearShell = mStr.Join(
 		Dir.App,
 		mStr.ToStr(os.PathSeparator),
-		"ReStart.sh",
+		"ReClear.sh",
 	)
 }

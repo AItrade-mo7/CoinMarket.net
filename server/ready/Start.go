@@ -69,13 +69,13 @@ func SetTickerAnaly() {
 }
 
 func ReStartShell() {
-	isShellPath := mPath.Exists(config.File.ReStartShell)
+	isShellPath := mPath.Exists(config.File.ReClearShell)
 	if !isShellPath {
-		global.Log.Println("未找到 ReStartShell 脚本")
+		global.Log.Println("未找到 ReClearShell 脚本")
 		return
 	}
 
-	Succeed, err := exec.Command("/bin/bash", config.File.ReStartShell).Output()
+	Succeed, err := exec.Command("/bin/bash", config.File.ReClearShell).Output()
 	global.Log.Println("执行脚本", Succeed, err)
 
 	go global.Email(global.EmailOpt{
