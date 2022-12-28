@@ -12,6 +12,7 @@ import (
 	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mPath"
+	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
 )
 
@@ -28,6 +29,12 @@ func Start() {
 		},
 	}).Send()
 
+	// 数据库重启操作
+	go mClock.New(mClock.OptType{
+		Func: ReStartShell,
+		Spec: "0 0 5 * * ? ", // 每天凌晨 5 点整，数据库重启
+	})
+
 	// 数据榜单并进行数据库存储
 	SetTickerAnaly() // 默认执行一次
 	go mClock.New(mClock.OptType{
@@ -38,10 +45,6 @@ func Start() {
 
 // 获取榜单数据
 func SetTickerAnaly() {
-	if IsRestartShellTimeScale(mTime.GetUnixInt64()) {
-		ReStartShell() // 在这里 清理 Linux 缓存 和 重启数据库
-	}
-
 	okxApi.SetInst() // 获取并设置交易产品信息
 
 	global.Run.Println("========= 开始获取数据 ===========")
@@ -74,4 +77,14 @@ func ReStartShell() {
 
 	Succeed, err := exec.Command("/bin/bash", config.File.ReStartShell).Output()
 	global.Log.Println("执行脚本", Succeed, err)
+
+	go global.Email(global.EmailOpt{
+		To:       config.Email.To,
+		Subject:  "数据库重启并执行清理",
+		Template: tmpl.SysEmail,
+		SendData: tmpl.SysParam{
+			Message: mStr.ToStr(Succeed),
+			SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
+		},
+	}).Send()
 }
