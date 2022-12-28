@@ -32,7 +32,7 @@ func Start() {
 	// 数据库重启操作
 	go mClock.New(mClock.OptType{
 		Func: ReStartShell,
-		Spec: "0 0 5 * * ? ", // 每天凌晨 5 点整，数据库重启
+		Spec: "0 0 3 * * ? ", // 每天凌晨 3 点整，数据库重启
 	})
 
 	// 数据榜单并进行数据库存储

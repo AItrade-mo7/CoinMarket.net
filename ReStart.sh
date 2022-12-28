@@ -9,3 +9,6 @@ swapoff -a && swapon -a
 # 重启 mongodb
 sudo systemctl stop mongod
 sudo systemctl restart mongod
+
+# 打印当前服务
+pm2 ls
