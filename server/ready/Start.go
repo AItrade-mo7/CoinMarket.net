@@ -2,6 +2,7 @@ package ready
 
 import (
 	"os/exec"
+	"time"
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
@@ -28,11 +29,16 @@ func Start() {
 			SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
 		},
 	}).Send()
-
-	// 数据库重启操作
+	// 系统重启
 	go mClock.New(mClock.OptType{
-		Func: ReStartShell,
-		Spec: "0 0 3 * * ? ", // 每天凌晨 3 点整，数据库重启
+		Func: SysReStart,
+		Spec: "0 18 5 3,9,15,21,27 * ? ", // 每个月的 3 日、9 日 每隔5天的凌晨 5:18 重启一次 Linux 系统
+	})
+
+	// 内存清理
+	go mClock.New(mClock.OptType{
+		Func: ReClearShell,
+		Spec: "0 18 3 * * ? ", // 每天凌晨 3:18 ，数据库重启
 	})
 
 	// 数据榜单并进行数据库存储
@@ -68,7 +74,7 @@ func SetTickerAnaly() {
 	}
 }
 
-func ReStartShell() {
+func ReClearShell() {
 	isShellPath := mPath.Exists(config.File.ReClearShell)
 	if !isShellPath {
 		global.Log.Println("未找到 ReClearShell 脚本")
@@ -87,4 +93,27 @@ func ReStartShell() {
 			SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
 		},
 	}).Send()
+}
+
+func SysReStart() {
+	go global.Email(global.EmailOpt{
+		To:       config.Email.To,
+		Subject:  "Linux系统即将重启",
+		Template: tmpl.SysEmail,
+		SendData: tmpl.SysParam{
+			Message: "Linux系统 10 秒钟后 将自动进行重启",
+			SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
+		},
+	}).Send()
+
+	time.Sleep(time.Second * 10)
+
+	isShellPath := mPath.Exists(config.File.SysReStart)
+	if !isShellPath {
+		global.Log.Println("未找到 SysReStart 脚本")
+		return
+	}
+
+	Succeed, err := exec.Command("/bin/bash", config.File.SysReStart).Output()
+	global.Log.Println("执行脚本", Succeed, err)
 }
