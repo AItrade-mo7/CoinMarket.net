@@ -7,4 +7,5 @@ sync
 swapoff -a && swapon -a
 
 # 重启 mongodb
+sudo systemctl stop mongod
 sudo systemctl restart mongod
