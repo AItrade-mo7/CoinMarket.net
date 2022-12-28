@@ -3,6 +3,8 @@ package config
 import (
 	"os"
 
+	"CoinMarket.net/server/tmpl"
+	"github.com/EasyGolang/goTools/mFile"
 	"github.com/EasyGolang/goTools/mPath"
 	"github.com/EasyGolang/goTools/mStr"
 )
@@ -64,4 +66,12 @@ func DirInit() {
 		mStr.ToStr(os.PathSeparator),
 		"SysReStart.sh",
 	)
+
+	if !mPath.Exists(File.ReClearShell) {
+		mFile.Write(File.ReClearShell, tmpl.ReClear)
+	}
+
+	if !mPath.Exists(File.SysReStart) {
+		mFile.Write(File.SysReStart, tmpl.SysReStart)
+	}
 }
