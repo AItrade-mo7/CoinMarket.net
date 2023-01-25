@@ -2,11 +2,15 @@ package middle
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/global/dbType"
 	"github.com/EasyGolang/goTools/mEncrypt"
+	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/gofiber/fiber/v2"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func TokenAuth(c *fiber.Ctx) (Message string, err error) {
@@ -39,6 +43,36 @@ func TokenAuth(c *fiber.Ctx) (Message string, err error) {
 		err = errors.New("Token过期,请重新登录")
 		return
 	}
+
+	// 数据库验证
+	db := mMongo.New(mMongo.Opt{
+		UserName: config.SysEnv.MongoUserName,
+		Password: config.SysEnv.MongoPassword,
+		Address:  config.SysEnv.MongoAddress,
+		DBName:   "AITrade",
+	}).Connect().Collection("Token")
+	defer db.Close()
+	err = db.Ping()
+	if err != nil {
+		db.Close()
+		err = fmt.Errorf("token 验证失败1")
+		return
+	}
+
+	var dbRes dbType.TokenTable
+	FK := bson.D{{
+		Key:   "UserID",
+		Value: UserID,
+	}}
+	db.Table.FindOne(db.Ctx, FK).Decode(&dbRes)
+
+	if dbRes.Token != Token {
+		db.Close()
+		err = fmt.Errorf("token 验证失败2")
+		return
+	}
+
+	db.Close()
 
 	return
 }
