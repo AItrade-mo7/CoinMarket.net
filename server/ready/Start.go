@@ -54,7 +54,7 @@ func SetTickerAnaly() {
 	okxApi.SetInst() // 获取并设置交易产品信息
 
 	global.Run.Println("========= 开始获取数据 ===========")
-	go SetBinancePosition()
+	// go SetBinancePosition()
 
 	okxApi.SetTicker() // 计算并设置综合榜单 产出 okxInfo.TickerVol 数据
 
