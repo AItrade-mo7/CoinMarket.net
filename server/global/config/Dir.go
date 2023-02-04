@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 
 	"CoinMarket.net/server/tmpl"
@@ -56,20 +57,25 @@ func DirInit() {
 	)
 
 	File.ReClearShell = mStr.Join(
-		Dir.App,
-		mStr.ToStr(os.PathSeparator),
 		Dir.JsonData,
 		mStr.ToStr(os.PathSeparator),
 		"ReClear.sh",
 	)
 
 	File.SysReStart = mStr.Join(
-		Dir.App,
-		mStr.ToStr(os.PathSeparator),
 		Dir.JsonData,
 		mStr.ToStr(os.PathSeparator),
 		"SysReStart.sh",
 	)
+
+	// 检测 logs 目录
+	isJsonDataPath := mPath.Exists(Dir.JsonData)
+	if !isJsonDataPath {
+		// 不存在则创建 logs 目录
+		os.MkdirAll(Dir.JsonData, 0o777)
+	}
+
+	fmt.Println("创建文件", mPath.Exists(File.ReClearShell), File.ReClearShell)
 
 	if !mPath.Exists(File.ReClearShell) {
 		mFile.Write(File.ReClearShell, tmpl.ReClear)
