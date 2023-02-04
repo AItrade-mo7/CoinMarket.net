@@ -3,7 +3,6 @@
   "version": "0.9.9",
   "port": 8998,
   "scripts": {
-    "git": "./_shell/gitSet.sh",
     "sync": "./_shell/gitSync.sh",
     "serve": "./_shell/serve_start.sh",
     "build": "./_shell/build.sh",
