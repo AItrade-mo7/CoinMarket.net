@@ -58,11 +58,15 @@ func DirInit() {
 	File.ReClearShell = mStr.Join(
 		Dir.App,
 		mStr.ToStr(os.PathSeparator),
+		Dir.JsonData,
+		mStr.ToStr(os.PathSeparator),
 		"ReClear.sh",
 	)
 
 	File.SysReStart = mStr.Join(
 		Dir.App,
+		mStr.ToStr(os.PathSeparator),
+		Dir.JsonData,
 		mStr.ToStr(os.PathSeparator),
 		"SysReStart.sh",
 	)
