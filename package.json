@@ -8,6 +8,6 @@
     "build": "./_shell/Build.sh",
     "deploy": "./_shell/Deploy.sh",
     "task": "./_shell/Task.sh",
-    "crun": "rm -rf ./logs/ && rm -rf ./jsonData/ && go run main.go"
+    "crun": "rm -rf ./logs/ && rm -rf ./jsonData/ && ./_shell/ServerStart.sh"
   }
 }
