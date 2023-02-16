@@ -32,7 +32,7 @@ func NewAnalyTask() *AnalyTaskObj {
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AITrade",
+		DBName:   "AItrade",
 		Timeout:  Timeout,
 	}).Connect().Collection("CoinTicker")
 
@@ -40,7 +40,7 @@ func NewAnalyTask() *AnalyTaskObj {
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AITrade",
+		DBName:   "AItrade",
 		Timeout:  Timeout,
 	}).Connect().Collection("TickerAnaly")
 
@@ -48,7 +48,7 @@ func NewAnalyTask() *AnalyTaskObj {
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AITrade",
+		DBName:   "AItrade",
 		Timeout:  Timeout,
 	}).Connect().Collection("BTCUSDT")
 

@@ -54,7 +54,7 @@ func GetETHKdata(json dbSearch.FindParam) (resData dbSearch.PagingType, resErr e
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AITrade",
+		DBName:   "AItrade",
 	}).Connect().Collection("ETHUSDT")
 	defer db.Close()
 	err := db.Ping()
@@ -99,7 +99,7 @@ func GetBTCKdata(json dbSearch.FindParam) (resData dbSearch.PagingType, resErr e
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AITrade",
+		DBName:   "AItrade",
 	}).Connect().Collection("BTCUSDT")
 	defer db.Close()
 	defer db.Close()

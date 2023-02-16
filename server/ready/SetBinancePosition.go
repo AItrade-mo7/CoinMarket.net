@@ -31,7 +31,7 @@ func SetBinancePosition() {
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AITrade",
+		DBName:   "AItrade",
 		Timeout:  100,
 	}).Connect().Collection("BinancePosition")
 	defer global.Run.Println("关闭数据库连接", "BinancePosition")

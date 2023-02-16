@@ -66,7 +66,7 @@ func SetKdata(CcyName string) {
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AITrade",
+		DBName:   "AItrade",
 		Timeout:  Timeout,
 	}).Connect().Collection(tableName)
 	defer global.Run.Println("关闭数据库连接", tableName)

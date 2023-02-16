@@ -34,7 +34,7 @@ func SetCoinKdataDB(CoinName string) {
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AITrade",
+		DBName:   "AItrade",
 		Timeout:  Timeout,
 	}).Connect().Collection(tableName)
 	defer global.Run.Println("关闭数据库连接", tableName)
@@ -77,7 +77,7 @@ func SetCoinTickerDB() {
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AITrade",
+		DBName:   "AItrade",
 		Timeout:  Timeout,
 	}).Connect().Collection("CoinTicker")
 	defer global.Run.Println("关闭数据库连接 CoinTicker")
@@ -124,7 +124,7 @@ func SetTickerAnalyDB() {
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AITrade",
+		DBName:   "AItrade",
 		Timeout:  Timeout,
 	}).Connect().Collection("TickerAnaly")
 	defer global.Run.Println("关闭数据库连接 TickerAnaly")
