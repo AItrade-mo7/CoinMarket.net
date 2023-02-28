@@ -10,25 +10,23 @@ import (
 	"CoinMarket.net/server/okxApi"
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
-	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mClock"
 	"github.com/EasyGolang/goTools/mPath"
-	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
 )
 
 // 这里只是榜单数据的爬取和搜集。
 func Start() {
 	// 发送启动邮件
-	go global.Email(global.EmailOpt{
-		To:       config.Email.To,
-		Subject:  "ServeStart",
-		Template: tmpl.SysEmail,
-		SendData: tmpl.SysParam{
-			Message: "服务启动",
-			SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
-		},
-	}).Send()
+	// go global.Email(global.EmailOpt{
+	// 	To:       config.Email.To,
+	// 	Subject:  "ServeStart",
+	// 	Template: tmpl.SysEmail,
+	// 	SendData: tmpl.SysParam{
+	// 		Message: "服务启动",
+	// 		SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
+	// 	},
+	// }).Send()
 	// 系统重启
 	go mClock.New(mClock.OptType{
 		Func: SysReStart,
@@ -84,27 +82,27 @@ func ReClearShell() {
 	Succeed, err := exec.Command("/bin/bash", config.File.ReClearShell).Output()
 	global.Log.Println("执行脚本", Succeed, err)
 
-	go global.Email(global.EmailOpt{
-		To:       config.Email.To,
-		Subject:  "数据库重启并执行清理",
-		Template: tmpl.SysEmail,
-		SendData: tmpl.SysParam{
-			Message: mStr.ToStr(Succeed),
-			SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
-		},
-	}).Send()
+	// go global.Email(global.EmailOpt{
+	// 	To:       config.Email.To,
+	// 	Subject:  "数据库重启并执行清理",
+	// 	Template: tmpl.SysEmail,
+	// 	SendData: tmpl.SysParam{
+	// 		Message: mStr.ToStr(Succeed),
+	// 		SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
+	// 	},
+	// }).Send()
 }
 
 func SysReStart() {
-	go global.Email(global.EmailOpt{
-		To:       config.Email.To,
-		Subject:  "Linux系统即将重启",
-		Template: tmpl.SysEmail,
-		SendData: tmpl.SysParam{
-			Message: "Linux系统 10 秒钟后 将自动进行重启",
-			SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
-		},
-	}).Send()
+	// go global.Email(global.EmailOpt{
+	// 	To:       config.Email.To,
+	// 	Subject:  "Linux系统即将重启",
+	// 	Template: tmpl.SysEmail,
+	// 	SendData: tmpl.SysParam{
+	// 		Message: "Linux系统 10 秒钟后 将自动进行重启",
+	// 		SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
+	// 	},
+	// }).Send()
 
 	time.Sleep(time.Second * 10)
 

@@ -7,11 +7,9 @@ import (
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxInfo"
-	"CoinMarket.net/server/tmpl"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mMongo"
 	"github.com/EasyGolang/goTools/mOKX/binance"
-	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mStruct"
 	"github.com/EasyGolang/goTools/mTime"
 	"go.mongodb.org/mongo-driver/bson"
@@ -169,28 +167,28 @@ func ReadBinancePosition10(db *mMongo.DB) (PositList []binance.PositionType) {
 }
 
 func NotificationChange(nowData binance.PositionType) {
-	dir := `<span style='color: #A69B9B;'> 错误 </span>`
+	// dir := `<span style='color: #A69B9B;'> 错误 </span>`
 
-	if nowData.Dir > 0 {
-		dir = `<span style='color: #116F19;'> 上涨 </span>`
-	}
-	if nowData.Dir < 0 {
-		dir = `<span style='color: #D93424;'> 下跌 </span>`
-	}
+	// if nowData.Dir > 0 {
+	// 	dir = `<span style='color: #116F19;'> 上涨 </span>`
+	// }
+	// if nowData.Dir < 0 {
+	// 	dir = `<span style='color: #D93424;'> 下跌 </span>`
+	// }
 
-	msg := mStr.Join(
-		"侦测币种: ", nowData.InstID, "<br />",
-		"趋势方向: ", dir, "<br />",
-		"数据时间: ", nowData.CreateTimeStr, "<br />",
-	)
-	Email := global.Email(global.EmailOpt{
-		To:       config.Email.To,
-		Subject:  "市场方向变更",
-		Template: tmpl.SysEmail,
-		SendData: tmpl.SysParam{
-			Message: msg,
-			SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
-		},
-	})
-	Email.Send()
+	// msg := mStr.Join(
+	// 	"侦测币种: ", nowData.InstID, "<br />",
+	// 	"趋势方向: ", dir, "<br />",
+	// 	"数据时间: ", nowData.CreateTimeStr, "<br />",
+	// )
+	// Email := global.Email(global.EmailOpt{
+	// 	To:       config.Email.To,
+	// 	Subject:  "市场方向变更",
+	// 	Template: tmpl.SysEmail,
+	// 	SendData: tmpl.SysParam{
+	// 		Message: msg,
+	// 		SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
+	// 	},
+	// })
+	// Email.Send()
 }

@@ -3,40 +3,32 @@ package global
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/tmpl"
+	"CoinMarket.net/server/utils/taskPush"
+	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mLog"
-	"github.com/EasyGolang/goTools/mPath"
+	"github.com/EasyGolang/goTools/mStr"
 	"github.com/EasyGolang/goTools/mTime"
 )
 
 var (
 	Log             *log.Logger // 系统日志& 重大错误或者事件
+	Run             *log.Logger //  运行日志
 	KdataLog        *log.Logger //  OKX Kdata 日志
 	BinanceKdataLog *log.Logger //  币安 Kdata 日志
-	Run             *log.Logger //  运行日志
 )
 
 func LogInit() {
-	// 检测 logs 目录
-	isLogPath := mPath.Exists(config.Dir.Log)
-	if !isLogPath {
-		// 不存在则创建 logs 目录
-		os.MkdirAll(config.Dir.Log, 0o777)
-	}
-
-	isJsonDataPath := mPath.Exists(config.Dir.JsonData)
-	if !isJsonDataPath {
-		// 不存在则创建 jsonData 目录
-		os.MkdirAll(config.Dir.JsonData, 0o777)
-	}
-
 	// 创建一个log
 	Log = mLog.NewLog(mLog.NewLogParam{
 		Path: config.Dir.Log,
 		Name: "Sys",
+	})
+
+	Run = mLog.NewLog(mLog.NewLogParam{
+		Path: config.Dir.Log,
+		Name: "Run",
 	})
 
 	KdataLog = mLog.NewLog(mLog.NewLogParam{
@@ -47,11 +39,6 @@ func LogInit() {
 	BinanceKdataLog = mLog.NewLog(mLog.NewLogParam{
 		Path: config.Dir.Log,
 		Name: "BinanceKdata",
-	})
-
-	Run = mLog.NewLog(mLog.NewLogParam{
-		Path: config.Dir.Log,
-		Name: "Run",
 	})
 
 	// 设定清除log
@@ -66,16 +53,22 @@ func LogInit() {
 }
 
 func LogErr(sum ...any) {
-	str := fmt.Sprintf("系统错误 : %+v", sum)
-	Email := Email(EmailOpt{
-		To:       config.Email.To,
-		Subject:  "LogErr",
-		Template: tmpl.SysEmail,
-		SendData: tmpl.SysParam{
-			Message: str,
-			SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
-		},
-	})
+	str := fmt.Sprintf("系统错误: %+v", sum)
 	Log.Println(str)
-	go Email.Send()
+
+	message := ""
+	if len(sum) > 0 {
+		message = mStr.ToStr(sum[0])
+	}
+	content := mJson.Format(sum)
+
+	err := taskPush.SysEmail(taskPush.SysEmailOpt{
+		From:        config.SysName,
+		Subject:     "系统错误",
+		Title:       config.SysName + " 系统出错",
+		Message:     message,
+		Content:     content,
+		Description: "出现系统错误",
+	})
+	Log.Println("邮件已发送", err)
 }

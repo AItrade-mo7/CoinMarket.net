@@ -22,7 +22,7 @@ func SWAP() {
 		},
 		Method:        "get",
 		LocalJsonPath: SWAP_file,
-		IsLocalJson:   config.SysEnv.RunMod == 1,
+		// IsLocalJson:   config.SysEnv.RunMod == 1,
 	})
 	if err != nil {
 		global.LogErr("inst.SWAP ", err)

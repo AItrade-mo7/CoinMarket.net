@@ -1,5 +1,7 @@
 package config
 
+import "github.com/EasyGolang/goTools/mStr"
+
 // var SliceHour = []int{3, 5, 8, 12, 16, 20, 24, 28, 32, 36, 40}
 // var SliceHour = []int{3, 5, 8, 12, 16, 20, 24}
 
@@ -23,3 +25,10 @@ var KdataBarOpt = []string{
 }
 
 var KdataBar = KdataBarOpt[5]
+
+// 计价的锚定货币
+var Unit = "USDT"
+
+var SPOT_suffix = mStr.Join("-", Unit)
+
+var SWAP_suffix = mStr.Join(SPOT_suffix, "-SWAP")
