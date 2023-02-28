@@ -1,13 +1,13 @@
 {
   "name": "coin-market",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "port": 8998,
   "scripts": {
-    "sync": "./_shell/GitSync.sh",
-    "serve": "./_shell/ServerStart.sh",
     "build": "./_shell/Build.sh",
+    "serve": "./_shell/ServerStart.sh",
+    "sync": "./_shell/GitSync.sh",
     "deploy": "./_shell/Deploy.sh",
-    "task": "./_shell/Task.sh",
-    "crun": "rm -rf ./logs/ && rm -rf ./jsonData/ && ./_shell/ServerStart.sh"
+    "crun": "rm -rf ./logs && rm -rf ./jsonData && npm run serve",
+    "task": "./_shell/Task.sh"
   }
 }
