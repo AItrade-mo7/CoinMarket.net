@@ -1,4 +1,4 @@
-package binanceApi
+package xxx
 
 import (
 	"strings"

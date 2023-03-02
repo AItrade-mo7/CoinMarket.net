@@ -1,6 +1,7 @@
 package ready
 
 import (
+	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/okxApi"
 )
 
@@ -30,8 +31,7 @@ func Start() {
 func SetTickerAnaly() {
 	okxApi.SetInst() // 获取并设置交易产品信息
 
-	// global.Run.Println("========= 开始获取数据 ===========")
-	// // go SetBinancePosition()
+	global.Run.Println("========= 开始获取数据 ===========")
 
 	// okxApi.SetTicker() // 计算并设置综合榜单 产出 okxInfo.TickerVol 数据
 
