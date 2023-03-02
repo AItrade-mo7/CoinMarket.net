@@ -63,8 +63,8 @@ func SetInstID(data []mOKX.TypeBinanceTicker) (TickerList []mOKX.TypeBinanceTick
 	VolumeList := VolumeSort(list)
 
 	tLen := len(VolumeList)
-	if tLen > 18 {
-		VolumeList = VolumeList[tLen-15:] // 取出最后 15 个
+	if tLen > 21 {
+		VolumeList = VolumeList[tLen-20:] // 取出最后 20 个
 	}
 
 	TickerList = Reverse(VolumeList) // 翻转数组大的排在前面

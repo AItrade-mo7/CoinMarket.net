@@ -1,6 +1,7 @@
 package okxApi
 
 import (
+	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/okxApi/binanceApi"
 	"CoinMarket.net/server/okxApi/restApi/inst"
 	"CoinMarket.net/server/okxInfo"
@@ -30,8 +31,8 @@ func SetInst() {
 	for _, val := range InstList {
 		if val.InstType == "SWAP" {
 			SPOT := MergeInstList[val.Uly]
-			val.Symbol = SPOT.Symbol
 			if len(SPOT.Symbol) > 4 {
+				val.Symbol = SPOT.Symbol
 				MergeInstList[val.InstID] = val
 			}
 		}
@@ -40,5 +41,7 @@ func SetInst() {
 	okxInfo.Inst = make(map[string]mOKX.TypeInst) // 清理产品信息
 	if len(MergeInstList) > 10 {
 		okxInfo.Inst = MergeInstList // 获取并设置交易产品信息
+	} else {
+		global.LogErr("okxApi.SetInst 数量不足", len(MergeInstList))
 	}
 }

@@ -15,13 +15,13 @@ import (
 )
 
 func SetTicker() {
-	binanceApi.GetTicker() // 获取 okxInfo.BinanceTickerList
-	tickers.GetTicker()    // 获取 okxInfo.OKXTickerList
-
 	if len(okxInfo.Inst) < 10 {
 		global.LogErr("ready.SetTicker okxInfo.Inst 数据条目不正确", len(okxInfo.Inst))
 		return
 	}
+
+	binanceApi.GetTicker() // 获取 okxInfo.BinanceTickerList
+	tickers.GetTicker()    // 获取 okxInfo.OKXTickerList
 
 	if len(okxInfo.BinanceTickerList) < 6 || len(okxInfo.OKXTickerList) < 6 {
 		global.LogErr("ready.SetTicker TickerList 数据条目不正确", len(okxInfo.BinanceTickerList), len(okxInfo.OKXTickerList))
@@ -42,7 +42,7 @@ func SetTicker() {
 		}
 	}
 
-	VolumeSortList := mOKX.SortVolume(tickerList)
+	VolumeSortList := mOKX.SortVolume(tickerList) // 按照成交量排序
 	okxInfo.TickerVol = []mOKX.TypeTicker{}
 	okxInfo.TickerVol = VolumeSortList
 }
@@ -80,8 +80,8 @@ func TickerCount(OKXTicker mOKX.TypeOKXTicker, BinanceTicker mOKX.TypeBinanceTic
 
 	// 合约 上架小于 36 天的不计入榜单
 	diffOnLine := mCount.Sub(mStr.ToStr(Ticker.TimeUnix), SWAP.ListTime)
-	diffDay := mCount.Div(diffOnLine, mTime.UnixTime.Day)
-	if mCount.Le(diffDay, "36") < 0 {
+	diffDay := mCount.Div(diffOnLine, mTime.UnixTime.Day) // 转化为天数
+	if mCount.Le(diffDay, "36") < 0 {                     // 少于 36 天的时候 返回空
 		return mOKX.TypeTicker{}
 	}
 

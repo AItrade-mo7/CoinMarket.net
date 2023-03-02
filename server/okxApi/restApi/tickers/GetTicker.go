@@ -56,8 +56,8 @@ func setTicker(data any) {
 
 	VolumeList := VolumeSort(tickerList) // 按照成交额排序之后
 	tLen := len(VolumeList)
-	if tLen > 18 {
-		VolumeList = VolumeList[tLen-15:] // 取出最后 15 个
+	if tLen > 20 {
+		VolumeList = VolumeList[tLen-20:] // 取出最后 20 个
 	}
 	okxInfo.OKXTickerList = []mOKX.TypeOKXTicker{}
 	okxInfo.OKXTickerList = Reverse(VolumeList) // 翻转数组大的排在前面
