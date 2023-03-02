@@ -2,10 +2,15 @@ package ready
 
 import (
 	"CoinMarket.net/server/global"
+	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi"
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/tickerAnaly"
+	"github.com/EasyGolang/goTools/mClock"
+	"github.com/EasyGolang/goTools/mFile"
+	"github.com/EasyGolang/goTools/mJson"
+	"github.com/EasyGolang/goTools/mTime"
 )
 
 // 这里只是榜单数据的爬取和搜集。
@@ -24,10 +29,10 @@ func Start() {
 
 	// 数据榜单并进行数据库存储
 	SetTickerAnaly() // 默认执行一次
-	// go mClock.New(mClock.OptType{
-	// 	Func: SetTickerAnaly,
-	// 	Spec: "1 1,6,11,16,21,26,31,36,41,46,51,56 * * * ? ", // 每隔5分钟比标准时间晚一分钟 过1秒 执行查询
-	// })
+	go mClock.New(mClock.OptType{
+		Func: SetTickerAnaly,
+		Spec: "1 1,6,11,16,21,26,31,36,41,46,51,56 * * * ? ", // 每隔5分钟比标准时间晚一分钟 过1秒 执行一次查询
+	})
 }
 
 // 获取榜单数据
@@ -45,13 +50,14 @@ func SetTickerAnaly() {
 		TickerVol:   okxInfo.TickerVol,
 		TickerKdata: okxInfo.TickerKdata,
 	})
+	mFile.Write(config.Dir.JsonData+"TickerAnaly.json", mJson.ToStr(okxInfo.TickerAnaly))
 
-	// if IsOKXDataTimeScale(mTime.GetUnixInt64()) {
-	// 	go SetTickerAnalyDB()
-	// 	go SetCoinTickerDB()
-	// 	go SetCoinKdataDB("BTC")
-	// 	go SetCoinKdataDB("ETH")
-	// }
+	if IsOKXDataTimeScale(mTime.GetUnixInt64()) {
+		go SetTickerAnalyDB()
+		go SetCoinTickerDB()
+		go SetCoinKdataDB("BTC")
+		go SetCoinKdataDB("ETH")
+	}
 }
 
 // func ReClearShell() {

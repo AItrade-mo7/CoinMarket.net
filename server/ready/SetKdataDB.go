@@ -14,13 +14,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// 存储币种
 func SetCoinKdataDB(CoinName string) {
 	if CoinName == "BTC" || CoinName == "ETH" {
 	} else {
 		return
 	}
 
-	tableName := CoinName + "USDT"
 	InstID := CoinName + "-USDT"
 
 	list := okxInfo.TickerKdata[InstID]
@@ -34,10 +34,10 @@ func SetCoinKdataDB(CoinName string) {
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AItrade",
+		DBName:   "CoinMarket",
 		Timeout:  Timeout,
-	}).Connect().Collection(tableName)
-	defer global.Run.Println("关闭数据库连接", tableName)
+	}).Connect().Collection(InstID)
+	defer global.Run.Println("关闭数据库连接", InstID)
 	defer db.Close()
 
 	for _, Kd := range list {
@@ -62,11 +62,12 @@ func SetCoinKdataDB(CoinName string) {
 		upOpt.SetUpsert(true)
 		_, err := db.Table.UpdateOne(db.Ctx, FK, UK, upOpt)
 		if err != nil {
-			global.LogErr(tableName+"数据更插失败  %+v", err)
+			global.LogErr(InstID+"数据更插失败  %+v", err)
 		}
 	}
 }
 
+// 存储排行榜单
 func SetCoinTickerDB() {
 	Timeout := len(okxInfo.TickerVol) * 20
 
@@ -77,7 +78,7 @@ func SetCoinTickerDB() {
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AItrade",
+		DBName:   "CoinMarket",
 		Timeout:  Timeout,
 	}).Connect().Collection("CoinTicker")
 	defer global.Run.Println("关闭数据库连接 CoinTicker")
@@ -114,6 +115,7 @@ func SetCoinTickerDB() {
 	}
 }
 
+// 存储分析结果
 func SetTickerAnalyDB() {
 	Timeout := len(okxInfo.TickerAnaly.AnalySingle) * 20
 
@@ -124,7 +126,7 @@ func SetTickerAnalyDB() {
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AItrade",
+		DBName:   "CoinMarket",
 		Timeout:  Timeout,
 	}).Connect().Collection("TickerAnaly")
 	defer global.Run.Println("关闭数据库连接 TickerAnaly")
@@ -154,9 +156,8 @@ func SetTickerAnalyDB() {
 	if err != nil {
 		global.LogErr("数据更插失败 TickerAnaly %+v", err)
 	}
-
 	global.Run.Println(
-		"CoinTicker更插完毕",
+		"TickerAnaly 更插完毕",
 		TickerAnaly.TimeStr,
 		len(TickerAnaly.TickerVol),
 		TickerAnaly.TickerVol[0].CcyName,
