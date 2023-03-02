@@ -50,7 +50,7 @@ func SetTickerAnaly() {
 		TickerVol:   okxInfo.TickerVol,
 		TickerKdata: okxInfo.TickerKdata,
 	})
-	mFile.Write(config.Dir.JsonData+"TickerAnaly.json", mJson.ToStr(okxInfo.TickerAnaly))
+	mFile.Write(config.Dir.JsonData+"/TickerAnaly.json", mJson.ToStr(okxInfo.TickerAnaly))
 
 	if IsOKXDataTimeScale(mTime.GetUnixInt64()) {
 		go SetTickerAnalyDB()
