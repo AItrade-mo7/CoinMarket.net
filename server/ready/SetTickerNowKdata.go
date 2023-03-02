@@ -21,7 +21,7 @@ func SetTickerNowKdata() {
 			TickerList = append(TickerList, item)
 			TickerKdata[item.InstID] = List
 		} else {
-			global.LogErr("ready.SetTickerNowKdata Kdata 长度不足", item.InstID, len(List))
+			global.LogErr("ready.SetTickerNowKdata Kdata 长度不足，从数据中除名", item.InstID, len(List))
 		}
 
 	}

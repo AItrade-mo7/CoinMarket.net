@@ -2,7 +2,10 @@ package ready
 
 import (
 	"CoinMarket.net/server/global"
+	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi"
+	"CoinMarket.net/server/okxInfo"
+	"CoinMarket.net/server/tickerAnaly"
 )
 
 // 这里只是榜单数据的爬取和搜集。
@@ -35,13 +38,13 @@ func SetTickerAnaly() {
 
 	okxApi.SetTicker() // 计算并设置综合榜单 产出 okxInfo.TickerVol 数据
 
-	// SetTickerNowKdata() // 产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 数据
+	SetTickerNowKdata() // 产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 数据
 
-	// okxInfo.TickerAnaly = dbType.AnalyTickerType{} // 这里只是数据的搜集与格式化
-	// okxInfo.TickerAnaly = dbType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
-	// 	TickerVol:   okxInfo.TickerVol,
-	// 	TickerKdata: okxInfo.TickerKdata,
-	// })
+	okxInfo.TickerAnaly = dbType.AnalyTickerType{} // 这里只是数据的搜集与格式化
+	okxInfo.TickerAnaly = dbType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
+		TickerVol:   okxInfo.TickerVol,
+		TickerKdata: okxInfo.TickerKdata,
+	})
 
 	// if IsOKXDataTimeScale(mTime.GetUnixInt64()) {
 	// 	go SetTickerAnalyDB()
