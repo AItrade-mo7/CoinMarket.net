@@ -35,6 +35,7 @@ func ReClearShell() {
 	global.Log.Println("执行脚本", Succeed, err)
 
 	taskPush.SysEmail(taskPush.SysEmailOpt{
+		From:        config.SysName,
 		Subject:     "执行清理",
 		Title:       "执行了一次清理",
 		Message:     "执行一次" + config.File.ReClearShell + "脚本",
@@ -45,6 +46,7 @@ func ReClearShell() {
 
 func SysReStart() {
 	taskPush.SysEmail(taskPush.SysEmailOpt{
+		From:        config.SysName,
 		Subject:     "Linux系统即将重启",
 		Title:       "系统即将重启",
 		Message:     "系统重启通知",
