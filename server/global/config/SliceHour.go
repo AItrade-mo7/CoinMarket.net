@@ -13,6 +13,7 @@ var KdataLen = 100
  [1m/3m/5m/15m/30m/1H/2H/4H]
 */
 
+// mOKX.KdataBarOpt 的 key 值
 var KdataBarOpt = []string{
 	"1m",
 	"3m",
