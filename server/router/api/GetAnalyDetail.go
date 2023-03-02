@@ -22,7 +22,7 @@ func GetAnalyDetail(c *fiber.Ctx) error {
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AItrade",
+		DBName:   "CoinMarket",
 	}).Connect().Collection("TickerAnaly")
 	defer db.Close()
 

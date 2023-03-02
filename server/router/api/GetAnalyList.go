@@ -31,7 +31,7 @@ func GetTickerAnaly(opt dbSearch.FindParam) (resData dbSearch.PagingType, resErr
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AItrade",
+		DBName:   "CoinMarket",
 	}).Connect().Collection("TickerAnaly")
 	defer db.Close()
 	// 构建搜索参数
