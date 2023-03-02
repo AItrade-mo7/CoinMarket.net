@@ -35,8 +35,8 @@ func WholeAnaly(TickerAnalySingle map[string][]mOKX.AnalySliceType) []mOKX.TypeW
 	}
 
 	for key, list := range TickerSingle {
-		TickerVolumeList[key] = mOKX.SortAnalySlice_Volume(list)
-		TickerURList[key] = mOKX.SortAnalySlice_UR(list)
+		TickerVolumeList[key] = mOKX.SortAnalySlice_Volume(list) // 成交量排序
+		TickerURList[key] = mOKX.SortAnalySlice_UR(list)         // 涨跌幅排序
 	}
 
 	for key, list := range TickerVolumeList {
@@ -48,8 +48,19 @@ func WholeAnaly(TickerAnalySingle map[string][]mOKX.AnalySliceType) []mOKX.TypeW
 	return mOKX.Sort_DiffHour(TickerAnalyWhole)
 }
 
-func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWholeTickerAnaly) {
+// list1 :成交量排序数组   list2 涨跌幅排序数组
+func TickerWholeAnaly(list1, list2 []mOKX.AnalySliceType) (resData mOKX.TypeWholeTickerAnaly) {
 	resData = mOKX.TypeWholeTickerAnaly{}
+
+	VolList := make([]mOKX.AnalySliceType, len(list1)) // 成交量排序数组
+	copy(VolList, list1)
+
+	URList := make([]mOKX.AnalySliceType, len(list2)) // 涨跌幅排序数组
+	copy(URList, list2)
+
+	inciseURList := URList[1 : len(URList)-1] // 去除一个最高值和最低值
+	newURList := make([]mOKX.AnalySliceType, len(inciseURList))
+	copy(newURList, inciseURList)
 
 	// 开始
 	var (
@@ -57,12 +68,8 @@ func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWhol
 		Down_Num []string // 下跌幅度的集合
 	)
 
-	inciseURList := URList[1 : len(URList)-1] // 去除一个最高值和最低值
-	newURList := make([]mOKX.AnalySliceType, len(inciseURList))
-	copy(newURList, inciseURList)
-
 	for _, val := range newURList {
-		U_R_diff := mCount.Le(val.RosePer, "0")
+		U_R_diff := mCount.Le(val.RosePer, "0") // 涨幅的正负
 
 		if U_R_diff > 0 {
 			Up_Num = append(Up_Num, val.RosePer)
@@ -97,15 +104,15 @@ func TickerWholeAnaly(list, URList []mOKX.AnalySliceType) (resData mOKX.TypeWhol
 		resData.DirIndex = -1
 	}
 
-	resData.StartTimeStr = list[0].StartTimeStr
-	resData.StartTimeUnix = list[0].StartTimeUnix
+	resData.StartTimeStr = VolList[0].StartTimeStr
+	resData.StartTimeUnix = VolList[0].StartTimeUnix
 
-	resData.EndTimeStr = list[0].EndTimeStr
-	resData.EndTimeUnix = list[0].EndTimeUnix
+	resData.EndTimeStr = VolList[0].EndTimeStr
+	resData.EndTimeUnix = VolList[0].EndTimeUnix
 
 	resData.MaxUP = URList[0] // 这里要按照涨跌幅 排序
 	resData.MaxDown = URList[len(URList)-1]
 
-	resData.DiffHour = list[0].DiffHour
+	resData.DiffHour = VolList[0].DiffHour
 	return resData
 }
