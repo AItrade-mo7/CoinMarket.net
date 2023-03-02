@@ -29,6 +29,5 @@ func GetInst() (InstList map[string]mOKX.TypeInst) {
 			InstList[val.InstID] = val
 		}
 	}
-
 	return
 }
