@@ -9,6 +9,7 @@ import (
 	"CoinMarket.net/server/utils/taskPush"
 	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mPath"
+	"github.com/EasyGolang/goTools/mStr"
 )
 
 func StartEmail() {
@@ -33,27 +34,23 @@ func ReClearShell() {
 	Succeed, err := exec.Command("/bin/bash", config.File.ReClearShell).Output()
 	global.Log.Println("执行脚本", Succeed, err)
 
-	// go global.Email(global.EmailOpt{
-	// 	To:       config.Email.To,
-	// 	Subject:  "数据库重启并执行清理",
-	// 	Template: tmpl.SysEmail,
-	// 	SendData: tmpl.SysParam{
-	// 		Message: mStr.ToStr(Succeed),
-	// 		SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
-	// 	},
-	// }).Send()
+	taskPush.SysEmail(taskPush.SysEmailOpt{
+		Subject:     "执行清理",
+		Title:       "执行了一次清理",
+		Message:     "执行一次" + config.File.ReClearShell + "脚本",
+		Content:     mStr.ToStr(Succeed),
+		Description: "系统清理",
+	})
 }
 
 func SysReStart() {
-	// go global.Email(global.EmailOpt{
-	// 	To:       config.Email.To,
-	// 	Subject:  "Linux系统即将重启",
-	// 	Template: tmpl.SysEmail,
-	// 	SendData: tmpl.SysParam{
-	// 		Message: "Linux系统 10 秒钟后 将自动进行重启",
-	// 		SysTime: mTime.UnixFormat(mTime.GetUnixInt64()),
-	// 	},
-	// }).Send()
+	taskPush.SysEmail(taskPush.SysEmailOpt{
+		Subject:     "Linux系统即将重启",
+		Title:       "系统即将重启",
+		Message:     "系统重启通知",
+		Content:     "Linux系统 10 秒钟后 将自动进行重启",
+		Description: "系统重启",
+	})
 
 	time.Sleep(time.Second * 10)
 
