@@ -1,14 +1,15 @@
 package private
 
 import (
-	"CoinMarket.net/server/router/middle"
+	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/global/middle"
 	"CoinMarket.net/server/router/result"
 	"github.com/EasyGolang/goTools/mStr"
 	"github.com/gofiber/fiber/v2"
 )
 
 func MiddleWare(c *fiber.Ctx) error {
-	c.Set("Data-Path", "CoinMarket.net/CoinMarket/private")
+	c.Set("Data-Path", config.SysName+"/api/private")
 
 	// Token 验证
 	_, err := middle.TokenAuth(c)

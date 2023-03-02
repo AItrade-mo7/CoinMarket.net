@@ -6,8 +6,8 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/global/middle"
 	"CoinMarket.net/server/router/api"
-	"CoinMarket.net/server/router/middle"
 	"CoinMarket.net/server/router/private"
 	"CoinMarket.net/server/router/public"
 	"github.com/EasyGolang/goTools/mStr"
