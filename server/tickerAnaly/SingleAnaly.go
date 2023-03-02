@@ -1,6 +1,8 @@
 package tickerAnaly
 
 import (
+	"strings"
+
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"github.com/EasyGolang/goTools/mCount"
@@ -60,12 +62,13 @@ func (_this *SingleType) SetInfo() *SingleType {
 
 // 对数据进行切片
 func (_this *SingleType) SliceKdata(hour int) (resData mOKX.AnalySliceType) {
-	resData = mOKX.AnalySliceType{}
 	list := _this.List
 	Len := len(_this.List)
 
 	startItem := list[Len-1-hour]
 	lastItem := list[Len-1]
+
+	resData = mOKX.AnalySliceType{}
 
 	resData.StartTimeStr = startItem.TimeStr
 	resData.StartTimeUnix = startItem.TimeUnix
@@ -73,9 +76,7 @@ func (_this *SingleType) SliceKdata(hour int) (resData mOKX.AnalySliceType) {
 	resData.EndTimeUnix = lastItem.TimeUnix
 	DiffHour := (resData.EndTimeUnix - resData.StartTimeUnix) / mTime.UnixTimeInt64.Hour
 	resData.DiffHour = int(DiffHour)
-
 	resData.Len = hour + 1
-
 	return
 }
 
@@ -105,8 +106,8 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 	firstElm := list[0]
 	lastElm := list[len(list)-1]
 
-	Volume := "0" // 成交量总和
-	VolumeHour := make(map[string][]string)
+	Volume := "0"                           // 成交量总和
+	VolumeHour := make(map[string][]string) // 每小时的成交量数组
 
 	U_shade := []string{}
 	D_shade := []string{}
@@ -123,7 +124,7 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 		VolumeHour[TimeKey] = append(VolumeHour[TimeKey], item.Vol)
 	}
 
-	VolumeHourArr := []string{}
+	VolumeHourArr := []string{} // 每小时成交量总和
 	for _, l := range VolumeHour {
 		Vol := "0"
 		for _, v := range l {
@@ -136,8 +137,8 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 	Sort_L := mOKX.Sort_L(list)         // 最低价排序 高 - 低
 	Sort_HLPer := mOKX.Sort_HLPer(list) // 振幅排序 高 - 低
 
-	slice.Volume = Volume
-	slice.RosePer = mCount.RoseCent(lastElm.C, firstElm.C) // 最后一个的 C - 一开始的 CBas
+	slice.Volume = Volume                                  // 成交量总和
+	slice.RosePer = mCount.RoseCent(lastElm.C, firstElm.O) // 最后一个的 C - 一开始的 O
 	slice.H = Sort_H[0].H
 	slice.L = Sort_L[len(Sort_H)-1].L
 
@@ -154,6 +155,8 @@ func (_this *SingleType) AnalySlice(Index int) mOKX.AnalySliceType {
 
 	VolumeAvg := mCount.Average(VolumeHourArr)
 	slice.VolumeAvg = mCount.Cent(VolumeAvg, 3)
+
+	slice.CcyName = strings.Replace(slice.InstID, config.SPOT_suffix, "", -1)
 
 	_this.Slice[Index] = slice
 
