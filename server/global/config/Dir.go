@@ -80,6 +80,6 @@ func DirInit() {
 	os.Remove(File.ReClearShell)
 	mFile.Write(File.ReClearShell, tmpl.ReClear)
 
-	os.Remove(File.ReClearShell)
+	os.Remove(File.SysReStart)
 	mFile.Write(File.SysReStart, tmpl.SysReStart)
 }
