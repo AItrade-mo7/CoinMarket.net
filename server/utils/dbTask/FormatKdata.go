@@ -18,12 +18,12 @@ func FormatKdata() {
 	okxApi.SetInst() // 获取并设置交易产品信息
 
 	SetKdata("BTC")
+	SetKdata("ETH")
 }
 
-var Page = 263
+var Page = 270
 
 func SetKdata(CcyName string) {
-	tableName := CcyName + "USDT"
 	InstID := CcyName + "-USDT"
 
 	AllList := []mOKX.TypeKd{}
@@ -57,7 +57,7 @@ func SetKdata(CcyName string) {
 	// 	global.Run.Println(nowItem.TimeUnix - preItem.TimeUnix)
 	// }
 
-	// 链接数据库
+	// // 链接数据库
 	Timeout := len(AllList) * 10
 	if Timeout < 100 {
 		Timeout = 100
@@ -66,10 +66,10 @@ func SetKdata(CcyName string) {
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
-		DBName:   "AItrade",
+		DBName:   "CoinMarket",
 		Timeout:  Timeout,
-	}).Connect().Collection(tableName)
-	defer global.Run.Println("关闭数据库连接", tableName)
+	}).Connect().Collection(InstID)
+	defer global.Run.Println("关闭数据库连接", InstID)
 	defer db.Close()
 
 	for _, Kd := range AllList {
@@ -94,8 +94,8 @@ func SetKdata(CcyName string) {
 		upOpt.SetUpsert(true)
 		_, err := db.Table.UpdateOne(db.Ctx, FK, UK, upOpt)
 		if err != nil {
-			global.Run.Println(tableName+"数据更插失败  %+v", err)
+			global.Run.Println(InstID+"数据更插失败  %+v", err)
 		}
-		global.Run.Println("数据更插成功", tableName, Kd.TimeStr)
+		global.Run.Println("数据更插成功", InstID, Kd.TimeStr)
 	}
 }
