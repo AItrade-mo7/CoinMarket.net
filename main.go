@@ -5,8 +5,7 @@ import (
 
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
-	"CoinMarket.net/server/ready"
-	"CoinMarket.net/server/router"
+	"CoinMarket.net/server/utils/dbTask"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -18,9 +17,11 @@ func main() {
 	// 初始化系统参数
 	global.Start()
 
+	dbTask.BackTest()
+
 	// 数据准备
-	ready.Start()
+	// ready.Start()
 
 	// 启动 http 监听服务
-	router.Start()
+	// router.Start()
 }
