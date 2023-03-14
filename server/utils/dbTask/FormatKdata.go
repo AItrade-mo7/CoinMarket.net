@@ -14,21 +14,32 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func FormatKdata() {
-	okxApi.SetInst() // 获取并设置交易产品信息
-
-	SetKdata("BTC")
-	SetKdata("ETH")
+type FormatKdataObj struct {
+	Page int
 }
 
-var Page = 270
+func FormatKdata() *FormatKdataObj {
+	okxApi.SetInst() // 获取并设置交易产品信息
+	obj := FormatKdataObj{}
 
-func SetKdata(CcyName string) {
+	obj.Page = 270 // 请求近270 页的数据，一页 100 条。 每条 1 小时
+
+	// 开始塞入 BTC 的数据
+	obj.SetKdata("BTC")
+
+	// 开始塞入 ETH 的数据
+	obj.SetKdata("ETH")
+
+	return &obj
+}
+
+func (obj *FormatKdataObj) SetKdata(CcyName string) {
 	InstID := CcyName + "-USDT"
 
 	AllList := []mOKX.TypeKd{}
 
-	for i := 0; i < Page; i++ {
+	// 请求数据
+	for i := 0; i < obj.Page; i++ {
 		time.Sleep(time.Second / 3)
 		List := mOKX.GetKdata(mOKX.GetKdataOpt{
 			InstID: InstID,
@@ -47,17 +58,17 @@ func SetKdata(CcyName string) {
 	}
 
 	// 数据检查
-	// for key := range AllList {
-	// 	preIndex := key - 1
-	// 	if preIndex < 0 {
-	// 		preIndex = 0
-	// 	}
-	// 	preItem := AllList[preIndex]
-	// 	nowItem := AllList[key]
-	// 	global.Run.Println(nowItem.TimeUnix - preItem.TimeUnix)
-	// }
+	for key := range AllList {
+		preIndex := key - 1
+		if preIndex < 0 {
+			preIndex = 0
+		}
+		preItem := AllList[preIndex]
+		nowItem := AllList[key]
+		global.Run.Println(nowItem.TimeUnix - preItem.TimeUnix)
+	}
 
-	// // 链接数据库
+	// 链接数据库
 	Timeout := len(AllList) * 10
 	if Timeout < 100 {
 		Timeout = 100
