@@ -3,7 +3,7 @@ module CoinMarket.net
 go 1.18
 
 require (
-	github.com/EasyGolang/goTools v1.0.24
+	github.com/EasyGolang/goTools v1.0.25
 	github.com/gofiber/fiber/v2 v2.42.0
 	github.com/gofiber/websocket/v2 v2.1.0
 	github.com/json-iterator/go v1.1.12
@@ -19,7 +19,7 @@ require (
 	github.com/antchfx/xmlquery v1.3.15 // indirect
 	github.com/antchfx/xpath v1.2.4 // indirect
 	github.com/bitly/go-simplejson v0.5.0 // indirect
-	github.com/fasthttp/websocket v1.5.1 // indirect
+	github.com/fasthttp/websocket v1.5.2 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gocolly/colly v1.2.0 // indirect
@@ -57,7 +57,7 @@ require (
 	github.com/temoto/robotstxt v1.1.2 // indirect
 	github.com/tinylib/msgp v1.1.8 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasthttp v1.44.0 // indirect
+	github.com/valyala/fasthttp v1.45.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	github.com/wenlng/go-user-agent v1.0.2 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
@@ -70,7 +70,7 @@ require (
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/protobuf v1.29.1 // indirect
+	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
