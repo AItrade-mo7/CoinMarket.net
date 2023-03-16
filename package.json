@@ -7,7 +7,6 @@
     "serve": "./_shell/ServerStart.sh",
     "sync": "./_shell/GitSync.sh",
     "deploy": "./_shell/Deploy.sh",
-    "crun": "rm -rf ./logs && rm -rf ./jsonData && npm run serve",
     "task": "./_shell/Task.sh"
   }
 }

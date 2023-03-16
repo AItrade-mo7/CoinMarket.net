@@ -1,8 +1,8 @@
 #!/bin/bash
-# 加载变量
-source "./_shell/init.sh"
-#############
 
+## 设置并加载变量
+source "./_shell/init.sh"
+OutPutPath=${OutPutPath}
 StartName="Task-TickerAnaly"
 BuildName=${StartName}
 DeployPath="/root/ProdProject/"${StartName}
