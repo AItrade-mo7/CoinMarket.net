@@ -7,6 +7,7 @@
     "serve": "./_shell/ServerStart.sh",
     "sync": "./_shell/GitSync.sh",
     "deploy": "./_shell/Deploy.sh",
-    "task": "./_shell/Task.sh"
+    "task": "./_shell/TaskRun.sh",
+    "task-deploy": "./_shell/TaskDeploy.sh"
   }
 }
