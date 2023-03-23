@@ -1,6 +1,7 @@
 package api
 
 import (
+	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/okxInfo"
 	"CoinMarket.net/server/router/result"
 	"github.com/EasyGolang/goTools/mFiber"
@@ -22,7 +23,7 @@ func GetNowKdata(c *fiber.Ctx) error {
 
 	KdataList := okxInfo.TickerKdata[json.InstID]
 
-	if len(KdataList) < 120 {
+	if len(KdataList) < config.KdataLen {
 		return c.JSON(result.Fail.WithData(mStr.Join("长度不足,", len(KdataList))))
 	}
 
