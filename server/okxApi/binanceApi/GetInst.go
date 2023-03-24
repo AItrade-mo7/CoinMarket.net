@@ -72,16 +72,15 @@ func GetInst() (InstList []SymbolType) {
 	var result InstType
 	jsoniter.Unmarshal(resData, &result)
 
-	if len(result.Symbols) < 10 {
-		global.LogErr("binanceApi.GetInst 长度不足", len(result.Symbols))
-		return
-	}
-
 	InstList = []SymbolType{}
 	for _, val := range result.Symbols {
 		if val.QuoteAsset == "USDT" && val.Status == "TRADING" {
 			InstList = append(InstList, val)
 		}
+	}
+
+	if len(InstList) < 10 {
+		global.LogErr("binanceApi.GetInst 长度不足", len(InstList))
 	}
 
 	return

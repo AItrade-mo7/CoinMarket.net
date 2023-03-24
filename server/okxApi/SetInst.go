@@ -17,6 +17,7 @@ func SetInst() {
 	MergeInstList := make(map[string]mOKX.TypeInst)
 	// 整理现货
 	for _, okxItem := range InstList {
+		MergeInstList[okxItem.InstID] = okxItem
 		Symbol := mStr.Join(okxItem.BaseCcy, okxItem.QuoteCcy)
 		for _, binanceItem := range binanceInstList {
 			if binanceItem.Symbol == Symbol {
@@ -33,8 +34,8 @@ func SetInst() {
 			SPOT := MergeInstList[val.Uly]
 			if len(SPOT.Symbol) > 4 {
 				val.Symbol = SPOT.Symbol
-				MergeInstList[val.InstID] = val
 			}
+			MergeInstList[val.InstID] = val
 		}
 	}
 
