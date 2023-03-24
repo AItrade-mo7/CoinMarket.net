@@ -10,14 +10,18 @@ import (
 )
 
 func SetInst() {
+	InstList := inst.GetInst()
+
 	binanceInstList := binanceApi.GetInst()
 
-	InstList := inst.GetInst()
+	if len(InstList) < 10 || len(binanceInstList) < 10 {
+		global.LogErr("okxApi.SetInst 数量不足1", len(InstList), len(binanceInstList))
+		return
+	}
 
 	MergeInstList := make(map[string]mOKX.TypeInst)
 	// 整理现货
 	for _, okxItem := range InstList {
-		MergeInstList[okxItem.InstID] = okxItem
 		Symbol := mStr.Join(okxItem.BaseCcy, okxItem.QuoteCcy)
 		for _, binanceItem := range binanceInstList {
 			if binanceItem.Symbol == Symbol {
@@ -34,8 +38,8 @@ func SetInst() {
 			SPOT := MergeInstList[val.Uly]
 			if len(SPOT.Symbol) > 4 {
 				val.Symbol = SPOT.Symbol
+				MergeInstList[val.InstID] = val
 			}
-			MergeInstList[val.InstID] = val
 		}
 	}
 
@@ -43,6 +47,6 @@ func SetInst() {
 	if len(MergeInstList) > 10 {
 		okxInfo.Inst = MergeInstList // 获取并设置交易产品信息
 	} else {
-		global.LogErr("okxApi.SetInst 数量不足", len(MergeInstList))
+		global.LogErr("okxApi.SetInst 数量不足2", len(MergeInstList))
 	}
 }
