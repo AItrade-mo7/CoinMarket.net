@@ -1,6 +1,6 @@
 module CoinMarket.net
 
-go 1.18
+go 1.20
 
 require (
 	github.com/EasyGolang/goTools v1.0.28
