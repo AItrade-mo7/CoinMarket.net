@@ -3,7 +3,7 @@ module CoinMarket.net
 go 1.20
 
 require (
-	github.com/EasyGolang/goTools v1.0.28
+	github.com/EasyGolang/goTools v1.0.30
 	github.com/gofiber/fiber/v2 v2.43.0
 	github.com/gofiber/websocket/v2 v2.1.0
 	github.com/json-iterator/go v1.1.12
@@ -64,11 +64,11 @@ require (
 	github.com/xdg-go/scram v1.1.2 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
-	golang.org/x/crypto v0.7.0 // indirect
-	golang.org/x/net v0.8.0 // indirect
+	golang.org/x/crypto v0.8.0 // indirect
+	golang.org/x/net v0.9.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.7.0 // indirect
-	golang.org/x/text v0.8.0 // indirect
+	golang.org/x/text v0.9.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
