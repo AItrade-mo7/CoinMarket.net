@@ -7,6 +7,11 @@ import (
 	"github.com/EasyGolang/goTools/mTime"
 )
 
+/*
+18  80   340
+
+*/
+
 type TickerAnalyParam struct {
 	TickerVol   []mOKX.TypeTicker
 	TickerKdata map[string][]mOKX.TypeKd
