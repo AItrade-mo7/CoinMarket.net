@@ -18,6 +18,7 @@ func SetTickerNowKdata() {
 
 	// 一个列表最多 15 条， 一条请求结束才会是下一条
 	for _, item := range okxInfo.TickerVol {
+		time.Sleep(time.Second / 3)
 		List := Get400Kdata(item.InstID)
 		if len(List) == config.KdataLen*(Page+1) {
 			TickerList = append(TickerList, item)

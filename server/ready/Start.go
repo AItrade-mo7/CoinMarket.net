@@ -2,8 +2,14 @@ package ready
 
 import (
 	"CoinMarket.net/server/global"
+	"CoinMarket.net/server/global/config"
+	"CoinMarket.net/server/global/dbType"
 	"CoinMarket.net/server/okxApi"
+	"CoinMarket.net/server/okxInfo"
+	"CoinMarket.net/server/tickerAnaly"
 	"github.com/EasyGolang/goTools/mClock"
+	"github.com/EasyGolang/goTools/mFile"
+	"github.com/EasyGolang/goTools/mJson"
 	"github.com/EasyGolang/goTools/mTime"
 )
 
@@ -39,12 +45,12 @@ func SetTickerAnaly() {
 
 	SetTickerNowKdata() // 产出 okxInfo.TickerVol 和 okxInfo.TickerKdata 数据
 
-	// okxInfo.TickerAnaly = dbType.AnalyTickerType{} // 这里只是数据的搜集与格式化
-	// okxInfo.TickerAnaly = dbType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
-	// 	TickerVol:   okxInfo.TickerVol,
-	// 	TickerKdata: okxInfo.TickerKdata,
-	// })
-	// mFile.Write(config.Dir.JsonData+"/TickerAnaly.json", mJson.ToStr(okxInfo.TickerAnaly))
+	okxInfo.TickerAnaly = dbType.AnalyTickerType{} // 这里只是数据的搜集与格式化
+	okxInfo.TickerAnaly = dbType.GetAnalyTicker(tickerAnaly.TickerAnalyParam{
+		TickerVol:   okxInfo.TickerVol,
+		TickerKdata: okxInfo.TickerKdata,
+	})
+	mFile.Write(config.Dir.JsonData+"/TickerAnaly.json", mJson.ToStr(okxInfo.TickerAnaly))
 
 	if IsOKXDataTimeScale(mTime.GetUnixInt64()) {
 		go SetTickerAnalyDB()

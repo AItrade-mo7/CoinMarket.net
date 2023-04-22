@@ -23,7 +23,7 @@ func GetAnalyTicker(opt tickerAnaly.TickerAnalyParam) (resData AnalyTickerType) 
 	resData = AnalyTickerType{}
 	resData.Version = 1
 
-	if len(opt.TickerVol) > 3 && len(opt.TickerKdata) == len(opt.TickerVol) && len(opt.TickerKdata["BTC-USDT"]) == config.KdataLen {
+	if len(opt.TickerVol) > 3 && len(opt.TickerKdata) == len(opt.TickerVol) && len(opt.TickerKdata["BTC-USDT"]) == config.KdataLen*4 {
 	} else {
 		global.LogErr("dbType.GetAnalyTicker", len(opt.TickerVol), len(opt.TickerKdata), len(opt.TickerKdata["BTC-USDT"]))
 		return
