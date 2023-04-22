@@ -19,7 +19,7 @@ type CoinTickerTable struct {
 }
 
 func JoinCoinTicker(opt tickerAnaly.TickerAnalyParam) CoinTickerTable {
-	if len(opt.TickerVol) > 3 && len(opt.TickerKdata) == len(opt.TickerVol) && len(opt.TickerKdata["BTC-USDT"]) == config.KdataLen {
+	if len(opt.TickerVol) > 3 && len(opt.TickerKdata) == len(opt.TickerVol) && len(opt.TickerKdata["BTC-USDT"]) == config.KdataLen*4 {
 	} else {
 		global.LogErr("dbType.JoinCoinTicker", len(opt.TickerVol), len(opt.TickerKdata))
 		return CoinTickerTable{}
