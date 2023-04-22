@@ -30,15 +30,20 @@ func SetCoinKdataDB(CoinName string) {
 		Timeout = 100
 	}
 
-	db := mMongo.New(mMongo.Opt{
+	db, err := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "CoinMarket",
 		Timeout:  Timeout,
-	}).Connect().Collection(InstID)
+	}).Connect()
+	if err != nil {
+		global.LogErr("ready.SetCoinKdataDB  %+v", err)
+		return
+	}
 	defer global.Run.Println("关闭数据库连接", InstID)
 	defer db.Close()
+	db.Collection(InstID)
 
 	for _, Kd := range list {
 		FK := bson.D{{
@@ -74,15 +79,20 @@ func SetCoinTickerDB() {
 	if Timeout < 100 {
 		Timeout = 100
 	}
-	db := mMongo.New(mMongo.Opt{
+	db, err := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "CoinMarket",
 		Timeout:  Timeout,
-	}).Connect().Collection("CoinTicker")
+	}).Connect()
+	if err != nil {
+		global.LogErr("ready.SetCoinTickerDB", err)
+		return
+	}
 	defer global.Run.Println("关闭数据库连接 CoinTicker")
 	defer db.Close()
+	db.Collection("CoinTicker")
 
 	// 获取当前的榜单数据并拼接
 	Ticker := dbType.JoinCoinTicker(tickerAnaly.TickerAnalyParam{
@@ -108,7 +118,7 @@ func SetCoinTickerDB() {
 	})
 	upOpt := options.Update()
 	upOpt.SetUpsert(true)
-	_, err := db.Table.UpdateOne(db.Ctx, FK, UK, upOpt)
+	_, err = db.Table.UpdateOne(db.Ctx, FK, UK, upOpt)
 	if err != nil {
 		resErr := fmt.Errorf("数据更插失败 CoinTicker %+v", err)
 		global.LogErr(resErr)
@@ -122,15 +132,20 @@ func SetTickerAnalyDB() {
 	if Timeout < 100 {
 		Timeout = 100
 	}
-	db := mMongo.New(mMongo.Opt{
+	db, err := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "CoinMarket",
 		Timeout:  Timeout,
-	}).Connect().Collection("TickerAnaly")
+	}).Connect()
+	if err != nil {
+		global.LogErr("ready.SetTickerAnalyDB %+v", err)
+		return
+	}
 	defer global.Run.Println("关闭数据库连接 TickerAnaly")
 	defer db.Close()
+	db.Collection("TickerAnaly")
 
 	TickerAnaly := okxInfo.TickerAnaly
 
@@ -152,7 +167,7 @@ func SetTickerAnalyDB() {
 	})
 	upOpt := options.Update()
 	upOpt.SetUpsert(true)
-	_, err := db.Table.UpdateOne(db.Ctx, FK, UK, upOpt)
+	_, err = db.Table.UpdateOne(db.Ctx, FK, UK, upOpt)
 	if err != nil {
 		global.LogErr("数据更插失败 TickerAnaly %+v", err)
 	}

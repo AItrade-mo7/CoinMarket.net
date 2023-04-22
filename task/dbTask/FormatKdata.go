@@ -73,15 +73,19 @@ func (obj *FormatKdataObj) SetKdata(CcyName string) {
 	if Timeout < 100 {
 		Timeout = 100
 	}
-	db := mMongo.New(mMongo.Opt{
+	db, err := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "CoinMarket",
 		Timeout:  Timeout,
-	}).Connect().Collection(InstID)
+	}).Connect()
+	if err != nil {
+		panic(err)
+	}
 	defer global.Run.Println("关闭数据库连接", InstID)
 	defer db.Close()
+	db.Collection(InstID)
 
 	for _, Kd := range AllList {
 		FK := bson.D{{

@@ -27,13 +27,18 @@ func GetTickerAnaly(opt dbSearch.FindParam) (resData dbSearch.PagingType, resErr
 	resData = dbSearch.PagingType{}
 	resErr = nil
 
-	db := mMongo.New(mMongo.Opt{
+	db, err := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "CoinMarket",
-	}).Connect().Collection("TickerAnaly")
+	}).Connect()
+	if err != nil {
+		resErr = err
+		return
+	}
 	defer db.Close()
+	db.Collection("TickerAnaly")
 	// 构建搜索参数
 
 	resCur, err := dbSearch.GetCursor(dbSearch.CurOpt{

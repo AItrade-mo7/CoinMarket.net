@@ -1,8 +1,6 @@
 package api
 
 import (
-	"fmt"
-
 	"CoinMarket.net/server/global"
 	"CoinMarket.net/server/global/config"
 	"CoinMarket.net/server/router/result"
@@ -50,20 +48,19 @@ func GetCoinHistory(c *fiber.Ctx) error {
 }
 
 func GetDBKdata(json dbSearch.FindParam, TabName string) (resData dbSearch.PagingType, resErr error) {
-	db := mMongo.New(mMongo.Opt{
+	db, err := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "CoinMarket",
-	}).Connect().Collection(TabName)
-	defer db.Close()
-	err := db.Ping()
+	}).Connect()
 	if err != nil {
-		db.Close()
-		resErr = fmt.Errorf("数据读取失败,数据库连接错误1 %+v", err)
+		resErr = err
 		global.LogErr(resErr)
 		return
 	}
+	defer db.Close()
+	db.Collection(TabName)
 	// 构建搜索参数
 	resCur, err := dbSearch.GetCursor(dbSearch.CurOpt{
 		Param: json,

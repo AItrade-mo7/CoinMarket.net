@@ -18,13 +18,17 @@ func GetAnalyDetail(c *fiber.Ctx) error {
 	var json GetAnalyDetailParam
 	mFiber.Parser(c, &json)
 
-	db := mMongo.New(mMongo.Opt{
+	db, err := mMongo.New(mMongo.Opt{
 		UserName: config.SysEnv.MongoUserName,
 		Password: config.SysEnv.MongoPassword,
 		Address:  config.SysEnv.MongoAddress,
 		DBName:   "CoinMarket",
-	}).Connect().Collection("TickerAnaly")
+	}).Connect()
+	if err != nil {
+		return c.JSON(result.ErrDB.WithData(err))
+	}
 	defer db.Close()
+	db.Collection("TickerAnaly")
 
 	FK := bson.D{{
 		Key:   "TimeID",
