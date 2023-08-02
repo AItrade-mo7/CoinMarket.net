@@ -26,15 +26,15 @@ var BinanceKey = struct {
 	ApiKey    string `bson:"ApiKey"`
 	SecretKey string `bson:"SecretKey"`
 }{
-	ApiKey:    "e1ch7VN2DHqymTJMDRZLDjoyWHdjAaT2anp06elWJwOOZ51GoXXXQpOAeDenWEml",
-	SecretKey: "E9w2QmhtJC6Z326mB9fcCFH6syB2qt7TbvwaFfmxWtrWdAFrQNTIVvT8bSKLtV9e",
+	ApiKey:    "xxxx",
+	SecretKey: "xxxxx",
 }
 
 func DefaultSysEnv() {
-	SysEnv.MongoAddress = "tcy.mo7.cc:17017"
-	SysEnv.MongoPassword = "asdasd55555"
-	SysEnv.MongoUserName = "mo7"
-	SysEnv.MessageBaseUrl = "http://msg.mo7.cc"
+	SysEnv.MongoAddress = "xxx.xxx.xxx:xxx"
+	SysEnv.MongoPassword = "xxx"
+	SysEnv.MongoUserName = "xxx"
+	SysEnv.MessageBaseUrl = "http://xxx.xxx.xxx"
 }
 
 func LoadSysEnv(envPath string) {
